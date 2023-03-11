@@ -1,4 +1,4 @@
-ARTIFACT = Air_Traffic_Control_System
+ARTIFACT = ATCS
 
 #Build architecture/variant string, possible values: x86, armv7le, etc...
 PLATFORM ?= x86_64

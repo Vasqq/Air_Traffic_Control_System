@@ -1,16 +1,15 @@
 /*
  * SSR.h
  *
- *  Created on: Mar 11, 2023
- *      Author: Argi
+ *  Created on: Mar. 11, 2023
+ *      Author: Liam
  */
 
 #ifndef SSR_H_
 #define SSR_H_
 #include "Aircraft.h"
+
 class SSR {
-
-
 public:
 	SSR();
 
@@ -20,10 +19,7 @@ public:
 	void interrogateAircraft(Aircraft targetAircraft);
 	void receiveTransponderData(Aircraft targetAircraft);
 
-
-
 	virtual ~SSR();
-
 };
 
 #endif /* SSR_H_ */

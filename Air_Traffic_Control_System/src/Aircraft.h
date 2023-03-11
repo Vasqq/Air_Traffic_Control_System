@@ -1,8 +1,8 @@
 /*
  * Aircraft.h
  *
- *  Created on: Mar 11, 2023
- *      Author: Argi
+ *  Created on: Mar. 11, 2023
+ *      Author: Liam
  */
 
 #ifndef AIRCRAFT_H_
@@ -11,7 +11,6 @@
 class Aircraft {
 public:
 	Aircraft();
-
 	virtual ~Aircraft();
 
 private:

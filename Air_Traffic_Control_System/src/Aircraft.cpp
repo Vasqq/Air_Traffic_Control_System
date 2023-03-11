@@ -1,8 +1,8 @@
 /*
  * Aircraft.cpp
  *
- *  Created on: Mar 11, 2023
- *      Author: Argi
+ *  Created on: Mar. 11, 2023
+ *      Author: Liam
  */
 
 #include "Aircraft.h"
