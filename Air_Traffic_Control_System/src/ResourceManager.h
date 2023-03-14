@@ -12,7 +12,7 @@ class ResourceManager {
 public:
 	ResourceManager();
 //All the void functions
-	void createAircraftProcesses(Aircraft aircraft[]);
+	void createAircraftThreads(Aircraft aircraft[]);
 	void createATCSSubsystems();
 	void storeAircraftProcessId(int pid);
 	void initializeDataDisplay();
@@ -24,9 +24,9 @@ public:
 
 
 //Aircraft class function
-	Aircraft* TakeNextAircraftProcess(Aircraft aircraft[]);
+	Aircraft* TakeNextAircraftThread(Aircraft aircraft[]);
 //int function
-	int spawnNewAircraftProcess(Aircraft aircraft);
+	int spawnNewAircraftThread(Aircraft aircraft);
 
 	virtual ~ResourceManager();
 private:
