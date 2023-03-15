@@ -10,17 +10,19 @@
 #include <pthread.h>
 class Aircraft {
 public:
-	Aircraft(int angle, int distance, int flightId, int flightLevel, int speed, int position);
+	Aircraft(int time,int flightId, int positionX, int positionY, int positionZ,int speedX,int speedY,int speedZ);
 	void updatePosition(int flightId);
+	int getPositionX(int flightId);
+	int getPositionY(int flightId);
+	int getPositionZ(int flightId);
 	virtual ~Aircraft();
 
 private:
-	int angle;
-	int distance;
 	int flightId;
-	int flightLevel;
-	int speed;
-	int position;
+	int speedX,speedY,speedZ;
+	int positionX,positionY,positionZ ;
+	int time;
+
 };
 
 #endif /* AIRCRAFT_H_ */
