@@ -9,7 +9,7 @@
 #define SSR_H_
 #include "Aircraft.h"
 
-class SSR {
+class SSR: public Aircraft {
 public:
 	SSR();
 
