@@ -10,26 +10,27 @@
 SSR::SSR() {
 	// TODO Auto-generated constructor stub
 
-}
+};
 
 void SSR::interrogateAircraft(Aircraft targetAircraft){
 
-}
+};
 
 void SSR:: receiveTransponderData(Aircraft targetAircraft){
 
+};
+
+Aircraft* SSR::Interrogate(Aircraft illuminatedObjects[])
+{
+    return nullptr;
 }
 
-SSR::Aircraft* Interrogate(Aircraft illuminatedObjects[]){
 
+Aircraft* SSR::sendTransponderData(Aircraft transponderData[])
+{
+    return nullptr;
 }
-
-
-SSR::Aircraft* sendTransponderData(Aircraft transponderData[]){
-
-}
-
 SSR::~SSR() {
 	// TODO Auto-generated destructor stub
-}
+};
 
