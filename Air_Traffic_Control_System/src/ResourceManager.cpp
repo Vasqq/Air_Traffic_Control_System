@@ -16,3 +16,15 @@ ResourceManager::~ResourceManager() {
 	// TODO Auto-generated destructor stub
 }
 
+
+int ResourceManager::spawnNewAircraftThread(Aircraft AircraftObj){
+
+	for (i=1;i<=numOfLines;i++)
+	{
+		int pid=i;
+		pthread_create(NULL, NULL, &functionA ,NULL);
+
+		pthread_create( NULL, NULL, &function, NULL );
+	}
+
+}
