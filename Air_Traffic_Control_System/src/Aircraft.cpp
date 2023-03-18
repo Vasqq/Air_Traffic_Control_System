@@ -6,47 +6,66 @@
  */
 
 #include "Aircraft.h"
+using namespace std;
 
-Aircraft::Aircraft(int time,int flightId, int positionX, int positionY, int positionZ,int speedX,int speedY,int speedZ) {
-	// TODO Auto-generated constructor stub
-		this->time=time;
-		this->flightId=flightId;
-		this->positionX=positionX;
-		this->positionY=positionY;
-		this->positionZ=positionZ;
-		this->speedX=speedX;
-		this->speedY=speedY;
-		this->speedZ=speedZ;
+Aircraft::Aircraft()
+{
 }
 
-void Aircraft::updatePosition(int flightId){		//updates the position of the the aircraft by passing it's identifier
-
-	getPositionX(flightId)+=((this->speedX)*diff_in_time);		//need to define how to do diff in time
-	getPositionY(flightId)+=((this->speedY)*diff_in_time);
-	getPositionZ(flightId)+=((this->speedZ)*diff_in_time);
-}
-
-int Aircraft::getPositionX(int flightId){
-
-	return this->positionX;
+Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
+{
+	this->time_at_boundary=time_at_boundary;
+	this->flight_level=flight_level;
+	this->flight_id=flight_id;
+	this->posX=posX;
+	this->posY=posY;
+	this->posZ=posZ;
+	this->speedX=speedX;
+	this->speedY=speedY;
+	this->speedZ=speedZ;
 
 }
 
-int Aircraft::getPositionY(int flightId){
 
-	return this->positionY;
-
+void Aircraft::UpdateAircraftPosition()
+{
 }
 
-int Aircraft::getPositionZ(int flightId){
-
-	return this->positionZ;
-
-}
-Aircraft::~Aircraft() {
-	// TODO Auto-generated destructor stub
+void Aircraft::updatePositionX()
+{
 }
 
+void Aircraft::updatePositionY()
+{
+}
 
+void Aircraft::updatePositionZ()
+{
+}
+
+void Aircraft::updateFlightLevel()
+{
+}
+
+void Aircraft::ServiceInterrogationSignal()
+{
+}
+
+void Aircraft::receiveInterrogationSignal()
+{
+}
+
+char Aircraft::collectTransponderData()
+{
+	return 0;
+}
+
+void Aircraft::senTransponderData(char transponderData[])
+{
+}
+
+Aircraft::~Aircraft()
+{
+}
 
 

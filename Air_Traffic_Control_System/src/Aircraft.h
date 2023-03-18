@@ -8,20 +8,31 @@
 #ifndef AIRCRAFT_H_
 #define AIRCRAFT_H_
 #include <pthread.h>
+#include <vector>
+
+using namespace std;
+
+
 class Aircraft {
 public:
-	Aircraft(int time,int flightId, int positionX, int positionY, int positionZ,int speedX,int speedY,int speedZ);
-	void updatePosition(int flightId);
-	int getPositionX(int flightId);
-	int getPositionY(int flightId);
-	int getPositionZ(int flightId);
+	Aircraft();
+	Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
+	void UpdateAircraftPosition();
+	void updatePositionX();
+	void updatePositionY();
+	void updatePositionZ();
+	void updateFlightLevel();
+	void ServiceInterrogationSignal();
+	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
+	char collectTransponderData();
+	void senTransponderData(char transponderData[]);
+
 	virtual ~Aircraft();
 
 private:
-	int flightId;
+	int time_at_boundary, flight_level, flight_id;
+	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
-	int positionX,positionY,positionZ ;
-	int time;
 
 };
 
