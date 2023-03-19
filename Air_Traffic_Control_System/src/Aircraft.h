@@ -24,13 +24,15 @@ public:
 	void updateFlightLevel();
 	void ServiceInterrogationSignal();
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
-	char collectTransponderData();
+	char* collectTransponderData();
 	void senTransponderData(char transponderData[]);
 
 	virtual ~Aircraft();
 
 private:
-	int time_at_boundary, flight_level, flight_id;
+	int time_at_boundary;
+	int flight_level;
+	int flight_id;
 	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
 
