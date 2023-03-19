@@ -3,6 +3,8 @@
  *
  *  Created on: Mar. 11, 2023
  *      Author: Liam
+ *
+ *      FILE DESCRIPTION GOES HERE
  */
 
 #include "SSR.h"
@@ -18,24 +20,25 @@ SSR::SSR() {
 
 };
 
-/*Input: Aircraft targetAircraft
- *Output: Aircraft targetAircraft
- *Description:This method will request the aircraft thread for transponder data
+/*
+ * Function Name: interrogateAircraft
+ * Input: Aircraft targetAircraft
+ * Output: Aircraft targetAircraft
+ * Description:This method will request the aircraft thread for transponder data
  */
 void SSR::interrogateAircraft(Aircraft targetAircraft){
-
-
 	Aircraft A;
-
-
 };
 
-/*Input: Aircraft targetAircraft
- *Output: Aircraft targetAircraft
- *Description:This will receive transponder data between Aircraft Thread and SSR.
+/*
+ * Function Name: receiveTransponderData
+ * Input: Aircraft targetAircraft
+ * Output: Aircraft targetAircraft
+ * Description:This method will receive transponder data between Aircraft Thread and SSR.
  */
 SSR::transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
 
+	/*
 	Aircraft A;
 	//Aircraft Flight ID and Flight Level
 	TD.flightID=A.getFlightId(targetAircraft);//after we have successfully interrogated the Aircrafts in illuminatedObjects, we can go ahead and grab the required info
@@ -51,6 +54,7 @@ SSR::transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
 	TD.speedY=A.getSpeedY(targetAircraft);
 	TD.speedZ=A.getSpeedZ(targetAircraft);
 	return TD;
+	*/
 };
 
  SSR::transponderData* SSR::Interrogate(Aircraft illuminatedObjects[])		//first we receive an array of illuminated Objects (assume we push them from back to front)

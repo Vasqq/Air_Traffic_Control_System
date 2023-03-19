@@ -17,14 +17,18 @@ ResourceManager::~ResourceManager() {
 }
 
 
-int ResourceManager::spawnNewAircraftThread(Aircraft AircraftObj){
+void ResourceManager::spawnNewAircraftThread(Aircraft AircraftObj){
 
-	for (i=1;i<=numOfLines;i++)
+	/*
+	for (int i=1;i<=numOfLines;i++)
 	{
+		/*
 		int pid=i;
 		pthread_create(NULL, NULL, &functionA ,NULL);
 
 		pthread_create( NULL, NULL, &function, NULL );
+
 	}
+*/
 
 }

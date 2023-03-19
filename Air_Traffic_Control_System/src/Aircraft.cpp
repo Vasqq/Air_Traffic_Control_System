@@ -55,13 +55,28 @@ void Aircraft::receiveInterrogationSignal()
 {
 }
 
-char Aircraft::collectTransponderData()
+char* Aircraft::collectTransponderData()
 {
 	return 0;
 }
 
 void Aircraft::senTransponderData(char transponderData[])
 {
+}
+
+int Aircraft::getPosX(){
+
+	return this->posX;
+}
+
+int Aircraft::getPosY(){
+
+	return this->posY;
+}
+
+int Aircraft::getFlightID(){
+
+	return this->flight_id;
 }
 
 Aircraft::~Aircraft()

@@ -1,8 +1,15 @@
 /*
- * PSR.cpp
+ * 		PSR.cpp
  *
- *  Created on: Mar. 11, 2023
+ *  	Created on: Mar. 11, 2023
  *      Author: Liam
+ *
+ *		File Description:
+ *
+ *      This file serves as the implementation for the PSR (Primary Surveilance Radar)
+ *      The PSR will scan the airspace and send an array of illuminated objects to the
+ *      SSR.
+ *
  */
 
 #include "PSR.h"
@@ -22,7 +29,6 @@ PSR::PSR(vector<Aircraft> aircraftArr) {
 	pulse_speed = PULSE_SPEED;
 
 	aircraftList = aircraftArr;
-
 }
 
 PSR::~PSR() {
@@ -30,8 +36,6 @@ PSR::~PSR() {
 }
 
 void PSR::scan(){
-
-	cout << "In scan function" << endl;
 
 	while(current_angle <= DEGREES_IN_CIRCLE){
 
@@ -44,43 +48,61 @@ void PSR::scan(){
 			break;
 		}
 
+		// Rotate the radar 1 degree
 		rotateRadar();
 	}
 }
 
 void PSR::detectAircraft(int angle){
 
-	int aircraftDistance; 	// Distance of the detected aircraft
-	int aircraftAngle; 		// Angle of the detected aircraft
+	int aircraftDistance; 			// Distance of the detected aircraft
+	double aircraftAngleRads; 		// Angle of the detected aircraft
 
 	for (Aircraft& aircraft : aircraftList){
 
-		// Get the aircraft angle
-		aircraftAngle = (int) (atan2(aircraft.getPosY(), aircraft.getPosX()));
+		// Get the aircraft angle in radians
+		aircraftAngleRads = (atan2(aircraft.getPosY(), aircraft.getPosX()));
 
 		   // Adjust the aircraft angle to be between 0 and 2*pi
-		   if (aircraftAngle < 0)
-			   aircraftAngle += 2 * M_PI;
+		   if (aircraftAngleRads < 0)
+			   aircraftAngleRads += 2 * M_PI;
 
 		   // Adjust the input angle to be between 0 and 2*pi
 		   if (angle  < 0)
 			   angle += 2 * M_PI;
 
+		// convert to degrees
+		int aircraftAngleDegrees = (int) (aircraftAngleRads * 180)/ M_PI;
+
 		   // Check if the aircraft is at the current radar angle
-		   if (aircraftAngle == angle){
+		   if (aircraftAngleDegrees == angle){
 			   // Get the aircraft distance
 			   aircraftDistance = (int) (sqrt(pow(aircraft.getPosX(), 2) + pow(aircraft.getPosY(), 2)));
-
+			   // Add the aircraft object to the array if it is within range
 			   if(aircraftDistance < range)
 				   illuminatedObjects.push_back(aircraft);
 		   }
 	}
+
 }
 
 void PSR::rotateRadar(){
 
 	current_angle++;
 }
+
+
+void PSR::sendAircraftPositionsToSSR(vector<Aircraft> illuminatedObjects){
+
+	cout << "Sending illuminated objects" << endl;
+
+	for (Aircraft& aircraft : aircraftList){
+
+		cout << "Aircraft: " << aircraft.getFlightID() << endl;
+	}
+
+}
+
 
 void PSR::execute(){
 
@@ -91,4 +113,3 @@ void PSR::execute(){
 	}
 
 }
-

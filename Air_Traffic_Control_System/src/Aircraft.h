@@ -27,6 +27,10 @@ public:
 	char* collectTransponderData();
 	void senTransponderData(char transponderData[]);
 
+	int getPosX();
+	int getPosY();
+	int getFlightID();
+
 	virtual ~Aircraft();
 
 private:

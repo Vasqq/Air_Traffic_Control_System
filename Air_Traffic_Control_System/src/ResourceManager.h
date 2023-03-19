@@ -26,12 +26,12 @@ public:
 //Aircraft class function
 	Aircraft* TakeNextAircraftThread(Aircraft aircraft[]);
 //int function
-	int spawnNewAircraftThread(Aircraft aircraft);
+	void spawnNewAircraftThread(Aircraft aircraft);
 
 	virtual ~ResourceManager();
 private:
-	int aircraft_pids[];		//arrays of type integer to store Aircraft PIDS
-	int ATCS_pids[];			//arrays of type integer to store ATCS PIDS
+	vector<int> aircraft_pids;		//arrays of type integer to store Aircraft PIDS
+	vector<int> ATCS_pids;			//arrays of type integer to store ATCS PIDS
 };
 
 #endif /* SRC_RESOURCEMANAGER_H_ */
