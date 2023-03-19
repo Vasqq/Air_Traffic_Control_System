@@ -6,13 +6,66 @@
  */
 
 #include "Aircraft.h"
+using namespace std;
 
-Aircraft::Aircraft() {
-	// TODO Auto-generated constructor stub
+Aircraft::Aircraft()
+{
+}
+
+Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
+{
+	this->time_at_boundary=time_at_boundary;
+	this->flight_level=flight_level;
+	this->flight_id=flight_id;
+	this->posX=posX;
+	this->posY=posY;
+	this->posZ=posZ;
+	this->speedX=speedX;
+	this->speedY=speedY;
+	this->speedZ=speedZ;
 
 }
 
-Aircraft::~Aircraft() {
-	// TODO Auto-generated destructor stub
+
+void Aircraft::UpdateAircraftPosition()
+{
 }
+
+void Aircraft::updatePositionX()
+{
+}
+
+void Aircraft::updatePositionY()
+{
+}
+
+void Aircraft::updatePositionZ()
+{
+}
+
+void Aircraft::updateFlightLevel()
+{
+}
+
+void Aircraft::ServiceInterrogationSignal()
+{
+}
+
+void Aircraft::receiveInterrogationSignal()
+{
+}
+
+char Aircraft::collectTransponderData()
+{
+	return 0;
+}
+
+void Aircraft::senTransponderData(char transponderData[])
+{
+}
+
+Aircraft::~Aircraft()
+{
+}
+
 
