@@ -18,9 +18,6 @@ int main() {
 	PSR psr(testAircraftArr);
 	vector<Aircraft> illuminatedObjects;
 	illuminatedObjects=psr.execute();
-	for (Aircraft& illuminatedObject: illuminatedObjects){
-		cout<<illuminatedObject.getPosX()<<endl;
-	}
 
 	SSR ssr(illuminatedObjects);
 	ssr.execute();

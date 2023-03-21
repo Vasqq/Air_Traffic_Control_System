@@ -34,22 +34,14 @@ private:
 vector<Aircraft> illuminatedObjects;
 
 public:
-	SSR(vector<Aircraft>illuminatedObjects);
-
-
-		 vector<transponderData> transponderDataList;
-
-
-		 vector<transponderData> Interrogate(vector<Aircraft> illuminatedObjects);
-		 vector<transponderData> sendTransponderData();
-		transponderData receiveTransponderData(Aircraft illuminatedObject);
-	void interrogateAircraft(Aircraft targetAircraft);
-	void execute();
-
-	virtual ~SSR();
-
-
-
+  SSR(vector<Aircraft>illuminatedObjects);
+  vector<transponderData> transponderDataList;
+  vector<transponderData> interrogate(vector<Aircraft> illuminatedObjects);
+  vector<transponderData> sendTransponderData();
+  transponderData receiveTransponderData(Aircraft illuminatedObject);
+  void interrogateAircraft(Aircraft targetAircraft);
+  void execute();
+  virtual ~SSR();
 };
 
 #endif /* SSR_H_ */

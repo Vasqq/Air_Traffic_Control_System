@@ -60,6 +60,8 @@ void PSR::detectAircraft(int angle){
 
 	for (Aircraft& aircraft : aircraftList){
 
+		cout << "Aircraft ID: " << aircraft.getFlightID() << endl;
+
 		// Get the aircraft angle in radians
 		aircraftAngleRads = (atan2(aircraft.getPosY(), aircraft.getPosX()));
 
@@ -75,12 +77,16 @@ void PSR::detectAircraft(int angle){
 		int aircraftAngleDegrees = (int) (aircraftAngleRads * 180)/ M_PI;
 
 		   // Check if the aircraft is at the current radar angle
-		   if (aircraftAngleDegrees == angle){
+     		   if (aircraftAngleDegrees == angle){
 			   // Get the aircraft distance
 			   aircraftDistance = (int) (sqrt(pow(aircraft.getPosX(), 2) + pow(aircraft.getPosY(), 2)));
 			   // Add the aircraft object to the array if it is within range
-			   if(aircraftDistance < range)
+			   if(aircraftDistance < range){
+
+				   cout << "Pushing back aircraft ID: " << aircraft.getFlightID() << endl;
 				   illuminatedObjects.push_back(aircraft);
+			   	   cout << illuminatedObjects.size() << endl;
+			   }
 		   }
 	}
 
@@ -92,11 +98,11 @@ void PSR::rotateRadar(){
 }
 
 
-vector<Aircraft> PSR::sendAircraftPositionsToSSR(vector<Aircraft> illuminatedObjects){
+vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 
 	cout << "Sending illuminated objects" << endl;
 
-	for (Aircraft& aircraft : aircraftList){
+	for (Aircraft& aircraft : illuminatedObjects){
 
 		cout << "Aircraft: " << aircraft.getFlightID() << endl;
 
@@ -110,8 +116,13 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(vector<Aircraft> illuminatedObj
 vector<Aircraft> PSR::execute(){
 
 		scan();
-		sendAircraftPositionsToSSR(illuminatedObjects);
+		sendAircraftPositionsToSSR();
 
 	return illuminatedObjects;
 
 }
+
+void PSR::test(){}
+
+
+
