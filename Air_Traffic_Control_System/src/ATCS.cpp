@@ -3,6 +3,7 @@ using namespace std;
 
 #include "Aircraft.h"
 #include "PSR.h"
+#include "SSR.h"
 
 int main() {
 	cout << "Hello World!!!" << endl; // prints Hello World!!!
@@ -15,7 +16,14 @@ int main() {
 	testAircraftArr.push_back(a2);
 
 	PSR psr(testAircraftArr);
-	psr.execute();
+	vector<Aircraft> illuminatedObjects;
+	illuminatedObjects=psr.execute();
+	for (Aircraft& illuminatedObject: illuminatedObjects){
+		cout<<illuminatedObject.getPosX()<<endl;
+	}
+
+	SSR ssr(illuminatedObjects);
+	ssr.execute();
 
 
 

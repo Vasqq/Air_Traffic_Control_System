@@ -92,24 +92,26 @@ void PSR::rotateRadar(){
 }
 
 
-void PSR::sendAircraftPositionsToSSR(vector<Aircraft> illuminatedObjects){
+vector<Aircraft> PSR::sendAircraftPositionsToSSR(vector<Aircraft> illuminatedObjects){
 
 	cout << "Sending illuminated objects" << endl;
 
 	for (Aircraft& aircraft : aircraftList){
 
 		cout << "Aircraft: " << aircraft.getFlightID() << endl;
+
 	}
 
+
+	return illuminatedObjects;
 }
 
 
-void PSR::execute(){
-
-	while(true){
+vector<Aircraft> PSR::execute(){
 
 		scan();
 		sendAircraftPositionsToSSR(illuminatedObjects);
-	}
+
+	return illuminatedObjects;
 
 }

@@ -8,10 +8,7 @@
 #ifndef SSR_H_
 #define SSR_H_
 #include "Aircraft.h"
-
-class SSR {
-
-private:
+#include "PSR.h"
 	struct transponderData
 {
 			int flightId;
@@ -26,19 +23,28 @@ private:
  };
 
 
+class SSR {
+
+private:
+
+
+
  transponderData TD;
 
+vector<Aircraft> illuminatedObjects;
+
 public:
-	SSR();
-
-		transponderData transponderDataArr[5];
+	SSR(vector<Aircraft>illuminatedObjects);
 
 
-		transponderData* Interrogate(Aircraft illuminatedObjects[]);
-		transponderData* sendTransponderData(transponderData transponderData[]);
-		transponderData receiveTransponderData(Aircraft targetAircraft);
+		 vector<transponderData> transponderDataList;
+
+
+		 vector<transponderData> Interrogate(vector<Aircraft> illuminatedObjects);
+		 vector<transponderData> sendTransponderData();
+		transponderData receiveTransponderData(Aircraft illuminatedObject);
 	void interrogateAircraft(Aircraft targetAircraft);
-
+	void execute();
 
 	virtual ~SSR();
 

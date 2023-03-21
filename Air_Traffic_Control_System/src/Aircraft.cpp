@@ -49,6 +49,7 @@ void Aircraft::updateFlightLevel()
 
 void Aircraft::ServiceInterrogationSignal()
 {
+
 }
 
 void Aircraft::receiveInterrogationSignal()

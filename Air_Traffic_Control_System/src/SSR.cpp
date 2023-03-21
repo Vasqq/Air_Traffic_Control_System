@@ -15,10 +15,14 @@
 using namespace std;
 
 
-SSR::SSR() {
+SSR::SSR(vector<Aircraft>illuminatedObjects) {
 	// TODO Auto-generated constructor stub
+	this->illuminatedObjects=illuminatedObjects;
+
 
 };
+
+
 
 /*
  * Function Name: interrogateAircraft
@@ -27,7 +31,11 @@ SSR::SSR() {
  * Description:This method will request the aircraft thread for transponder data
  */
 void SSR::interrogateAircraft(Aircraft targetAircraft){
-	Aircraft A;
+
+		//implement message passing for thread
+	cout<<"Ask Aircraft:"<< targetAircraft.getFlightID()<<endl;
+
+
 };
 
 /*
@@ -36,49 +44,81 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
  * Output: Aircraft targetAircraft
  * Description:This method will receive transponder data between Aircraft Thread and SSR.
  */
-SSR::transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
+transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
 
-	/*
-	Aircraft A;
+
+
+
+	targetAircraft.ServiceInterrogationSignal();
+
+
+
 	//Aircraft Flight ID and Flight Level
-	TD.flightID=A.getFlightId(targetAircraft);//after we have successfully interrogated the Aircrafts in illuminatedObjects, we can go ahead and grab the required info
-	TD.flightLevel= A.getFlightLevel(targetAircraft);
+	/*
+	TD.flightID=targetAircraft.getFlightId();//after we have successfully interrogated the Aircrafts in illuminatedObjects, we can go ahead and grab the required info
+	TD.flightLevel= targetAircraft.getFlightLevel();
 
 	//Aircraft Positions X,Y,Z
-	TD.positionX=A.getPositionX(targetAircraft);
-	TD.positionY=A.getPositionY(targetAircraft);
-	TD.positionZ=A.getPositionZ(targetAircraft);
+	TD.positionX=targetAircraft.getPositionX();
+	TD.positionY=targetAircraft.getPositionY();
+	TD.positionZ=targetAircraft.getPositionZ();
 
 	//Aircraft Speeds X,Y,Z
-	TD.speedX=A.getSpeedX(targetAircraft);
-	TD.speedY=A.getSpeedY(targetAircraft);
-	TD.speedZ=A.getSpeedZ(targetAircraft);
+	TD.speedX=targetAircraft.getSpeedX();
+	TD.speedY=targetAircraft.getSpeedY();
+	TD.speedZ=targetAircraft.getSpeedZ();
 	return TD;
 	*/
+
 };
 
- SSR::transponderData* SSR::Interrogate(Aircraft illuminatedObjects[])		//first we receive an array of illuminated Objects (assume we push them from back to front)
+vector<transponderData> SSR::Interrogate(vector<Aircraft> illuminatedObjects)		//first we receive an array of illuminated Objects (assume we push them from back to front)
 {
-	int i;
-	int s= (sizeof(illuminatedObjects) / sizeof((illuminatedObjects[0])));		//because I refuse to run a for loop for this, I'm using this to get the length
-	for (i=0;i<=s;i++){
+
+	transponderData receivedReply;
+
+	for (Aircraft& illuminatedObject: illuminatedObjects){
 		//interrogate the aircraft and receive the transponder data
-		interrogateAircraft(illuminatedObjects[i]);		//goes into array and grabs ith object and passes it to function
+
+		interrogateAircraft(illuminatedObject);		//goes into array and grabs ith object and passes it to function
 				//if we successfully ask for the
 		//Store this inside an Aircraft object array called transponderData to use for the senTransponderData function
 
-	transponderDataArr[i]=receiveTransponderData(illuminatedObjects[i]);		//doing this will also dynamically increase the size of the array
+		receivedReply= receiveTransponderData(illuminatedObject);
+		transponderDataList.push_back(receivedReply);		//doing this will also dynamically increase the size of the array
 
 	}
-	return transponderDataArr;
+	return transponderDataList;
 }
 
 
- SSR::transponderData* SSR::sendTransponderData(transponderData transponderDataArr[])
+vector<transponderData> SSR::sendTransponderData()
 {
-
-	 return transponderDataArr;
+		for (transponderData& transponderData: transponderDataList){
+			cout<<transponderData.flightId<<endl;
+			cout<<transponderData.flightLevel<<endl;
+			cout<<transponderData.positionX<<endl;
+			cout<<transponderData.positionY<<endl;
+			cout<<transponderData.positionZ<<endl;
+			cout<<transponderData.speedX<<endl;
+			cout<<transponderData.speedY<<endl;
+			cout<<transponderData.speedZ<<endl;
+			cout<<endl;
+			cout<<endl;
+		}
+	 	 return this->transponderDataList;
 }
+
+ void SSR::execute(){
+
+
+	 Interrogate(illuminatedObjects);
+	 sendTransponderData();
+
+
+ }
+
+
 SSR::~SSR() {
 	// TODO Auto-generated destructor stub
 };
