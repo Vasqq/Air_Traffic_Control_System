@@ -15,10 +15,14 @@
 using namespace std;
 
 
-SSR::SSR() {
+SSR::SSR(vector<Aircraft>illuminatedObjects) {
 	// TODO Auto-generated constructor stub
+	this->illuminatedObjects=illuminatedObjects;
+
 
 };
+
+
 
 /*
  * Function Name: interrogateAircraft
@@ -27,58 +31,78 @@ SSR::SSR() {
  * Description:This method will request the aircraft thread for transponder data
  */
 void SSR::interrogateAircraft(Aircraft targetAircraft){
-	Aircraft A;
+
+		//implement message passing for thread
+
 };
 
-/*
- * Function Name: receiveTransponderData
- * Input: Aircraft targetAircraft
- * Output: Aircraft targetAircraft
- * Description:This method will receive transponder data between Aircraft Thread and SSR.
+/* -----------------------------------------------------------------------------
+ * Name:        receiveTransponderData
+ * Input:       Aircraft targetAircraft
+ * Output:      Aircraft targetAircraft
+ * Description: This method will receive transponder data between the Aircraft
+ *              thread and SSR.
+ * -----------------------------------------------------------------------------
  */
-SSR::transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
+void SSR::receiveTransponderData(Aircraft targetAircraft){
 
-	/*
-	Aircraft A;
-	//Aircraft Flight ID and Flight Level
-	TD.flightID=A.getFlightId(targetAircraft);//after we have successfully interrogated the Aircrafts in illuminatedObjects, we can go ahead and grab the required info
-	TD.flightLevel= A.getFlightLevel(targetAircraft);
+    transponderData TD;
 
-	//Aircraft Positions X,Y,Z
-	TD.positionX=A.getPositionX(targetAircraft);
-	TD.positionY=A.getPositionY(targetAircraft);
-	TD.positionZ=A.getPositionZ(targetAircraft);
+    targetAircraft.ServiceInterrogationSignal();
 
-	//Aircraft Speeds X,Y,Z
-	TD.speedX=A.getSpeedX(targetAircraft);
-	TD.speedY=A.getSpeedY(targetAircraft);
-	TD.speedZ=A.getSpeedZ(targetAircraft);
-	return TD;
-	*/
+    TD.flightId=targetAircraft.getFlightID();
+    TD.flightLevel= targetAircraft.getFlightLevel();
+
+    //Aircraft Positions X,Y,Z
+    TD.positionX=targetAircraft.getPosX();
+    TD.positionY=targetAircraft.getPosY();
+    TD.positionZ=targetAircraft.getPosZ();
+
+    //Aircraft Speeds X,Y,Z
+    TD.speedX=targetAircraft.getSpeedX();
+    TD.speedY=targetAircraft.getSpeedY();
+    TD.speedZ=targetAircraft.getSpeedZ();
+
+    transponderDataList.push_back(TD);
+
+
 };
 
- SSR::transponderData* SSR::Interrogate(Aircraft illuminatedObjects[])		//first we receive an array of illuminated Objects (assume we push them from back to front)
+/* -----------------------------------------------------------------------------
+ * Name:        interrogate
+ * Input:       vector<Aircraft> illuminatedObjects
+ * Output:      transponderDataList
+ * Description: This method will interrogate each Aircraft and Illuminated Obj
+ *              vector and return the transponder Data for each Aircraft.
+ * -----------------------------------------------------------------------------
+ */
+
+void SSR::interrogate(vector<Aircraft> illuminatedObjects)
 {
-	int i;
-	int s= (sizeof(illuminatedObjects) / sizeof((illuminatedObjects[0])));		//because I refuse to run a for loop for this, I'm using this to get the length
-	for (i=0;i<=s;i++){
-		//interrogate the aircraft and receive the transponder data
-		interrogateAircraft(illuminatedObjects[i]);		//goes into array and grabs ith object and passes it to function
-				//if we successfully ask for the
-		//Store this inside an Aircraft object array called transponderData to use for the senTransponderData function
 
-	transponderDataArr[i]=receiveTransponderData(illuminatedObjects[i]);		//doing this will also dynamically increase the size of the array
+    transponderData receivedReply;
 
-	}
-	return transponderDataArr;
+for(Aircraft& illuminatedObject: illuminatedObjects){
+    //interrogate the aircraft and receive transponder data
+    interrogateAircraft(illuminatedObject);
+    receiveTransponderData(illuminatedObject);
+}
+
 }
 
 
- SSR::transponderData* SSR::sendTransponderData(transponderData transponderDataArr[])
+vector<transponderData> SSR::sendTransponderData()
 {
-
-	 return transponderDataArr;
+    //send transponderDataList to computer system
+    return transponderDataList;
 }
+
+ void SSR::execute(){
+
+     interrogate(illuminatedObjects);
+     sendTransponderData();
+ }
+
 SSR::~SSR() {
 	// TODO Auto-generated destructor stub
 };

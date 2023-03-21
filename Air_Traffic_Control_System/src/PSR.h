@@ -25,14 +25,15 @@ class PSR {
 public:
 	PSR(vector<Aircraft>);
 
-	void execute();
+	vector<Aircraft> execute();
+	void test();
 	void scan();
 	void detectAircraft(int angle);
 	void rotateRadar();
 	bool receiveEchoes(int echoes[]);
 	Aircraft* determineDistances(int echoes[]);
 
-	void sendAircraftPositionsToSSR(vector<Aircraft> illuminatedObjects);
+	vector<Aircraft> sendAircraftPositionsToSSR();
 
 	virtual ~PSR();
 

@@ -27,9 +27,16 @@ public:
 	char* collectTransponderData();
 	void senTransponderData(char transponderData[]);
 
+	int getFlightID();
+	int getFlightLevel();
+
 	int getPosX();
 	int getPosY();
-	int getFlightID();
+	int getPosZ();
+
+	int getSpeedX();
+	int getSpeedY();
+	int getSpeedZ();
 
 	virtual ~Aircraft();
 

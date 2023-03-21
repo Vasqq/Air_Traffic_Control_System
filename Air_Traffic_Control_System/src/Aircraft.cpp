@@ -49,6 +49,7 @@ void Aircraft::updateFlightLevel()
 
 void Aircraft::ServiceInterrogationSignal()
 {
+
 }
 
 void Aircraft::receiveInterrogationSignal()
@@ -63,6 +64,14 @@ char* Aircraft::collectTransponderData()
 void Aircraft::senTransponderData(char transponderData[])
 {
 }
+int Aircraft::getFlightID(){
+
+	return this->flight_id;
+}
+int Aircraft::getFlightLevel(){
+
+	return this->flight_level;
+}
 
 int Aircraft::getPosX(){
 
@@ -74,11 +83,25 @@ int Aircraft::getPosY(){
 	return this->posY;
 }
 
-int Aircraft::getFlightID(){
+int Aircraft::getPosZ(){
 
-	return this->flight_id;
+	return this->posZ;
 }
 
+int Aircraft::getSpeedX(){
+
+	return this->speedX;
+}
+
+int Aircraft::getSpeedY(){
+
+	return this->speedY;
+}
+
+int Aircraft::getSpeedZ(){
+
+	return this->speedZ;
+}
 Aircraft::~Aircraft()
 {
 }
