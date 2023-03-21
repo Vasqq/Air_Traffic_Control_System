@@ -36,9 +36,9 @@ vector<Aircraft> illuminatedObjects;
 public:
   SSR(vector<Aircraft>illuminatedObjects);
   vector<transponderData> transponderDataList;
-  vector<transponderData> interrogate(vector<Aircraft> illuminatedObjects);
   vector<transponderData> sendTransponderData();
-  transponderData receiveTransponderData(Aircraft illuminatedObject);
+  void receiveTransponderData(Aircraft illuminatedObject);
+  void interrogate(vector<Aircraft> illuminatedObjects);
   void interrogateAircraft(Aircraft targetAircraft);
   void execute();
   virtual ~SSR();

@@ -33,7 +33,7 @@ SSR::SSR(vector<Aircraft>illuminatedObjects) {
 void SSR::interrogateAircraft(Aircraft targetAircraft){
 
 		//implement message passing for thread
-	cout<<"Ask Aircraft:"<< targetAircraft.getFlightID()<<endl;
+
 };
 
 /* -----------------------------------------------------------------------------
@@ -44,13 +44,13 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
  *              thread and SSR.
  * -----------------------------------------------------------------------------
  */
-transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
+void SSR::receiveTransponderData(Aircraft targetAircraft){
 
     transponderData TD;
 
     targetAircraft.ServiceInterrogationSignal();
 
-    TD.flightId=targetAircraft.getFlightID();//after we have successfully interrogated the Aircrafts in illuminatedObjects, we can go ahead and grab the required info
+    TD.flightId=targetAircraft.getFlightID();
     TD.flightLevel= targetAircraft.getFlightLevel();
 
     //Aircraft Positions X,Y,Z
@@ -63,11 +63,21 @@ transponderData SSR::receiveTransponderData(Aircraft targetAircraft){
     TD.speedY=targetAircraft.getSpeedY();
     TD.speedZ=targetAircraft.getSpeedZ();
 
-    return TD;
+    transponderDataList.push_back(TD);
+
 
 };
 
-vector<transponderData> SSR::interrogate(vector<Aircraft> illuminatedObjects)		//first we receive an array of illuminated Objects (assume we push them from back to front)
+/* -----------------------------------------------------------------------------
+ * Name:        interrogate
+ * Input:       vector<Aircraft> illuminatedObjects
+ * Output:      transponderDataList
+ * Description: This method will interrogate each Aircraft and Illuminated Obj
+ *              vector and return the transponder Data for each Aircraft.
+ * -----------------------------------------------------------------------------
+ */
+
+void SSR::interrogate(vector<Aircraft> illuminatedObjects)
 {
 
     transponderData receivedReply;
@@ -75,30 +85,15 @@ vector<transponderData> SSR::interrogate(vector<Aircraft> illuminatedObjects)		/
 for(Aircraft& illuminatedObject: illuminatedObjects){
     //interrogate the aircraft and receive transponder data
     interrogateAircraft(illuminatedObject);
-
-    receivedReply = receiveTransponderData(illuminatedObject);
-    transponderDataList.push_back(receivedReply);
+    receiveTransponderData(illuminatedObject);
 }
-	return transponderDataList;
+
 }
 
 
 vector<transponderData> SSR::sendTransponderData()
 {
-    for (transponderData& transponderData: transponderDataList){
-
-        cout<<transponderData.flightId<<endl;
-        cout<<transponderData.flightLevel<<endl;
-        cout<<transponderData.positionX<<endl;
-        cout<<transponderData.positionY<<endl;
-        cout<<transponderData.positionZ<<endl;
-        cout<<transponderData.speedX<<endl;
-        cout<<transponderData.speedY<<endl;
-        cout<<transponderData.speedZ<<endl;
-        cout<<endl;
-        cout<<endl;
-    }
-
+    //send transponderDataList to computer system
     return transponderDataList;
 }
 
