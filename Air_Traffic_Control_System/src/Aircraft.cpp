@@ -29,18 +29,24 @@ Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int po
 
 void Aircraft::UpdateAircraftPosition()
 {
+    updatePositionX();
+    updatePositionY();
+    updatePositionZ();
 }
 
 void Aircraft::updatePositionX()
 {
+    posX += speedX;
 }
 
 void Aircraft::updatePositionY()
 {
+    posY += speedY;
 }
 
 void Aircraft::updatePositionZ()
 {
+    posZ += speedZ;
 }
 
 void Aircraft::updateFlightLevel()
@@ -61,7 +67,7 @@ char* Aircraft::collectTransponderData()
 	return 0;
 }
 
-void Aircraft::senTransponderData(char transponderData[])
+void Aircraft::sendTransponderData(char transponderData[])
 {
 }
 int Aircraft::getFlightID(){

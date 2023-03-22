@@ -60,8 +60,6 @@ void PSR::detectAircraft(int angle){
 
 	for (Aircraft& aircraft : aircraftList){
 
-		cout << "Aircraft ID: " << aircraft.getFlightID() << endl;
-
 		// Get the aircraft angle in radians
 		aircraftAngleRads = (atan2(aircraft.getPosY(), aircraft.getPosX()));
 

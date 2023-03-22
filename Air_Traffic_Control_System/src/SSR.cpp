@@ -99,6 +99,7 @@ vector<transponderData> SSR::sendTransponderData()
 
  void SSR::execute(){
 
+     while(true){}
      interrogate(illuminatedObjects);
      sendTransponderData();
  }

@@ -25,7 +25,7 @@ public:
 	void ServiceInterrogationSignal();
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
 	char* collectTransponderData();
-	void senTransponderData(char transponderData[]);
+	void sendTransponderData(char transponderData[]);
 
 	int getFlightID();
 	int getFlightLevel();

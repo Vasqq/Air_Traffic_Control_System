@@ -4,6 +4,7 @@ using namespace std;
 #include "Aircraft.h"
 #include "PSR.h"
 #include "SSR.h"
+#include "ResourceManager.h"
 
 int main() {
 	cout << "Hello World!!!" << endl; // prints Hello World!!!
@@ -15,12 +16,20 @@ int main() {
 	testAircraftArr.push_back(a1);
 	testAircraftArr.push_back(a2);
 
+
+	ResourceManager RM(testAircraftArr);
+	RM.createAircraftThreads();
+
+
 	PSR psr(testAircraftArr);
 	vector<Aircraft> illuminatedObjects;
+
+
 	illuminatedObjects=psr.execute();
 
 	SSR ssr(illuminatedObjects);
 	ssr.execute();
+
 
 
 
