@@ -6,6 +6,7 @@
  */
 
 #include "ResourceManager.h"
+#include "PSR.h"
 
 
 
