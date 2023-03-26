@@ -17,7 +17,7 @@ class Aircraft {
 public:
 	Aircraft();
 	Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
-	void UpdateAircraftPosition();
+	void* updateAircraftPosition();
 	void updatePositionX();
 	void updatePositionY();
 	void updatePositionZ();

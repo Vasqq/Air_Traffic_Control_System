@@ -30,11 +30,11 @@ public:
 	void initializeRadar();
 	void storeATCSProcessId(int pid);
 	static void *  ThreadAircraft(void * aircraft);
+	void execute();
+	void configureSimulation();
+	void runSimulation();
 
-//Aircraft class function
-	Aircraft* TakeNextAircraftThread(Aircraft aircraft[]);
-//int function
-	void spawnNewAircraftThread(Aircraft aircraft);
+	void spawnNewAircraftThread(Aircraft nextAircraft);
 
 	virtual ~ResourceManager();
 private:

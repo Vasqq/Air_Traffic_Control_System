@@ -7,7 +7,6 @@ using namespace std;
 #include "ResourceManager.h"
 
 int main() {
-	cout << "Hello World!!!" << endl; // prints Hello World!!!
 
 	Aircraft a1(10,20000,1,30,60,0,1000,1000,1000);
 	Aircraft a2(11,20000,2,40,70,0,1000,1000,1000);
@@ -16,10 +15,8 @@ int main() {
 	testAircraftArr.push_back(a1);
 	testAircraftArr.push_back(a2);
 
-
 	ResourceManager RM(testAircraftArr);
-	RM.createAircraftThreads();
-
+	RM.execute();
 
 	PSR psr(testAircraftArr);
 	vector<Aircraft> illuminatedObjects;

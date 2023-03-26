@@ -27,7 +27,7 @@ Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int po
 }
 
 
-void Aircraft::UpdateAircraftPosition()
+void* Aircraft::updateAircraftPosition()
 {
     updatePositionX();
     updatePositionY();
