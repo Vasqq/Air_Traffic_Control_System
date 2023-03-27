@@ -15,6 +15,7 @@ int main() {
 	testAircraftArr.push_back(a1);
 	testAircraftArr.push_back(a2);
 
+	cout << "Address of testAircraftArr" << &testAircraftArr << endl;
 	ResourceManager RM(testAircraftArr);
 	RM.execute();
 

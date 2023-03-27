@@ -14,9 +14,14 @@ ResourceManager::ResourceManager() {
 
 }
 
-ResourceManager::ResourceManager(vector<Aircraft> AircraftSchedule) {
+ResourceManager::ResourceManager(vector<Aircraft>& AircraftSchedule) {
 
     this->AircraftSchedule=AircraftSchedule;
+
+    cout << "Aircraft schedule: " << &(this->AircraftSchedule) << endl;
+
+    cout << "Aircraft a1: " << &this->AircraftSchedule[0] << endl;
+        cout << "Aircraft a2: " << &this->AircraftSchedule[1] << endl;
 
 }
 
@@ -39,12 +44,16 @@ void* ResourceManager::fwdExecutionToSSR(void *ssr) {
 void ResourceManager::createAircraftThreads(){
 
     cout << "Creating Aircraft threads" << endl;
+    cout << "Aircraft schedule: " << &AircraftSchedule << endl;
+
+    cout << "Aircraft a1: " << &AircraftSchedule[0] << endl;
+    cout << "Aircraft a2: " << &AircraftSchedule[1] << endl;
 
 for(Aircraft& nextAircraft: AircraftSchedule){
     spawnNewAircraftThread(nextAircraft);
     }
 }
-void ResourceManager::spawnNewAircraftThread(Aircraft nextAircraft){
+void ResourceManager::spawnNewAircraftThread(Aircraft& nextAircraft){
 
     int err_no;
     pthread_t   thread_id;
@@ -107,12 +116,13 @@ void ResourceManager::initializePSR(){
 
     vector<Aircraft> aircraftArr = AircraftSchedule;
 
-    PSR psr;
+    // Create a dynamic instance of the PSR class
+    PSR* psr = new PSR();
 
     err_no= pthread_create(&PSR_thread_id,
                            NULL,
                            &fwdExecutionToPSR,
-                           &psr);
+                           psr);
     if(err_no!=0){
         cout<<"ERROR when creating PSR thread: "<< err_no <<endl;
     }

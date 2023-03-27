@@ -18,7 +18,7 @@ using namespace std;
 class ResourceManager {
 public:
     ResourceManager();
-	ResourceManager(vector<Aircraft> AircraftSchedule);
+	ResourceManager(vector<Aircraft>& AircraftSchedule);
 //All the void functions
 	void createAircraftThreads();
 	void createATCSSubsystems();
@@ -38,7 +38,7 @@ public:
 	void configureSimulation();
 	void runSimulation();
 
-	void spawnNewAircraftThread(Aircraft nextAircraft);
+	void spawnNewAircraftThread(Aircraft& nextAircraft);
 
 	virtual ~ResourceManager();
 private:
