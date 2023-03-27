@@ -19,7 +19,7 @@
 
 
 
-PSR::PSR(vector<Aircraft> aircraftArr) {
+PSR::PSR() {
 
 	range = MAX_RANGE;
 	reference_angle = REFERENCE_ANGLE;
@@ -28,7 +28,14 @@ PSR::PSR(vector<Aircraft> aircraftArr) {
 	current_angle = CURRENT_ANGLE;
 	pulse_speed = PULSE_SPEED;
 
-	aircraftList = aircraftArr;
+	Aircraft a1(10,20000,1,30,60,0,1000,1000,1000);
+    Aircraft a2(11,20000,2,40,70,0,1000,1000,1000);
+
+    vector<Aircraft> testAircraftArr;
+    testAircraftArr.push_back(a1);
+    testAircraftArr.push_back(a2);
+
+	this->aircraftList=testAircraftArr;
 }
 
 PSR::~PSR() {
@@ -111,12 +118,14 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 }
 
 
-vector<Aircraft> PSR::execute(){
+void PSR::execute(){
+
+    cout << "Executing PSR..." << endl;
 
 		scan();
-		sendAircraftPositionsToSSR();
+		//sendAircraftPositionsToSSR();
 
-	return illuminatedObjects;
+	//return illuminatedObjects;
 
 }
 

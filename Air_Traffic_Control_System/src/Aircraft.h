@@ -10,6 +10,9 @@
 #include <pthread.h>
 #include <vector>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
 using namespace std;
 
 
@@ -17,7 +20,7 @@ class Aircraft {
 public:
 	Aircraft();
 	Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
-	void* updateAircraftPosition();
+	void updateAircraftPosition();
 	void updatePositionX();
 	void updatePositionY();
 	void updatePositionZ();

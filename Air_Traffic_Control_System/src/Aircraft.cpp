@@ -27,8 +27,10 @@ Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int po
 }
 
 
-void* Aircraft::updateAircraftPosition()
+void Aircraft::updateAircraftPosition()
 {
+    cout<<"Executing aircraft thread..."<<endl;
+
     updatePositionX();
     updatePositionY();
     updatePositionZ();

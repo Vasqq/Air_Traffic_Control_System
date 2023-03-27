@@ -18,17 +18,6 @@ int main() {
 	ResourceManager RM(testAircraftArr);
 	RM.execute();
 
-	PSR psr(testAircraftArr);
-	vector<Aircraft> illuminatedObjects;
-
-
-	illuminatedObjects=psr.execute();
-
-	SSR ssr(illuminatedObjects);
-	ssr.execute();
-
-
-
 
 	return 0;
 }

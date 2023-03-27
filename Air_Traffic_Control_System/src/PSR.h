@@ -23,9 +23,9 @@ using namespace std;
 
 class PSR {
 public:
-	PSR(vector<Aircraft>);
+	PSR();
 
-	vector<Aircraft> execute();
+	void execute();
 	void test();
 	void scan();
 	void detectAircraft(int angle);

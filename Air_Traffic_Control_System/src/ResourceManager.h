@@ -28,8 +28,12 @@ public:
 	void initializeCommunicationSystem();
 	void initializeOperatorConsole();
 	void initializeRadar();
+	void initializePSR();
+	void initializeSSR();
 	void storeATCSProcessId(int pid);
-	static void *  ThreadAircraft(void * aircraft);
+	static void * fwdExecutionToAircraft(void * aircraft);
+	static void * fwdExecutionToPSR(void * psr);
+	static void * fwdExecutionToSSR(void * ssr);
 	void execute();
 	void configureSimulation();
 	void runSimulation();

@@ -20,10 +20,20 @@ ResourceManager::ResourceManager(vector<Aircraft> AircraftSchedule) {
 
 }
 
-void * ResourceManager:: ThreadAircraft(void * aircraft)
+void* ResourceManager:: fwdExecutionToAircraft(void * aircraft)
 {
+    static_cast <Aircraft*> (aircraft)->updateAircraftPosition();
 
-    cout<<"Executing aircraft thread..."<<endl;
+    return NULL;
+}
+void* ResourceManager::fwdExecutionToPSR(void * psr) {
+
+    static_cast <PSR*> (psr)->execute();
+
+    return NULL;
+}
+
+void* ResourceManager::fwdExecutionToSSR(void *ssr) {
 }
 
 void ResourceManager::createAircraftThreads(){
@@ -41,8 +51,8 @@ void ResourceManager::spawnNewAircraftThread(Aircraft nextAircraft){
 
     err_no= pthread_create(&thread_id,
                            NULL,
-                           &ThreadAircraft,
-                           NULL);
+                           &fwdExecutionToAircraft,
+                           &nextAircraft);
     if(err_no!=0){
         cout<<"ERROR when creating thread: "<< err_no <<endl;
     }
@@ -85,6 +95,34 @@ void ResourceManager::initializeOperatorConsole(){
 void ResourceManager::initializeRadar(){
 
     cout << "Initializing Radar..." << endl;
+
+    initializePSR();
+
+}
+
+void ResourceManager::initializePSR(){
+
+    int err_no;
+    pthread_t   PSR_thread_id;
+
+    vector<Aircraft> aircraftArr = AircraftSchedule;
+
+    PSR psr;
+
+    err_no= pthread_create(&PSR_thread_id,
+                           NULL,
+                           &fwdExecutionToPSR,
+                           &psr);
+    if(err_no!=0){
+        cout<<"ERROR when creating PSR thread: "<< err_no <<endl;
+    }
+    else{
+        cout<<" PSR with thread ID: "<<PSR_thread_id<<" created"<<endl;
+        }
+
+}
+void ResourceManager::initializeSSR(){
+
 }
 
 void ResourceManager::configureSimulation(){
@@ -97,7 +135,6 @@ void ResourceManager::runSimulation(){
 
     cout << "Begin of simulation" << endl;
 
-    PSR psr(AircraftSchedule);
 
 }
 
@@ -114,6 +151,8 @@ void ResourceManager::execute(){
         runSimulation();
 
 }
+
+
 ResourceManager::~ResourceManager() {
 	// TODO Auto-generated destructor stub
 }
