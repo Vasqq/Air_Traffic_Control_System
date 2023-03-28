@@ -7,6 +7,7 @@
 
 #include "Timer.h"
 
+<<<<<<< HEAD
 
 
 Timer::Timer(uint32_t sec, uint32_t msec) {
@@ -25,10 +26,33 @@ Timer::Timer(uint32_t sec, uint32_t msec) {
 
     setTimerSpec(sec,1000000* msec);
     cycles_per_sec = SYSPAGE_ENTRY(qtime)->cycles_per_sec;
+=======
+Timer::Timer(uint32_t period_sec, uint32_t period_msec, uint32_t offset_sec,uint32_t offset_msec ) {
+	const int signal = SIGALRM;
+
+	sigemptyset(&sig_set); // initialize a signal set
+	sigaddset(&sig_set, signal); // add SIGALRM to the signal set
+	sigprocmask(SIG_BLOCK, &sig_set, NULL); //block the signal
+
+
+	/* set the signal event a timer expiration */
+	memset(&sig_event, 0, sizeof(struct sigevent));
+	sig_event.sigev_notify = SIGEV_SIGNAL;
+	sig_event.sigev_signo = signal;
+
+
+
+	if (timer_create(CLOCK_REALTIME, &sig_event, &timer_id) == -1){
+		std::cerr << "Timer, Init error : " << errno << "\n";
+	}
+
+	set_timer(period_sec,1000000* period_msec,offset_sec,1000000* offset_msec);//Set the timer offset and period (both expressed in sec and nsec)
+>>>>>>> 2a45a1ac1238570823d4779b605b170c9c10d2c6
 }
 
 
 Timer::~Timer() {
+<<<<<<< HEAD
     // TODO Auto-generated destructor stub
 }
 
@@ -59,6 +83,23 @@ void Timer::tick(){
 double Timer::tock(){
     tock_cycles = ClockCycles();
     return (double)((int)(((double)(tock_cycles-tick_cycles)/cycles_per_sec)*100000))/10;
+=======
+	// TODO Auto-generated destructor stub
+}
+
+void Timer::set_timer(uint32_t p_sec, uint32_t p_nsec, uint32_t o_sec, uint32_t o_nsec ){
+	timer_spec.it_value.tv_sec = o_sec;
+	timer_spec.it_value.tv_nsec = o_nsec;
+	timer_spec.it_interval.tv_sec = p_sec;
+	timer_spec.it_interval.tv_nsec = p_nsec;
+	timer_settime(timer_id, 0, &timer_spec, NULL);//Start the timer
+}
+
+void Timer::wait_next_activation() {
+	int dummy;
+	/* suspend calling process until a signal is pending */
+	sigwait(&sig_set, &dummy);
+>>>>>>> 2a45a1ac1238570823d4779b605b170c9c10d2c6
 }
 
 
