@@ -16,7 +16,6 @@
  *              initializes the object.
  * -----------------------------------------------------------------------------
  */
-
 ResourceManager::ResourceManager() {
 
 }
@@ -29,7 +28,6 @@ ResourceManager::ResourceManager() {
  *              initializes the AircraftSchedule vector.
  * -----------------------------------------------------------------------------
  */
-
 ResourceManager::ResourceManager(vector<Aircraft> &AircraftSchedule) {
 
     this->AircraftSchedule = AircraftSchedule;
@@ -63,7 +61,6 @@ ResourceManager::~ResourceManager() {
  * Description: This function initializes the Data Display subsystem.
  * -----------------------------------------------------------------------------
  */
-
 void ResourceManager::initializeDataDisplay() {
 
     cout << "Initializing Data Display..." << endl;
@@ -171,7 +168,6 @@ void ResourceManager::initializeSSR() {
  *              AircraftSchedule vector by calling spawnNewAircraftThread().
  * -----------------------------------------------------------------------------
  */
-
 void ResourceManager::createAircraftThreads() {
 
     cout << "Creating Aircraft threads" << endl;
@@ -194,7 +190,6 @@ void ResourceManager::createAircraftThreads() {
  *              Communication System, Operator Console, and Radar.
  * -----------------------------------------------------------------------------
  */
-
 void ResourceManager::createATCSSubsystems() {
 
     cout << "Initializing ATCS subsystems..." << endl;
@@ -212,7 +207,6 @@ void ResourceManager::createATCSSubsystems() {
  *              its position.
  * -----------------------------------------------------------------------------
  */
-
 void* ResourceManager::fwdExecutionToAircraft(void *aircraft) {
     static_cast<Aircraft*>(aircraft)->updateAircraftPosition();
 
@@ -225,7 +219,6 @@ void* ResourceManager::fwdExecutionToAircraft(void *aircraft) {
  * Description: This function forwards execution to a PSR object to execute.
  * -----------------------------------------------------------------------------
  */
-
 void* ResourceManager::fwdExecutionToPSR(void *psr) {
 
     static_cast<PSR*>(psr)->execute();
@@ -246,9 +239,9 @@ void* ResourceManager::fwdExecutionToSSR(void *ssr) {
     return NULL;
 }
 /* -----------------------------------------------------------------------------
- * Name:execute
- * Input:None
- * Output:None
+ * Name:		execute
+ * Input:		None
+ * Output:		None
  * Description: This function executes the ATCS simulation by first configuring
  *              the simulation through the configureSimulation() function.
  *              then, the user is prompted to start the simulation by pressing
@@ -270,16 +263,15 @@ void ResourceManager::execute() {
 
 }
 /* -----------------------------------------------------------------------------
- * Name:configureSimulation
- * Input: None
- * Output:None
+ * Name:		configureSimulation
+ * Input: 		None
+ * Output:		None
  * Description: This function is responsible for configuring the simulation by
  *              creating threads for each aircraft in the AircraftSchedule
- initializing the ATCS subsystems. It calls
- createAircraftThreads() and createATCSSubsystems() functions.
+ 	 	 	 	initializing the ATCS subsystems. It calls
+ 	 	 	 	createAircraftThreads() and createATCSSubsystems() functions.
  * -----------------------------------------------------------------------------
  */
-
 void ResourceManager::configureSimulation() {
 
     createAircraftThreads();
@@ -309,7 +301,6 @@ void ResourceManager::runSimulation() {
  *              creating the thread, an error message is printed.
  * -----------------------------------------------------------------------------
  */
-
 void ResourceManager::spawnNewAircraftThread(Aircraft &nextAircraft) {
 
     int err_no;

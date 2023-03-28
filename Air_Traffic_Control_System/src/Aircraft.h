@@ -18,18 +18,24 @@ using namespace std;
 
 class Aircraft {
 public:
+	//Constructors and Destructor
 	Aircraft();
+	virtual ~Aircraft();
 	Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
-	void updateAircraftPosition();
+
+
+	//Functions that update position and flight level
 	void updatePositionX();
 	void updatePositionY();
 	void updatePositionZ();
 	void updateFlightLevel();
+	void updateAircraftPosition();
+
+	//Communication with the IPC
 	void ServiceInterrogationSignal();
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
-	char* collectTransponderData();
-	void sendTransponderData(char transponderData[]);
 
+	//This section will return the new values after they are updated.
 	int getFlightID();
 	int getFlightLevel();
 
@@ -41,7 +47,14 @@ public:
 	int getSpeedY();
 	int getSpeedZ();
 
-	virtual ~Aircraft();
+
+	//This will collect all the new values returned and then send the new data.
+	char* collectTransponderData();
+	void sendTransponderData(char transponderData[]);
+
+
+
+
 
 private:
 	int time_at_boundary;
