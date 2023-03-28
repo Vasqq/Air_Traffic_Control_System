@@ -7,6 +7,7 @@
 
 #include "ResourceManager.h"
 #include "PSR.h"
+#include "SSR.h"
 
 /* -----------------------------------------------------------------------------
  * Name:        ResourceManager()
