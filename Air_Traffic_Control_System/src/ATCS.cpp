@@ -7,7 +7,7 @@ using namespace std;
 #include "ResourceManager.h"
 #include "IPC.cpp"
 
-void* server_start_routine(void*);
+
 
 int main() {
 
