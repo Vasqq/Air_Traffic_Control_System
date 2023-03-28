@@ -14,7 +14,14 @@
 
 using namespace std;
 
-
+/* -----------------------------------------------------------------------------
+ * Name:        SSR
+ * Input:       vector<Aircraft> illuminatedObjects
+ * Output:      None
+ * Description:  This is a constructor of the SSR class that  initializes the
+ *               illuminatedObjects vector.
+ * -----------------------------------------------------------------------------
+ */
 SSR::SSR(vector<Aircraft>illuminatedObjects) {
 	// TODO Auto-generated constructor stub
 	this->illuminatedObjects=illuminatedObjects;
@@ -24,11 +31,29 @@ SSR::SSR(vector<Aircraft>illuminatedObjects) {
 
 
 
-/*
- * Function Name: interrogateAircraft
- * Input: Aircraft targetAircraft
- * Output: Aircraft targetAircraft
- * Description:This method will request the aircraft thread for transponder data
+
+/* -----------------------------------------------------------------------------
+ * Name:        ~SSR
+ * Input:       None
+ * Output:      None
+ * Description: Destructor for the SSR class.
+ * -----------------------------------------------------------------------------
+ */
+SSR::~SSR() {
+   // TODO Auto-generated destructor stub
+};
+
+
+
+
+
+/* -----------------------------------------------------------------------------
+ * Name:        interrogateAircraft
+ * Input:       Aircraft targetAircraft
+ * Output:      Aircraft targetAircraft
+ * Description: This method will request the aircraft thread for transponder
+ *              data
+ * -----------------------------------------------------------------------------
  */
 void SSR::interrogateAircraft(Aircraft targetAircraft){
 
@@ -90,13 +115,29 @@ for(Aircraft& illuminatedObject: illuminatedObjects){
 
 }
 
-
+/* -----------------------------------------------------------------------------
+ * Name:        sendTransponderData
+ * Input:       None
+ * Output:      transponderDataList
+ * Description: This method will return the transponderDataList vector that was
+ *              filled with the push_back values of the transponderData struct
+ *              from receiveTransponderData().
+ * -----------------------------------------------------------------------------
+ */
 vector<transponderData> SSR::sendTransponderData()
 {
     //send transponderDataList to computer system
     return transponderDataList;
 }
 
+/* -----------------------------------------------------------------------------
+ * Name:        execute
+ * Input:       None
+ * Output:      None
+ * Description: This method will run interrogate and senTransponderData,
+ *              executing all functions within the SSR.
+ * -----------------------------------------------------------------------------
+ */
  void SSR::execute(){
 
      while(true){}
@@ -104,7 +145,4 @@ vector<transponderData> SSR::sendTransponderData()
      sendTransponderData();
  }
 
-SSR::~SSR() {
-	// TODO Auto-generated destructor stub
-};
 
