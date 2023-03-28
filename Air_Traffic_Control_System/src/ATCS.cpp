@@ -5,6 +5,9 @@ using namespace std;
 #include "PSR.h"
 #include "SSR.h"
 #include "ResourceManager.h"
+#include "IPC.cpp"
+
+void* server_start_routine(void*);
 
 int main() {
 
@@ -16,6 +19,9 @@ int main() {
 	testAircraftArr.push_back(a2);
 
 	cout << "Address of testAircraftArr" << &testAircraftArr << endl;
+
+
+
 	ResourceManager RM(testAircraftArr);
 	RM.execute();
 
