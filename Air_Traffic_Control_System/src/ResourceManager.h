@@ -17,34 +17,41 @@ using namespace std;
 
 class ResourceManager {
 public:
+    // Constructors and destructor
     ResourceManager();
-	ResourceManager(vector<Aircraft>& AircraftSchedule);
-//All the void functions
-	void createAircraftThreads();
-	void createATCSSubsystems();
-	void storeAircraftProcessId(int pid);
-	void initializeDataDisplay();
-	void initializeComputerSystem();
-	void initializeCommunicationSystem();
-	void initializeOperatorConsole();
-	void initializeRadar();
-	void initializePSR();
-	void initializeSSR();
-	void storeATCSProcessId(int pid);
-	static void * fwdExecutionToAircraft(void * aircraft);
-	static void * fwdExecutionToPSR(void * psr);
-	static void * fwdExecutionToSSR(void * ssr);
-	void execute();
-	void configureSimulation();
-	void runSimulation();
+    ResourceManager(vector<Aircraft>& AircraftSchedule);
+    virtual ~ResourceManager();
 
-	void spawnNewAircraftThread(Aircraft& nextAircraft);
+    // Initialization functions
+    void initializeDataDisplay();
+    void initializeComputerSystem();
+    void initializeCommunicationSystem();
+    void initializeOperatorConsole();
+    void initializeRadar();
+    void initializePSR();
+    void initializeSSR();
 
-	virtual ~ResourceManager();
+    // Process management functions
+    void createAircraftThreads();
+    void createATCSSubsystems();
+    void storeAircraftProcessId(int pid);
+    void storeATCSProcessId(int pid);
+
+    // Thread execution functions
+    static void * fwdExecutionToAircraft(void * aircraft);
+    static void * fwdExecutionToPSR(void * psr);
+    static void * fwdExecutionToSSR(void * ssr);
+
+    // Simulation functions
+    void execute();
+    void configureSimulation();
+    void runSimulation();
+    void spawnNewAircraftThread(Aircraft& nextAircraft);
+
 private:
-	vector<int> aircraft_pids;		//arrays of type integer to store Aircraft PIDS
-	vector<int> ATCS_pids;			//arrays of type integer to store ATCS PIDS
-	vector<Aircraft> AircraftSchedule;
+    vector<int> aircraft_pids;
+    vector<int> ATCS_pids;
+    vector<Aircraft> AircraftSchedule;
 
 };
 
