@@ -9,6 +9,8 @@
 #define SSR_H_
 #include "Aircraft.h"
 #include "PSR.h"
+#include <sys/neutrino.h> // For QNX message passing API
+#include <stdint.h> // For data type uint64_t
     // Struct declaration for transponderData
 	struct transponderData
 {
@@ -31,6 +33,11 @@ private:
 	transponderData TD;
 	// Vector declaration for illuminatedObjects vector of type Aircraft
 	vector<Aircraft> illuminatedObjects;
+	long MsgSend( int coid,
+	              const void* smsg,
+	              size_t sbytes,
+	              void* rmsg,
+	              size_t rbytes );
 
 public:
     // Constructors and destructor

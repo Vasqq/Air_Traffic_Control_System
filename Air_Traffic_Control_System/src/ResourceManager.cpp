@@ -237,6 +237,7 @@ void* ResourceManager::fwdExecutionToPSR(void *psr) {
 
 void* ResourceManager::fwdExecutionToSSR(void *ssr) {
 
+    static_cast<PSR*>(ssr)->execute();
     return NULL;
 }
 /* -----------------------------------------------------------------------------

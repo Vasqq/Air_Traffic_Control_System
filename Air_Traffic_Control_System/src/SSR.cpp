@@ -11,6 +11,8 @@
 #include "Aircraft.h"
 #include <iostream>
 #include <array>
+#include <sys/neutrino.h>
+
 
 using namespace std;
 
@@ -27,6 +29,8 @@ SSR::SSR(vector<Aircraft>illuminatedObjects) {
 	this->illuminatedObjects=illuminatedObjects;
 
 
+
+
 };
 
 
@@ -40,7 +44,8 @@ SSR::SSR(vector<Aircraft>illuminatedObjects) {
  * -----------------------------------------------------------------------------
  */
 SSR::~SSR() {
-   // TODO Auto-generated destructor stub
+
+
 };
 
 
@@ -57,7 +62,13 @@ SSR::~SSR() {
  */
 void SSR::interrogateAircraft(Aircraft targetAircraft){
 
-		//implement message passing for thread
+	//implement message passing for thread
+    // Send interrogation signal to the Aircraft thread
+        targetAircraft.ServiceInterrogationSignal();
+
+
+
+
 
 };
 
@@ -70,6 +81,10 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
  * -----------------------------------------------------------------------------
  */
 void SSR::receiveTransponderData(Aircraft targetAircraft){
+
+    // Receive message from the aircraft thread containing transponder data
+
+    targetAircraft.receiveInterrogationSignal();
 
     transponderData TD;
 
@@ -87,6 +102,7 @@ void SSR::receiveTransponderData(Aircraft targetAircraft){
     TD.speedX=targetAircraft.getSpeedX();
     TD.speedY=targetAircraft.getSpeedY();
     TD.speedZ=targetAircraft.getSpeedZ();
+
 
     transponderDataList.push_back(TD);
 

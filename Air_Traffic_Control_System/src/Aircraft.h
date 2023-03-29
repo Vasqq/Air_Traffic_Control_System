@@ -13,6 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <sys/neutrino.h> // For QNX message passing API
+#include <stdint.h> // For data type uint64_t
+#include <sys/iofunc.h>
+#include <sys/dispatch.h>
 using namespace std;
 
 
@@ -21,7 +25,7 @@ public:
 	//Constructors and Destructor
 	Aircraft();
 	virtual ~Aircraft();
-	Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
+	Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
 
 
 	//Functions that update position and flight level
@@ -52,7 +56,14 @@ public:
 	char* collectTransponderData();
 	void sendTransponderData(char transponderData[]);
 
-
+	int MsgReceive( int chid,
+	                void * msg,
+	                size_t bytes,
+	                struct _msg_info * info );
+	int MsgReply( int rcvid,
+	              long status,
+	              const void* msg,
+	              size_t bytes );
 
 
 
@@ -62,6 +73,7 @@ private:
 	int flight_id;
 	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
+
 
 };
 

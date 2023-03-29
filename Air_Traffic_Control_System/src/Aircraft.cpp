@@ -20,6 +20,7 @@ using namespace std;
  */
 Aircraft::Aircraft()
 {
+
 }
 
 
@@ -42,9 +43,9 @@ Aircraft::~Aircraft()
  * 				private members to be used in later functions.
  * -----------------------------------------------------------------------------
  */
-Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
+Aircraft::Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
 {
-	this->time_at_boundary=time_at_boundary;
+    this->time_at_boundary=time_at_boundary;
 	this->flight_level=flight_level;
 	this->flight_id=flight_id;
 	this->posX=posX;
@@ -53,6 +54,10 @@ Aircraft::Aircraft(int time_at_boundary, int flight_level, int flight_id, int po
 	this->speedX=speedX;
 	this->speedY=speedY;
 	this->speedZ=speedZ;
+
+
+
+
 
 }
 
@@ -144,6 +149,38 @@ void Aircraft::updateAircraftPosition()
 void Aircraft::ServiceInterrogationSignal()
 {
 
+
+    // Create message passing channel
+        int chid = ChannelCreate(0);
+        if (chid == -1) {
+            cerr << "Error: ChannelCreate failed." << endl;
+            return;
+        }
+
+        cout << "Aircraft thread waiting for interrogation signal..." << endl;
+
+        // Receive message
+        struct {
+            int code;
+            int data;
+        } msg;
+
+        int rcvid = MsgReceive(chid, &msg, sizeof(msg), NULL);
+        if (rcvid == -1) {
+            cerr << "Error: MsgReceive failed." << endl;
+            return;
+        }
+
+        cout << "Interrogation signal received from ground station. Code = " << msg.code << ", data = " << msg.data << endl;
+
+        // Reply to message
+        MsgReply(rcvid, EOK, NULL, 0);
+
+        // Destroy message passing channel
+        ChannelDestroy(chid);
+
+
+
 }
 
 
@@ -157,6 +194,40 @@ void Aircraft::ServiceInterrogationSignal()
  */
 void Aircraft::receiveInterrogationSignal()
 {
+
+    // Connect to message passing channel
+        int chid = ConnectAttach(0,0,0,0,0);
+        if (chid == -1) {
+            cerr << "Error: ChannelConnect failed." << endl;
+            return;
+        }
+
+        // Send message
+        struct {
+            int code;
+            int data;
+        } msg = { 1, 42 };
+
+        int status = MsgSend(chid, &msg, sizeof(msg), NULL, 0);
+        if (status == -1) {
+            cerr << "Error: MsgSend failed." << endl;
+            return;
+        }
+
+        cout << "Interrogation signal sent to aircraft. Code = " << msg.code << ", data = " << msg.data << endl;
+
+        // Receive reply to message
+        status = MsgReceive(chid, &msg, sizeof(msg), NULL);
+        if (status == -1) {
+            cerr << "Error: MsgReceive failed." << endl;
+            return;
+        }
+
+        cout << "Reply received from aircraft." << endl;
+
+        // Disconnect from message passing channel
+        ConnectDetach(chid);
+
 }
 
 
@@ -308,4 +379,12 @@ char* Aircraft::collectTransponderData()
  */
 void Aircraft::sendTransponderData(char transponderData[])
 {
+}
+
+int Aircraft::MsgReceive(int chid, void *msg, size_t bytes, struct _msg_info *info) {
+    return ::MsgReceive(chid, msg, bytes, info);
+}
+
+int Aircraft::MsgReply(int rcvid, long status,const void* msg, size_t bytes ){
+    return ::MsgReply(rcvid,status,msg, bytes);
 }

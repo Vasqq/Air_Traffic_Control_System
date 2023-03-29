@@ -1,17 +1,10 @@
 #include <iostream>
-using namespace std;
-
 #include "Aircraft.h"
 #include "PSR.h"
 #include "SSR.h"
 #include "ResourceManager.h"
-#include "IPC.cpp"
 
-<<<<<<< HEAD
-
-=======
-void* server_start_routine(void*);
->>>>>>> 2a45a1ac1238570823d4779b605b170c9c10d2c6
+using namespace std;
 
 int main() {
 
