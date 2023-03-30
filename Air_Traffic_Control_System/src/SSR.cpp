@@ -12,7 +12,8 @@
 #include <iostream>
 #include <array>
 #include <sys/neutrino.h>
-
+#include <sys/netmgr.h>
+#include <sys/types.h>
 
 using namespace std;
 
@@ -64,7 +65,8 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
 
 	//implement message passing for thread
     // Send interrogation signal to the Aircraft thread
-
+    pid_t pid = targetAircraft.get_pid();
+    cout<<pid<<endl;;
 
         // Create message passing channel
 
@@ -74,6 +76,18 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                     return;
                 }
 
+
+
+
+
+
+                // Connect to the Aircraft thread
+                int coid = ConnectAttach(0,pid, chid, _NTO_SIDE_CHANNEL, 0);
+                if (coid == -1) {
+                    perror("Failed to connect to Aircraft");
+                    ChannelDestroy(chid);
+                    return;
+                }
 
                 cout << "Aircraft thread waiting for Interrogation signal..." << endl;
 
@@ -94,15 +108,18 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
 
                 // Send the message to the Aircraft thread
 
-                int rc = MsgSend(chid, &msg, sizeof(msg), NULL, 0);
+                int rc = MsgSend(coid, &msg, sizeof(msg), NULL, 0);
 
                 if (rc == -1) {
                     perror("Failed to send message to Aircraft");
-                    exit(EXIT_FAILURE);
+                    ConnectDetach(coid);
+                    ChannelDestroy(chid);
+                    return;
+
                 }
 
                 //after msg is sent, we pass channel ID to function to run it
-                targetAircraft.ServiceInterrogationSignal(chid);
+                targetAircraft.ServiceInterrogationSignal(coid);
                 //if we dont send the channel id, we cannot receive and send a reply
                 //the only other alternative is to do a get and set but that means
                 //creating a private member called chid in the Aircraft class
@@ -116,7 +133,9 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                 rc = MsgReceive(chid, &reply_msg, sizeof(reply_msg), NULL);
                 if (rc == -1) {
                     perror("Failed to receive reply message from Aircraft");
-                    exit(EXIT_FAILURE);
+                    ConnectDetach(coid);
+                    ChannelDestroy(chid);
+                    return;
                 }
 
 
@@ -124,14 +143,17 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                 // Process the reply message
                 if (reply_msg.type == INTERROGATION_REPLY) {
                     int status_data = reply_msg.status;
-                    cout<<"Need to integrate this but it works"<<endl;
-                    // Do something with the status data...//HERE IS WHERE WE RUN RECEIVETRANSPONDERDATA
+                    cout<<"This is where we call receive transponder data"<<endl;
+
                 } else {
                     cerr << "Error: Received unexpected message type from Aircraft." << endl;
                 }
 
-                	// Close the message passing channel
-                    ChannelDestroy(chid);
+                // Close the connection and message passing channel
+                ConnectDetach(coid);
+                ChannelDestroy(chid);
+                cout << "Channel: " << chid << " Destroyed" << endl;
+
 };
 
 /* -----------------------------------------------------------------------------

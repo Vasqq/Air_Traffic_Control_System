@@ -17,13 +17,17 @@
 #include <stdint.h> // For data type uint64_t
 #include <sys/iofunc.h>
 #include <sys/dispatch.h>
+#include <unistd.h>
+#include <sys/netmgr.h>
+#include <sys/types.h>
 using namespace std;
 
 
 class Aircraft {
 public:
 	//Constructors and Destructor
-	Aircraft();
+
+    Aircraft();
 	virtual ~Aircraft();
 	Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
 	int INTERROGATION_REPLY = 2;
@@ -66,7 +70,9 @@ public:
 	              const void* msg,
 	              size_t bytes );
 
-
+	pid_t get_pid() {
+	        return getpid();
+	    }
 
 private:
 	int time_at_boundary;
@@ -74,6 +80,7 @@ private:
 	int flight_id;
 	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
+
 
 
 };

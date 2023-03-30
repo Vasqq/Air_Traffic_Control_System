@@ -164,8 +164,22 @@ void Aircraft::ServiceInterrogationSignal(int chid)
                int speedZ;
            } msg;
 
+               msg.flight_id= this->flight_id;
+               msg.flight_lvl= this->flight_level;
+               msg.posx= this->posX;
+               msg.posy= this->posY;
+               msg.posz= this->posZ;
+               msg.speedX= this->speedX;
+               msg.speedY= this->speedY;
+               msg.speedZ= this->speedZ;
            // Wait for a message on the channel
+
+               if (chid == -1) {
+                   perror("Invalid channel ID in ServiceInterrogationSignal");
+                   exit(EXIT_FAILURE);
+               }
            rc = MsgReceive(chid, &msg, sizeof(msg), NULL);
+
            if (rc == -1) {
                perror("Failed to receive message in ServiceInterrogationSignal");
                exit(EXIT_FAILURE);
@@ -173,26 +187,42 @@ void Aircraft::ServiceInterrogationSignal(int chid)
 
            // Process the message
            	   	   msg.code =INTERROGATION_SIGNAL;
-           	   	   if (code !=INTERROGATION_SIGNAL) {
-               perror("Failed to receive proper INTERROGATION_SIGNAL");
-               exit(EXIT_FAILURE);
-           }
 
-                   if (flight_id ==-1) {
-                                  perror("Failed to retrieve flight Id");
-                                  exit(EXIT_FAILURE);
-                              }
 
-                   msg.flight_lvl = getFlightLevel();
-                   msg.posx = getPosX();
-                   msg.posy = getPosY();
-                   msg.posz = getPosZ();
-                   msg.speedX = getSpeedX();
-                   msg.speedY = getSpeedY();
-                   msg.speedZ = getSpeedZ();
+           	   	   //Here we implement error checks for passed messages
 
-               // Perform the interrogation on this aircraft
-               // run all the get functions here to return them
+                   if (msg.flight_id ==-1) {
+                       perror("Failed to retrieve flight Id");
+                       exit(EXIT_FAILURE);}
+
+
+                   if (msg.flight_lvl ==-1) {
+                       perror("Failed to retrieve flight_lvl");
+                       exit(EXIT_FAILURE);}
+
+                   if (msg.posx ==-1) {
+                       perror("Failed to retrieve posX");
+                       exit(EXIT_FAILURE);}
+
+                   if (msg.posy ==-1) {
+                       perror("Failed to retrieve pos Y");
+                       exit(EXIT_FAILURE);}
+
+                   if (msg.posz ==-1) {
+                       perror("Failed to retrieve pos Z");
+                       exit(EXIT_FAILURE);}
+
+                   if (msg.speedX ==-1) {
+                       perror("Failed to retrieve speedX");
+                       exit(EXIT_FAILURE);}
+
+                   if (msg.speedY ==-1) {
+                        perror("Failed to retrieve speedY");
+                        exit(EXIT_FAILURE);}
+
+                   if (msg.speedZ ==-1) {
+                        perror("Failed to retrieve speedZ");
+                        exit(EXIT_FAILURE);}
 
 
 
@@ -212,9 +242,8 @@ void Aircraft::ServiceInterrogationSignal(int chid)
                if (rc == -1) {
                    perror("Failed to send reply message in ServiceInterrogationSignal");
                    exit(EXIT_FAILURE);
-               }
-            else {
-               cerr << "Reply Sent to SSR." << endl;}
+               }else{cout<<"All Test Passed"<<endl;}
+
 
 
 
@@ -390,9 +419,9 @@ void Aircraft::sendTransponderData(char transponderData[])
 }
 
 int Aircraft::MsgReceive(int chid, void* msg, size_t bytes, struct _msg_info* info) {
-    //return (chid, msg, bytes, &info);
 }
 
 int Aircraft::MsgReply(int rcvid, long status,const void* msg, size_t bytes ){
-    return (rcvid,status,msg, bytes);
+
 }
+
