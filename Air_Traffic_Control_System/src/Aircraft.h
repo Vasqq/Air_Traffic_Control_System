@@ -20,8 +20,10 @@
 #include <unistd.h>
 #include <sys/netmgr.h>
 #include <sys/types.h>
+
 using namespace std;
 
+static int chid;
 
 class Aircraft {
 public:
@@ -41,7 +43,8 @@ public:
 	void updateAircraftPosition();
 
 	//Communication with the IPC
-	void ServiceInterrogationSignal(int chid);
+	void ServiceInterrogationSignal();
+
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
 
 	//This section will return the new values after they are updated.
@@ -61,14 +64,7 @@ public:
 	char* collectTransponderData();
 	void sendTransponderData(char transponderData[]);
 
-	int MsgReceive( int chid,
-	                void * msg,
-	                size_t bytes,
-	                struct _msg_info * info );
-	int MsgReply( int rcvid,
-	              long status,
-	              const void* msg,
-	              size_t bytes );
+
 
 	pid_t get_pid() {
 	        return getpid();

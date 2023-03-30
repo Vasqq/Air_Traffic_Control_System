@@ -60,12 +60,7 @@ public:
     // Public declaration of transponderDataList vector
     vector<transponderData> transponderDataList;
 
-    long MsgSend( int chid,const void* smsg,size_t sbytes,void* rmsg,size_t rbytes );
-    int ConnectAttach( uint32_t nd,
-                       pid_t pid,
-                       int chid,
-                       unsigned index,
-                       int flags );
+
 };
 
 #endif /* SSR_H_ */

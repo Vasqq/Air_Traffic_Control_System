@@ -68,21 +68,16 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
     pid_t pid = targetAircraft.get_pid();
     cout<<pid<<endl;;
 
-        // Create message passing channel
+    // Create message passing channel
 
-                int chid = ChannelCreate(0);
-                if (chid == -1) {
-                    cerr << "Error: ChannelCreate failed." << endl;
-                    return;
-                }
-
-
-
-
-
+    				chid = ChannelCreate(0);
+     	                if (chid == -1) {
+     	                    cerr << "Error: ChannelCreate failed." << endl;
+     	                    return;
+     	                }
 
                 // Connect to the Aircraft thread
-                int coid = ConnectAttach(0,pid, chid, _NTO_SIDE_CHANNEL, 0);
+                int coid = ConnectAttach(0,pid,chid,0, 0);
                 if (coid == -1) {
                     perror("Failed to connect to Aircraft");
                     ChannelDestroy(chid);
@@ -90,23 +85,17 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                 }
 
                 cout << "Aircraft thread waiting for Interrogation signal..." << endl;
-
+                targetAircraft.ServiceInterrogationSignal();
                 // Receive message
                 struct {
                     int code;
-                    int flight_id;
-                    int flight_lvl;
-                    int posx;
-                    int posy;
-                    int posz;
-                    int speedX,speedY,speedZ;
-
                 } msg;
                 //we are requesting the following from Aircraft
                 msg.code = INTERROGATION_SIGNAL;
 
 
                 // Send the message to the Aircraft thread
+               // targetAircraft.ServiceInterrogationSignal(chid, pid);
 
                 int rc = MsgSend(coid, &msg, sizeof(msg), NULL, 0);
 
@@ -118,8 +107,9 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
 
                 }
 
+
                 //after msg is sent, we pass channel ID to function to run it
-                targetAircraft.ServiceInterrogationSignal(coid);
+                //targetAircraft.ServiceInterrogationSignal(chid);
                 //if we dont send the channel id, we cannot receive and send a reply
                 //the only other alternative is to do a get and set but that means
                 //creating a private member called chid in the Aircraft class
@@ -128,6 +118,12 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                 struct {
                     int type;
                     int status;
+                    int flight_id;
+                    int flight_lvl;
+                    int posx;
+                    int posy;
+                    int posz;
+                    int speedX,speedY,speedZ;
                 } reply_msg;
 
                 rc = MsgReceive(chid, &reply_msg, sizeof(reply_msg), NULL);
@@ -245,11 +241,5 @@ vector<transponderData> SSR::sendTransponderData()
      sendTransponderData();
  }
 
- long SSR::MsgSend(int chid,const void* smsg,size_t sbytes,void* rmsg,size_t rbytes ) {
-     return (chid, smsg, sbytes, rmsg,rbytes);
- }
 
- int SSR::ConnectAttach(uint32_t nd,pid_t pid,int chid,unsigned index,int flags ){
-     return (nd,pid,chid,index,flags);
- }
 
