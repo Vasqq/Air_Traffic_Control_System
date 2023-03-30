@@ -90,15 +90,6 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                 } msg;
                 //we are requesting the following from Aircraft
                 msg.code = INTERROGATION_SIGNAL;
-                //Not sure if we need to put the getXX() still to check
-                msg.flight_id = targetAircraft.getFlightID();
-                msg.flight_lvl = targetAircraft.getFlightLevel();
-                msg.posx = targetAircraft.getPosX();
-                msg.posy = targetAircraft.getPosY();
-                msg.posz = targetAircraft.getPosZ();
-                msg.speedX = targetAircraft.getSpeedX();
-                msg.speedY = targetAircraft.getSpeedY();
-                msg.speedZ = targetAircraft.getSpeedZ();
 
 
                 // Send the message to the Aircraft thread
@@ -127,20 +118,20 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
                     perror("Failed to receive reply message from Aircraft");
                     exit(EXIT_FAILURE);
                 }
-                 // Close the message passing channel
-                    ChannelDestroy(chid);
+
 
 
                 // Process the reply message
                 if (reply_msg.type == INTERROGATION_REPLY) {
                     int status_data = reply_msg.status;
-
+                    cout<<"Need to integrate this but it works"<<endl;
                     // Do something with the status data...//HERE IS WHERE WE RUN RECEIVETRANSPONDERDATA
                 } else {
                     cerr << "Error: Received unexpected message type from Aircraft." << endl;
                 }
 
-
+                	// Close the message passing channel
+                    ChannelDestroy(chid);
 };
 
 /* -----------------------------------------------------------------------------
@@ -233,7 +224,7 @@ vector<transponderData> SSR::sendTransponderData()
  }
 
  long SSR::MsgSend(int chid,const void* smsg,size_t sbytes,void* rmsg,size_t rbytes ) {
-     return ::MsgSend(chid, smsg, sbytes, rmsg,rbytes);
+     return (chid, smsg, sbytes, rmsg,rbytes);
  }
 
  int SSR::ConnectAttach(uint32_t nd,pid_t pid,int chid,unsigned index,int flags ){

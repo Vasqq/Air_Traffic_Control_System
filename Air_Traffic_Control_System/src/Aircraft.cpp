@@ -172,8 +172,17 @@ void Aircraft::ServiceInterrogationSignal(int chid)
            }
 
            // Process the message
-           if (msg.code == INTERROGATION_SIGNAL) {
-                   msg.flight_id = getFlightID();  // Set the flight ID field in the message
+           	   	   msg.code =INTERROGATION_SIGNAL;
+           	   	   if (code !=INTERROGATION_SIGNAL) {
+               perror("Failed to receive proper INTERROGATION_SIGNAL");
+               exit(EXIT_FAILURE);
+           }
+
+                   if (flight_id ==-1) {
+                                  perror("Failed to retrieve flight Id");
+                                  exit(EXIT_FAILURE);
+                              }
+
                    msg.flight_lvl = getFlightLevel();
                    msg.posx = getPosX();
                    msg.posy = getPosY();
@@ -181,7 +190,7 @@ void Aircraft::ServiceInterrogationSignal(int chid)
                    msg.speedX = getSpeedX();
                    msg.speedY = getSpeedY();
                    msg.speedZ = getSpeedZ();
-           }
+
                // Perform the interrogation on this aircraft
                // run all the get functions here to return them
 
@@ -205,7 +214,7 @@ void Aircraft::ServiceInterrogationSignal(int chid)
                    exit(EXIT_FAILURE);
                }
             else {
-               cerr << "Error: Received unexpected message code in ServiceInterrogationSignal." << endl;}
+               cerr << "Reply Sent to SSR." << endl;}
 
 
 
@@ -380,10 +389,10 @@ void Aircraft::sendTransponderData(char transponderData[])
 {
 }
 
-int Aircraft::MsgReceive(int chid, void *msg, size_t bytes, struct _msg_info *info) {
-    return ::MsgReceive(chid, msg, bytes, info);
+int Aircraft::MsgReceive(int chid, void* msg, size_t bytes, struct _msg_info* info) {
+    //return (chid, msg, bytes, &info);
 }
 
 int Aircraft::MsgReply(int rcvid, long status,const void* msg, size_t bytes ){
-    return ::MsgReply(rcvid,status,msg, bytes);
+    return (rcvid,status,msg, bytes);
 }
