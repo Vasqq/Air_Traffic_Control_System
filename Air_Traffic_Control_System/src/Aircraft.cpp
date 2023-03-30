@@ -6,6 +6,8 @@
  */
 
 #include "Aircraft.h"
+int INTERROGATION_REPLY = 2;
+int INTERROGATION_SIGNAL=1;
 using namespace std;
 
 
@@ -146,44 +148,69 @@ void Aircraft::updateAircraftPosition()
  * Description: This will call the IPC to check for messages.
  * -----------------------------------------------------------------------------
  */
-void Aircraft::ServiceInterrogationSignal()
+void Aircraft::ServiceInterrogationSignal(int chid)
 {
 
+    int rc;
+           struct {
+               int code;
+               int flight_id;
+               int flight_lvl;
+               int posx;
+               int posy;
+               int posz;
+               int speedX;
+               int speedY;
+               int speedZ;
+           } msg;
 
-    // Create message passing channel
-        int chid = ChannelCreate(0);
-        if (chid == -1) {
-            cerr << "Error: ChannelCreate failed." << endl;
-            return;
-        }
+           // Wait for a message on the channel
+           rc = MsgReceive(chid, &msg, sizeof(msg), NULL);
+           if (rc == -1) {
+               perror("Failed to receive message in ServiceInterrogationSignal");
+               exit(EXIT_FAILURE);
+           }
 
-        cout << "Aircraft thread waiting for interrogation signal..." << endl;
-
-        // Receive message
-        struct {
-            int code;
-            int data;
-        } msg;
-
-        int rcvid = MsgReceive(chid, &msg, sizeof(msg), NULL);
-        if (rcvid == -1) {
-            cerr << "Error: MsgReceive failed." << endl;
-            return;
-        }
-
-        cout << "Interrogation signal received from ground station. Code = " << msg.code << ", data = " << msg.data << endl;
-
-        // Reply to message
-        MsgReply(rcvid, EOK, NULL, 0);
-
-        // Destroy message passing channel
-        ChannelDestroy(chid);
+           // Process the message
+           if (msg.code == INTERROGATION_SIGNAL) {
+                   msg.flight_id = getFlightID();  // Set the flight ID field in the message
+                   msg.flight_lvl = getFlightLevel();
+                   msg.posx = getPosX();
+                   msg.posy = getPosY();
+                   msg.posz = getPosZ();
+                   msg.speedX = getSpeedX();
+                   msg.speedY = getSpeedY();
+                   msg.speedZ = getSpeedZ();
+           }
+               // Perform the interrogation on this aircraft
+               // run all the get functions here to return them
 
 
 
-}
 
 
+
+               // Send a reply message to the calling thread
+               struct {
+                   int type;
+                   int status;
+               } reply_msg;
+
+               reply_msg.type = INTERROGATION_REPLY;
+               reply_msg.status = 0;  // Set to some status value as needed
+
+               rc = MsgReply(chid, EOK, &reply_msg, sizeof(reply_msg));
+               if (rc == -1) {
+                   perror("Failed to send reply message in ServiceInterrogationSignal");
+                   exit(EXIT_FAILURE);
+               }
+            else {
+               cerr << "Error: Received unexpected message code in ServiceInterrogationSignal." << endl;}
+
+
+
+
+    };
 /* -----------------------------------------------------------------------------
  * Name:        receiveInterrogationSignal
  * Input:       None
@@ -195,38 +222,10 @@ void Aircraft::ServiceInterrogationSignal()
 void Aircraft::receiveInterrogationSignal()
 {
 
-    // Connect to message passing channel
-        int chid = ConnectAttach(0,0,0,0,0);
-        if (chid == -1) {
-            cerr << "Error: ChannelConnect failed." << endl;
-            return;
-        }
 
-        // Send message
-        struct {
-            int code;
-            int data;
-        } msg = { 1, 42 };
 
-        int status = MsgSend(chid, &msg, sizeof(msg), NULL, 0);
-        if (status == -1) {
-            cerr << "Error: MsgSend failed." << endl;
-            return;
-        }
 
-        cout << "Interrogation signal sent to aircraft. Code = " << msg.code << ", data = " << msg.data << endl;
 
-        // Receive reply to message
-        status = MsgReceive(chid, &msg, sizeof(msg), NULL);
-        if (status == -1) {
-            cerr << "Error: MsgReceive failed." << endl;
-            return;
-        }
-
-        cout << "Reply received from aircraft." << endl;
-
-        // Disconnect from message passing channel
-        ConnectDetach(chid);
 
 }
 

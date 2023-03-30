@@ -64,10 +64,81 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
 
 	//implement message passing for thread
     // Send interrogation signal to the Aircraft thread
-        targetAircraft.ServiceInterrogationSignal();
 
 
+        // Create message passing channel
 
+                int chid = ChannelCreate(0);
+                if (chid == -1) {
+                    cerr << "Error: ChannelCreate failed." << endl;
+                    return;
+                }
+
+
+                cout << "Aircraft thread waiting for Interrogation signal..." << endl;
+
+                // Receive message
+                struct {
+                    int code;
+                    int flight_id;
+                    int flight_lvl;
+                    int posx;
+                    int posy;
+                    int posz;
+                    int speedX,speedY,speedZ;
+
+                } msg;
+                //we are requesting the following from Aircraft
+                msg.code = INTERROGATION_SIGNAL;
+                //Not sure if we need to put the getXX() still to check
+                msg.flight_id = targetAircraft.getFlightID();
+                msg.flight_lvl = targetAircraft.getFlightLevel();
+                msg.posx = targetAircraft.getPosX();
+                msg.posy = targetAircraft.getPosY();
+                msg.posz = targetAircraft.getPosZ();
+                msg.speedX = targetAircraft.getSpeedX();
+                msg.speedY = targetAircraft.getSpeedY();
+                msg.speedZ = targetAircraft.getSpeedZ();
+
+
+                // Send the message to the Aircraft thread
+
+                int rc = MsgSend(chid, &msg, sizeof(msg), NULL, 0);
+
+                if (rc == -1) {
+                    perror("Failed to send message to Aircraft");
+                    exit(EXIT_FAILURE);
+                }
+
+                //after msg is sent, we pass channel ID to function to run it
+                targetAircraft.ServiceInterrogationSignal(chid);
+                //if we dont send the channel id, we cannot receive and send a reply
+                //the only other alternative is to do a get and set but that means
+                //creating a private member called chid in the Aircraft class
+
+                // Wait for a reply message from the Aircraft thread
+                struct {
+                    int type;
+                    int status;
+                } reply_msg;
+
+                rc = MsgReceive(chid, &reply_msg, sizeof(reply_msg), NULL);
+                if (rc == -1) {
+                    perror("Failed to receive reply message from Aircraft");
+                    exit(EXIT_FAILURE);
+                }
+                 // Close the message passing channel
+                    ChannelDestroy(chid);
+
+
+                // Process the reply message
+                if (reply_msg.type == INTERROGATION_REPLY) {
+                    int status_data = reply_msg.status;
+
+                    // Do something with the status data...//HERE IS WHERE WE RUN RECEIVETRANSPONDERDATA
+                } else {
+                    cerr << "Error: Received unexpected message type from Aircraft." << endl;
+                }
 
 
 };
@@ -84,11 +155,11 @@ void SSR::receiveTransponderData(Aircraft targetAircraft){
 
     // Receive message from the aircraft thread containing transponder data
 
-    targetAircraft.receiveInterrogationSignal();
+    //targetAircraft.receiveInterrogationSignal();
 
     transponderData TD;
 
-    targetAircraft.ServiceInterrogationSignal();
+    //targetAircraft.ServiceInterrogationSignal();
 
     TD.flightId=targetAircraft.getFlightID();
     TD.flightLevel= targetAircraft.getFlightLevel();
@@ -156,9 +227,16 @@ vector<transponderData> SSR::sendTransponderData()
  */
  void SSR::execute(){
 
-     while(true){}
+
      interrogate(illuminatedObjects);
      sendTransponderData();
  }
 
+ long SSR::MsgSend(int chid,const void* smsg,size_t sbytes,void* rmsg,size_t rbytes ) {
+     return ::MsgSend(chid, smsg, sbytes, rmsg,rbytes);
+ }
+
+ int SSR::ConnectAttach(uint32_t nd,pid_t pid,int chid,unsigned index,int flags ){
+     return (nd,pid,chid,index,flags);
+ }
 

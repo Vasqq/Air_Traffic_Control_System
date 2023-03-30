@@ -26,7 +26,8 @@ public:
 	Aircraft();
 	virtual ~Aircraft();
 	Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
-
+	int INTERROGATION_REPLY = 2;
+	 int INTERROGATION_SIGNAL = 1;
 
 	//Functions that update position and flight level
 	void updatePositionX();
@@ -36,7 +37,7 @@ public:
 	void updateAircraftPosition();
 
 	//Communication with the IPC
-	void ServiceInterrogationSignal();
+	void ServiceInterrogationSignal(int chid);
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
 
 	//This section will return the new values after they are updated.

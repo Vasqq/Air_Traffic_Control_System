@@ -13,7 +13,7 @@
  */
 
 #include "PSR.h"
-
+#include "SSR.h"
 #include <iostream>
 #include <math.h>
 
@@ -123,7 +123,9 @@ void PSR::execute(){
     cout << "Executing PSR..." << endl;
 
 		scan();
-		//sendAircraftPositionsToSSR();
+	sendAircraftPositionsToSSR();
+	SSR ssr(illuminatedObjects);
+	ssr.execute();
 
 	//return illuminatedObjects;
 

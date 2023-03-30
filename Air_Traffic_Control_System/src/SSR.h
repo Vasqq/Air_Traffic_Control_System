@@ -33,18 +33,15 @@ private:
 	transponderData TD;
 	// Vector declaration for illuminatedObjects vector of type Aircraft
 	vector<Aircraft> illuminatedObjects;
-	long MsgSend( int coid,
-	              const void* smsg,
-	              size_t sbytes,
-	              void* rmsg,
-	              size_t rbytes );
+
 
 public:
     // Constructors and destructor
     SSR(vector<Aircraft>illuminatedObjects);
     virtual ~SSR();
 
-
+    int INTERROGATION_REPLY = 2;
+    int INTERROGATION_SIGNAL = 1;
     // Functions to interact with Aircraft threads and receive their data
     void interrogateAircraft(Aircraft targetAircraft);
     void receiveTransponderData(Aircraft illuminatedObject);
@@ -62,7 +59,12 @@ public:
     // Public declaration of transponderDataList vector
     vector<transponderData> transponderDataList;
 
-
+    long MsgSend( int chid,const void* smsg,size_t sbytes,void* rmsg,size_t rbytes );
+    int ConnectAttach( uint32_t nd,
+                       pid_t pid,
+                       int chid,
+                       unsigned index,
+                       int flags );
 };
 
 #endif /* SSR_H_ */
