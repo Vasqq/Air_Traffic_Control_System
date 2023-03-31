@@ -50,6 +50,7 @@ private:
 
 	vector<Aircraft> aircraftList;
 	vector<Aircraft> illuminatedObjects;
+
 };
 
 #endif /* PSR_H_ */

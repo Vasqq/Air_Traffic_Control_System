@@ -8,6 +8,8 @@
 #ifndef SRC_RESOURCEMANAGER_H_
 #define SRC_RESOURCEMANAGER_H_
 #include "Aircraft.h"
+#include "PSR.h"
+#include "SSR.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -52,6 +54,8 @@ private:
     vector<int> aircraft_pids;
     vector<int> ATCS_pids;
     vector<Aircraft> AircraftSchedule;
+    pthread_t psrThreadID;  // Thread ID for PSR thread
+
 
 };
 

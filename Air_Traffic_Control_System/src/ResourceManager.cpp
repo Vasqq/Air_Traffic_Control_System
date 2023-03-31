@@ -6,8 +6,7 @@
  */
 
 #include "ResourceManager.h"
-#include "PSR.h"
-#include "SSR.h"
+
 
 /* -----------------------------------------------------------------------------
  * Name:        ResourceManager()
@@ -154,10 +153,9 @@ void ResourceManager::initializePSR() {
 	    } else {
 	        cout << " PSR with thread ID: " << PSR_thread_id << " created" << endl;
 	    }
-
+	    psrThreadID=PSR_thread_id;
 	    // Set the scheduling policy and priority of the PSR thread
-	    param.sched_priority = 5;  // set the priority to 5
-	    pthread_setschedparam(PSR_thread_id, SCHED_RR, &param);
+
 
 
 }
@@ -292,7 +290,6 @@ void ResourceManager::configureSimulation() {
 
     createATCSSubsystems();
 
-    //pthread_mutex_unlock(&mutex);
 }
 
 /* -----------------------------------------------------------------------------
@@ -306,6 +303,17 @@ void ResourceManager::configureSimulation() {
 void ResourceManager::runSimulation() {
 
     cout << "Begin of simulation" << endl;
+
+    //setting the priority of the PSR higher than the main
+    struct sched_param param;
+
+    //The following commented code below shows the current priority of the main
+    //param.sched_priority = 4;  // set the priority to 10
+    //pthread_setschedparam(pthread_self(), SCHED_RR, &param);
+
+    //here we set the priority of the psr thread +1 higher than the main
+    param.sched_priority = 5;  // set the priority to 5
+   	pthread_setschedparam(psrThreadID, SCHED_RR, &param);
 
 }
 /* -----------------------------------------------------------------------------
@@ -322,7 +330,7 @@ void ResourceManager::spawnNewAircraftThread(Aircraft &nextAircraft) {
 
     int err_no;
     pthread_t thread_id;
-    //pthread_mutex_lock(&mutex);
+
     err_no = pthread_create(&thread_id,
     NULL, &fwdExecutionToAircraft, &nextAircraft);
     if (err_no != 0) {
