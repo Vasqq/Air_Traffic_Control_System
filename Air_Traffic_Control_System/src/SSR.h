@@ -12,6 +12,8 @@
 #include <sys/neutrino.h> // For QNX message passing API
 #include <stdint.h> // For data type uint64_t
 #include <unistd.h>
+#include <errno.h>
+
     // Struct declaration for transponderData
 	struct transponderData
 {

@@ -70,42 +70,46 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
 
     // Create message passing channel
 
-    				chid = ChannelCreate(0);
-     	                if (chid == -1) {
-     	                    cerr << "Error: ChannelCreate failed." << endl;
-     	                    return;
-     	                }
+    int chid = ChannelCreate(0);
+    if (chid == -1) {
+        cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
+        exit(EXIT_FAILURE);
+    }
 
-                // Connect to the Aircraft thread
-                int coid = ConnectAttach(0,pid,chid,0, 0);
-                if (coid == -1) {
-                    perror("Failed to connect to Aircraft");
-                    ChannelDestroy(chid);
-                    return;
-                }
+    // Connect to the Aircraft thread
+    int coid = ConnectAttach(0,0,chid,_NTO_SIDE_CHANNEL, 0);
+    if (coid == -1) {
+        perror("Failed to connect to Aircraft");
+        ChannelDestroy(chid);
+        exit(EXIT_FAILURE);
+    }
 
-                cout << "Aircraft thread waiting for Interrogation signal..." << endl;
-                targetAircraft.ServiceInterrogationSignal();
-                // Receive message
-                struct {
-                    int code;
-                } msg;
-                //we are requesting the following from Aircraft
-                msg.code = INTERROGATION_SIGNAL;
+    cout << "Aircraft thread waiting for Interrogation signal..." << endl;
+    //targetAircraft.ServiceInterrogationSignal();
+    // Receive message
+    struct {
+    int code;
+    } msg;
+    //we are requesting the following from Aircraft
+    msg.code = INTERROGATION_SIGNAL;
 
 
-                // Send the message to the Aircraft thread
-               // targetAircraft.ServiceInterrogationSignal(chid, pid);
+    // Send the message to the Aircraft thread
+   // targetAircraft.ServiceInterrogationSignal(chid, pid);
 
-                int rc = MsgSend(coid, &msg, sizeof(msg), NULL, 0);
+    int err = targetAircraft.connectToChannel(chid);
 
-                if (rc == -1) {
-                    perror("Failed to send message to Aircraft");
-                    ConnectDetach(coid);
-                    ChannelDestroy(chid);
-                    return;
 
-                }
+    int rc = MsgSend(coid, &msg, sizeof(msg), NULL, 0);
+
+    if (rc = -1) {
+                printf("(worker) got reply\n");
+            } else {
+                printf("MsgSend failed, errno is %d, '%s'\n", rc, strerror(rc));
+                ConnectDetach(coid);
+                ChannelDestroy(chid);
+                return;
+            }
 
 
                 //after msg is sent, we pass channel ID to function to run it

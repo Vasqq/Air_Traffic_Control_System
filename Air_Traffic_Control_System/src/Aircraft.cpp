@@ -151,17 +151,8 @@ void Aircraft::updateAircraftPosition()
 void Aircraft::ServiceInterrogationSignal()
 {
 
-		pid_t pid = get_pid();//get the PID that matches the one in interrogate aircraft
 
-	// Connect to the Aircraft thread
-	  int coid = ConnectAttach(0,pid, chid, 0, 0);
-	  if (coid == -1) {
-	     perror("Failed to connect to establish connection between SSR and Aircraft");
-	     ChannelDestroy(chid);
-	     return;
-	  }else
-	  {cout<<"Established Connection between SSR and Aircraft"<<endl;}
-
+/*
 
            struct {
                int code;
@@ -269,6 +260,7 @@ void Aircraft::ServiceInterrogationSignal()
                }else{cout<<"All Test Passed"<<endl;}
 
 
+*/
 
 
 
@@ -444,4 +436,14 @@ void Aircraft::sendTransponderData(char transponderData[])
 {
 }
 
+int Aircraft::connectToChannel(int chid) {
 
+    int coid = ConnectAttach(0,0,chid, _NTO_SIDE_CHANNEL, 0);
+      if (coid == -1) {
+         perror("Failed to connect to establish connection between SSR and Aircraft");
+         ChannelDestroy(chid);
+      }else
+      {cout<<"Established Connection between SSR and Aircraft"<<endl;}
+
+      return coid;
+}

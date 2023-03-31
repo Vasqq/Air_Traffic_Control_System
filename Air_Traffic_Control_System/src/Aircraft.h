@@ -23,7 +23,6 @@
 
 using namespace std;
 
-static int chid;
 
 class Aircraft {
 public:
@@ -44,6 +43,8 @@ public:
 
 	//Communication with the IPC
 	void ServiceInterrogationSignal();
+	int connectToChannel(int chid);
+
 
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
 
