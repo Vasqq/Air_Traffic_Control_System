@@ -131,23 +131,34 @@ void ResourceManager::initializeRadar() {
  */
 void ResourceManager::initializePSR() {
 
-    int err_no;
-    pthread_t PSR_thread_id;
+	int err_no;
+	    pthread_t PSR_thread_id;
 
-    vector<Aircraft> aircraftArr = AircraftSchedule;
+	    vector<Aircraft> aircraftArr = AircraftSchedule;
 
-    // Create a dynamic instance of the PSR class
-    PSR *psr = new PSR();
+	    // Create a dynamic instance of the PSR class
+	    PSR *psr = new PSR();
 
-    err_no = pthread_create(&PSR_thread_id,
-                            NULL,
-                            &fwdExecutionToPSR,
-                            psr);
-    if (err_no != 0) {
-        cout << "ERROR when creating PSR thread: " << err_no << endl;
-    } else {
-        cout << " PSR with thread ID: " << PSR_thread_id << " created" << endl;
-    }
+	    // Set the scheduling policy and priority of the PSR thread
+	    struct sched_param param;
+	    param.sched_priority = 4;  // set the priority to 10
+	    pthread_setschedparam(pthread_self(), SCHED_RR, &param);
+
+	    // Create a new thread for the PSR object
+	    err_no = pthread_create(&PSR_thread_id,
+	                            NULL,
+	                            &fwdExecutionToPSR,
+	                            psr);
+	    if (err_no != 0) {
+	        cout << "ERROR when creating PSR thread: " << err_no << endl;
+	    } else {
+	        cout << " PSR with thread ID: " << PSR_thread_id << " created" << endl;
+	    }
+
+	    // Set the scheduling policy and priority of the PSR thread
+	    param.sched_priority = 5;  // set the priority to 5
+	    pthread_setschedparam(PSR_thread_id, SCHED_RR, &param);
+
 
 }
 
@@ -259,8 +270,8 @@ void ResourceManager::execute() {
 
     // Execute the ATCS simulation
     cout << "All systems ready, press 'R' to run the simulation." << endl;
-    cin >> input;
-    if (input == 'R')
+    //cin >> input;
+    //if (input == 'R')
         runSimulation();
 
 }
@@ -275,9 +286,13 @@ void ResourceManager::execute() {
  * -----------------------------------------------------------------------------
  */
 void ResourceManager::configureSimulation() {
+	pthread_mutex_init(&mutex, NULL);//initialize the mutex
 
     createAircraftThreads();
+
     createATCSSubsystems();
+
+    //pthread_mutex_unlock(&mutex);
 }
 
 /* -----------------------------------------------------------------------------
@@ -307,7 +322,7 @@ void ResourceManager::spawnNewAircraftThread(Aircraft &nextAircraft) {
 
     int err_no;
     pthread_t thread_id;
-
+    //pthread_mutex_lock(&mutex);
     err_no = pthread_create(&thread_id,
     NULL, &fwdExecutionToAircraft, &nextAircraft);
     if (err_no != 0) {
@@ -316,4 +331,7 @@ void ResourceManager::spawnNewAircraftThread(Aircraft &nextAircraft) {
         cout << " Aircraft with thread ID: " << thread_id << " created" << endl;
     }
 
+
 }
+
+

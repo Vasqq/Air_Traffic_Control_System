@@ -102,7 +102,7 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
 
     int rc = MsgSend(coid, &msg, sizeof(msg), NULL, 0);
 
-    if (rc = -1) {
+    if (rc != -1) {
                 printf("(worker) got reply\n");
             } else {
                 printf("MsgSend failed, errno is %d, '%s'\n", rc, strerror(rc));

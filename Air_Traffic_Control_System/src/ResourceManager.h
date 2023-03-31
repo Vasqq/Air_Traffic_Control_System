@@ -14,14 +14,13 @@
 
 using namespace std;
 
-
 class ResourceManager {
 public:
     // Constructors and destructor
     ResourceManager();
     ResourceManager(vector<Aircraft>& AircraftSchedule);
     virtual ~ResourceManager();
-
+    pthread_mutex_t mutex;
     // Initialization functions
     void initializeDataDisplay();
     void initializeComputerSystem();
@@ -30,6 +29,7 @@ public:
     void initializeRadar();
     void initializePSR();
     void initializeSSR();
+    void PSRReady();
 
     // Process management functions
     void createAircraftThreads();
