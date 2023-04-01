@@ -15,11 +15,14 @@ int main() {
 	testAircraftArr.push_back(a1);
 	testAircraftArr.push_back(a2);
 
+	cout << "Aircraft a1: " << &testAircraftArr[0] << endl;
+    cout << "Aircraft a2: " << &testAircraftArr[1] << endl;
+
 	cout << "Address of testAircraftArr" << &testAircraftArr << endl;
 
 
 
-	ResourceManager RM(testAircraftArr);
+	ResourceManager RM(&testAircraftArr);
 	RM.execute();
 
 

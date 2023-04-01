@@ -19,7 +19,7 @@
 
 
 
-PSR::PSR() {
+PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 
 	range = MAX_RANGE;
 	reference_angle = REFERENCE_ANGLE;
@@ -28,14 +28,8 @@ PSR::PSR() {
 	current_angle = CURRENT_ANGLE;
 	pulse_speed = PULSE_SPEED;
 
-	Aircraft a1(10,20000,1,30,60,0,1000,1000,1000);
-    Aircraft a2(11,20000,2,40,70,0,1000,1000,1000);
-
-    vector<Aircraft> testAircraftArr;
-    testAircraftArr.push_back(a1);
-    testAircraftArr.push_back(a2);
-
-	this->aircraftList=testAircraftArr;
+	this->aircraftList=AircraftSchedule;
+	cout << "PSR Aircraft list address: " << aircraftList << endl;
 }
 
 PSR::~PSR() {
@@ -44,6 +38,7 @@ PSR::~PSR() {
 
 void PSR::scan(){
 
+    cout << "Scanning..." << endl;
 	while(current_angle <= DEGREES_IN_CIRCLE){
 
 		detectAircraft(current_angle);
@@ -65,7 +60,7 @@ void PSR::detectAircraft(int angle){
 	int aircraftDistance; 			// Distance of the detected aircraft
 	double aircraftAngleRads; 		// Angle of the detected aircraft
 
-	for (Aircraft& aircraft : aircraftList){
+	for (Aircraft& aircraft : *aircraftList){
 
 		// Get the aircraft angle in radians
 		aircraftAngleRads = (atan2(aircraft.getPosY(), aircraft.getPosX()));
@@ -88,8 +83,8 @@ void PSR::detectAircraft(int angle){
 			   // Add the aircraft object to the array if it is within range
 			   if(aircraftDistance < range){
 
-				   cout << "Pushing back aircraft ID: " << aircraft.getFlightID() << endl;
-				   illuminatedObjects.push_back(aircraft);
+				   cout << "Pushing back with address: " << &aircraft  << endl;
+				   illuminatedObjects.push_back(&aircraft);
 			   	   cout << illuminatedObjects.size() << endl;
 			   }
 		   }
@@ -105,16 +100,16 @@ void PSR::rotateRadar(){
 
 vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 
-	cout << "Sending illuminated objects" << endl;
+//	cout << "Sending illuminated objects" << endl;
+//
+//	for (Aircraft& aircraft : illuminatedObjects){
+//
+//		cout << "Aircraft: " << aircraft.getFlightID() << endl;
+//
+//	}
 
-	for (Aircraft& aircraft : illuminatedObjects){
 
-		cout << "Aircraft: " << aircraft.getFlightID() << endl;
-
-	}
-
-
-	return illuminatedObjects;
+	//return illuminatedObjects;
 }
 
 
@@ -122,7 +117,7 @@ void PSR::execute(){
 
     cout << "Executing PSR..." << endl;
 
-		scan();
+	scan();
 	sendAircraftPositionsToSSR();
 	SSR ssr(illuminatedObjects);
 	ssr.execute();

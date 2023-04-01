@@ -23,7 +23,7 @@ using namespace std;
 
 class PSR {
 public:
-	PSR();
+	PSR(vector<Aircraft> *aircraftSchedule);
 
 	void execute();
 	void test();
@@ -48,8 +48,8 @@ private:
 	int current_angle;
 	int pulse_speed;
 
-	vector<Aircraft> aircraftList;
-	vector<Aircraft> illuminatedObjects;
+	vector<Aircraft> *aircraftList;
+	vector<Aircraft*> illuminatedObjects;
 };
 
 #endif /* PSR_H_ */

@@ -6,8 +6,6 @@
  */
 
 #include "Aircraft.h"
-int INTERROGATION_REPLY = 2;
-int INTERROGATION_SIGNAL=1;
 using namespace std;
 
 
@@ -132,11 +130,18 @@ void Aircraft::updateFlightLevel()
  */
 void Aircraft::updateAircraftPosition()
 {
-    cout<<"Executing aircraft thread..."<<endl;
+    cout<<"Executing aircraft update position thread..."<<endl;
 
     updatePositionX();
     updatePositionY();
     updatePositionZ();
+
+    cout<<"Update position thread finished executing..."<<endl;
+}
+
+void Aircraft::setTransponderDataChannel(int chid){
+
+    transponderDataChannel = chid;
 }
 
 
@@ -150,121 +155,41 @@ void Aircraft::updateAircraftPosition()
  */
 void Aircraft::ServiceInterrogationSignal()
 {
+    sTransponderData reply_msg;
+    sInterrogationSignal interrogationSignal;
 
+    cout << "Servicing interrogation signal" << endl;
+    // Wait for a message on the channel
+    int rcvid = MsgReceive(transponderDataChannel, &interrogationSignal, sizeof(interrogationSignal), NULL);
 
-/*
+    if (rcvid == -1) {
+        cout << "Failed to receive message in aircraft. Error Code: " << strerror(errno) << endl;
+       exit(EXIT_FAILURE);
+    }
+    else
+    {
+       cout<<"Message Received."<<endl;
+    }
 
-           struct {
-               int code;
+    // Construct reply message
 
-           } msg;
+    reply_msg.flightId    = this->flight_id;
+    reply_msg.flightLevel = this->flight_level;
+    reply_msg.positionX   = this->posX;
+    reply_msg.positionY   = this->posY;
+    reply_msg.positionZ   = this->posZ;
+    reply_msg.speedX      = this->speedX;
+    reply_msg.speedY      = this->speedY;
+    reply_msg.speedZ      = this->speedZ;
 
+   int returnCode = MsgReply(rcvid, EOK, &reply_msg, sizeof(reply_msg));
+   if (returnCode == -1) {
+       cout << "Failed to send reply message in ServiceInterrogationSignal. Error Code: " << strerror(errno) << endl;
+       exit(EXIT_FAILURE);
+   }
 
-           // Wait for a message on the channel
-
-               if (chid == -1) {
-                   perror("Invalid channel ID in ServiceInterrogationSignal");
-                   exit(EXIT_FAILURE);
-               }
-          int rc = MsgReceive(coid, &msg, sizeof(msg), NULL);
-
-           if (rc == -1) {
-               perror("Failed to receive message in ServiceInterrogationSignal");
-               exit(EXIT_FAILURE);
-           }else{cout<<"Message Received."<<endl;}
-
-           // Process the message
-           	   	   if(msg.code !=INTERROGATION_SIGNAL){
-           	   		perror("Wrong Interrogation signal returned.");
-           	   		exit(EXIT_FAILURE);
-           	   	   }else
-           	   	   {cout<<"Proper Interrogation signal: "<< INTERROGATION_SIGNAL<<" returned."<<endl;}
-
-
-
-
-
-
-
-               // Send a reply message to the calling thread
-               struct {
-                   int type;
-                   int status;
-                   int flight_id;
-                   int flight_lvl;
-                   int posx;
-                   int posy;
-                   int posz;
-                   int speedX;
-                   int speedY;
-                   int speedZ;
-               } reply_msg;
-
-               reply_msg.type = INTERROGATION_REPLY;
-               reply_msg.status = 0;  // Set to some status value as needed
-               reply_msg.flight_id= this->flight_id;
-               reply_msg.flight_lvl= this->flight_level;
-               reply_msg.posx= this->posX;
-               reply_msg.posy= this->posY;
-               reply_msg.posz= this->posZ;
-               reply_msg.speedX= this->speedX;
-               reply_msg.speedY= this->speedY;
-               reply_msg.speedZ= this->speedZ;
-
-
-
-               //Here we implement error checks for passed messages
-
-                                  if (reply_msg.flight_id ==-1) {
-                                      perror("Failed to retrieve flight Id");
-                                      exit(EXIT_FAILURE);}
-
-
-                                  if (reply_msg.flight_lvl ==-1) {
-                                      perror("Failed to retrieve flight_lvl");
-                                      exit(EXIT_FAILURE);}
-
-                                  if (reply_msg.posx ==-1) {
-                                      perror("Failed to retrieve posX");
-                                      exit(EXIT_FAILURE);}
-
-                                  if (reply_msg.posy ==-1) {
-                                      perror("Failed to retrieve pos Y");
-                                      exit(EXIT_FAILURE);}
-
-                                  if (reply_msg.posz ==-1) {
-                                      perror("Failed to retrieve pos Z");
-                                      exit(EXIT_FAILURE);}
-
-                                  if (reply_msg.speedX ==-1) {
-                                      perror("Failed to retrieve speedX");
-                                      exit(EXIT_FAILURE);}
-
-                                  if (reply_msg.speedY ==-1) {
-                                       perror("Failed to retrieve speedY");
-                                       exit(EXIT_FAILURE);}
-
-                                  if (reply_msg.speedZ ==-1) {
-                                       perror("Failed to retrieve speedZ");
-                                       exit(EXIT_FAILURE);}
-
-
-
-
-
-
-               int rply = MsgReply(rc, EOK, &reply_msg, sizeof(reply_msg));
-               if (rply == -1) {
-                   perror("Failed to send reply message in ServiceInterrogationSignal");
-                   exit(EXIT_FAILURE);
-               }else{cout<<"All Test Passed"<<endl;}
-
-
-*/
-
-
-
-    };
+   cout << "Finished servicing interrogation signal" << endl;
+}
 
 
 /* -----------------------------------------------------------------------------
@@ -436,14 +361,8 @@ void Aircraft::sendTransponderData(char transponderData[])
 {
 }
 
-int Aircraft::connectToChannel(int chid) {
 
-    int coid = ConnectAttach(0,0,chid, _NTO_SIDE_CHANNEL, 0);
-      if (coid == -1) {
-         perror("Failed to connect to establish connection between SSR and Aircraft");
-         ChannelDestroy(chid);
-      }else
-      {cout<<"Established Connection between SSR and Aircraft"<<endl;}
+int Aircraft::getTransponderDataChannel() {
 
-      return coid;
+    return transponderDataChannel;
 }

@@ -25,7 +25,7 @@ using namespace std;
  *               illuminatedObjects vector.
  * -----------------------------------------------------------------------------
  */
-SSR::SSR(vector<Aircraft>illuminatedObjects) {
+SSR::SSR(vector<Aircraft*>illuminatedObjects) {
 	// TODO Auto-generated constructor stub
 	this->illuminatedObjects=illuminatedObjects;
 
@@ -61,23 +61,13 @@ SSR::~SSR() {
  *              data
  * -----------------------------------------------------------------------------
  */
-void SSR::interrogateAircraft(Aircraft targetAircraft){
+void SSR::interrogateAircraft(Aircraft *targetAircraft){
 
-	//implement message passing for thread
-    // Send interrogation signal to the Aircraft thread
-    pid_t pid = targetAircraft.get_pid();
-    cout<<pid<<endl;;
+    cout << targetAircraft << endl;
+    int chid = targetAircraft->getTransponderDataChannel();
 
-    // Create message passing channel
-
-    int chid = ChannelCreate(0);
-    if (chid == -1) {
-        cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
-        exit(EXIT_FAILURE);
-    }
-
-    // Connect to the Aircraft thread
-    int coid = ConnectAttach(0,0,chid,_NTO_SIDE_CHANNEL, 0);
+    // Connecting the SSR to channel
+    int coid = ConnectAttach(ND_LOCAL_NODE ,0,chid,_NTO_SIDE_CHANNEL, 0);
     if (coid == -1) {
         perror("Failed to connect to Aircraft");
         ChannelDestroy(chid);
@@ -87,72 +77,28 @@ void SSR::interrogateAircraft(Aircraft targetAircraft){
     cout << "Aircraft thread waiting for Interrogation signal..." << endl;
     //targetAircraft.ServiceInterrogationSignal();
     // Receive message
-    struct {
-    int code;
-    } msg;
+    sInterrogationSignal is;
+    sTransponderData aircraftTransponderData;
     //we are requesting the following from Aircraft
-    msg.code = INTERROGATION_SIGNAL;
 
 
     // Send the message to the Aircraft thread
    // targetAircraft.ServiceInterrogationSignal(chid, pid);
 
-    int err = targetAircraft.connectToChannel(chid);
+    int returnCode = MsgSend(coid, &is, sizeof(is), &aircraftTransponderData, sizeof(aircraftTransponderData));
 
-
-    int rc = MsgSend(coid, &msg, sizeof(msg), NULL, 0);
-
-    if (rc = -1) {
-                printf("(worker) got reply\n");
-            } else {
-                printf("MsgSend failed, errno is %d, '%s'\n", rc, strerror(rc));
-                ConnectDetach(coid);
-                ChannelDestroy(chid);
-                return;
+    if (returnCode != -1) {
+        cout <<"Aircraft reply\n";
             }
+    else{
+        cout << "MsgSend failed. Error Code: " << strerror(errno) << endl;
+        return;
+        }
 
+    ConnectDetach(coid);
 
-                //after msg is sent, we pass channel ID to function to run it
-                //targetAircraft.ServiceInterrogationSignal(chid);
-                //if we dont send the channel id, we cannot receive and send a reply
-                //the only other alternative is to do a get and set but that means
-                //creating a private member called chid in the Aircraft class
+    cout <<  "Aircraft flightID is: " <<aircraftTransponderData.flightId << endl;
 
-                // Wait for a reply message from the Aircraft thread
-                struct {
-                    int type;
-                    int status;
-                    int flight_id;
-                    int flight_lvl;
-                    int posx;
-                    int posy;
-                    int posz;
-                    int speedX,speedY,speedZ;
-                } reply_msg;
-
-                rc = MsgReceive(chid, &reply_msg, sizeof(reply_msg), NULL);
-                if (rc == -1) {
-                    perror("Failed to receive reply message from Aircraft");
-                    ConnectDetach(coid);
-                    ChannelDestroy(chid);
-                    return;
-                }
-
-
-
-                // Process the reply message
-                if (reply_msg.type == INTERROGATION_REPLY) {
-                    int status_data = reply_msg.status;
-                    cout<<"This is where we call receive transponder data"<<endl;
-
-                } else {
-                    cerr << "Error: Received unexpected message type from Aircraft." << endl;
-                }
-
-                // Close the connection and message passing channel
-                ConnectDetach(coid);
-                ChannelDestroy(chid);
-                cout << "Channel: " << chid << " Destroyed" << endl;
 
 };
 
@@ -168,27 +114,8 @@ void SSR::receiveTransponderData(Aircraft targetAircraft){
 
     // Receive message from the aircraft thread containing transponder data
 
-    //targetAircraft.receiveInterrogationSignal();
+    sTransponderData TD;
 
-    transponderData TD;
-
-    //targetAircraft.ServiceInterrogationSignal();
-
-    TD.flightId=targetAircraft.getFlightID();
-    TD.flightLevel= targetAircraft.getFlightLevel();
-
-    //Aircraft Positions X,Y,Z
-    TD.positionX=targetAircraft.getPosX();
-    TD.positionY=targetAircraft.getPosY();
-    TD.positionZ=targetAircraft.getPosZ();
-
-    //Aircraft Speeds X,Y,Z
-    TD.speedX=targetAircraft.getSpeedX();
-    TD.speedY=targetAircraft.getSpeedY();
-    TD.speedZ=targetAircraft.getSpeedZ();
-
-
-    transponderDataList.push_back(TD);
 
 
 };
@@ -202,16 +129,14 @@ void SSR::receiveTransponderData(Aircraft targetAircraft){
  * -----------------------------------------------------------------------------
  */
 
-void SSR::interrogate(vector<Aircraft> illuminatedObjects)
+void SSR::interrogate(vector<Aircraft*> illuminatedObjects)
 {
 
-    transponderData receivedReply;
-
-for(Aircraft& illuminatedObject: illuminatedObjects){
-    //interrogate the aircraft and receive transponder data
-    interrogateAircraft(illuminatedObject);
-    receiveTransponderData(illuminatedObject);
-}
+    for(Aircraft* illuminatedObject: illuminatedObjects){
+        //interrogate the aircraft and receive transponder data
+        interrogateAircraft(illuminatedObject);
+        //receiveTransponderData(illuminatedObject);
+    }
 
 }
 
@@ -224,7 +149,7 @@ for(Aircraft& illuminatedObject: illuminatedObjects){
  *              from receiveTransponderData().
  * -----------------------------------------------------------------------------
  */
-vector<transponderData> SSR::sendTransponderData()
+vector<sTransponderData> SSR::sendTransponderData()
 {
     //send transponderDataList to computer system
     return transponderDataList;

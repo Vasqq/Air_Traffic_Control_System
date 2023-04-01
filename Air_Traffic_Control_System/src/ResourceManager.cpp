@@ -29,14 +29,14 @@ ResourceManager::ResourceManager() {
  *              initializes the AircraftSchedule vector.
  * -----------------------------------------------------------------------------
  */
-ResourceManager::ResourceManager(vector<Aircraft> &AircraftSchedule) {
+ResourceManager::ResourceManager(vector<Aircraft> *AircraftArr) {
 
-    this->AircraftSchedule = AircraftSchedule;
+    this->AircraftSchedule = AircraftArr;
 
-    cout << "Aircraft schedule: " << &(this->AircraftSchedule) << endl;
+    cout << "Aircraft schedule: " << AircraftSchedule << endl;
 
-    cout << "Aircraft a1: " << &this->AircraftSchedule[0] << endl;
-    cout << "Aircraft a2: " << &this->AircraftSchedule[1] << endl;
+    cout << "Aircraft a1: " << &AircraftSchedule[0] << endl;
+    cout << "Aircraft a2: " << &AircraftSchedule[1] << endl;
 
 }
 
@@ -134,10 +134,8 @@ void ResourceManager::initializePSR() {
     int err_no;
     pthread_t PSR_thread_id;
 
-    vector<Aircraft> aircraftArr = AircraftSchedule;
-
     // Create a dynamic instance of the PSR class
-    PSR *psr = new PSR();
+    PSR *psr = new PSR(AircraftSchedule);
 
     err_no = pthread_create(&PSR_thread_id,
                             NULL,
@@ -172,13 +170,14 @@ void ResourceManager::initializeSSR() {
 void ResourceManager::createAircraftThreads() {
 
     cout << "Creating Aircraft threads" << endl;
-    cout << "Aircraft schedule: " << &AircraftSchedule << endl;
 
-    cout << "Aircraft a1: " << &AircraftSchedule[0] << endl;
-    cout << "Aircraft a2: " << &AircraftSchedule[1] << endl;
+    for (Aircraft &nextAircraft : *AircraftSchedule) {
 
-    for (Aircraft &nextAircraft : AircraftSchedule) {
-        spawnNewAircraftThread(nextAircraft);
+
+        cout << &nextAircraft << endl;
+        int chid = createAircraftTransponderDataChannel();
+        nextAircraft.setTransponderDataChannel(chid);
+        spawnNewAircraftThreads(nextAircraft);
     }
 }
 
@@ -208,7 +207,7 @@ void ResourceManager::createATCSSubsystems() {
  *              its position.
  * -----------------------------------------------------------------------------
  */
-void* ResourceManager::fwdExecutionToAircraft(void *aircraft) {
+void* ResourceManager::fwdUpdateAircraftPosition(void *aircraft) {
     static_cast<Aircraft*>(aircraft)->updateAircraftPosition();
 
     return NULL;
@@ -276,6 +275,7 @@ void ResourceManager::execute() {
  */
 void ResourceManager::configureSimulation() {
 
+
     createAircraftThreads();
     createATCSSubsystems();
 }
@@ -293,6 +293,27 @@ void ResourceManager::runSimulation() {
     cout << "Begin of simulation" << endl;
 
 }
+
+int ResourceManager::createAircraftTransponderDataChannel() {
+
+    // Create message passing channel
+
+        int chid = ChannelCreate(0);
+        if (chid == -1) {
+            cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
+            exit(EXIT_FAILURE);
+        }
+
+    return chid;
+}
+
+void* ResourceManager::fwdServiceInterrogationSignal(void *aircraft) {
+
+    static_cast<Aircraft*>(aircraft)->ServiceInterrogationSignal();
+
+        return NULL;
+}
+
 /* -----------------------------------------------------------------------------
  * Name:        spawnNewAircraftThread
  * Input:       reference to an Aircraft object
@@ -303,17 +324,25 @@ void ResourceManager::runSimulation() {
  *              creating the thread, an error message is printed.
  * -----------------------------------------------------------------------------
  */
-void ResourceManager::spawnNewAircraftThread(Aircraft &nextAircraft) {
+void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
 
     int err_no;
     pthread_t thread_id;
 
     err_no = pthread_create(&thread_id,
-    NULL, &fwdExecutionToAircraft, &nextAircraft);
+    NULL, &fwdUpdateAircraftPosition, &nextAircraft);
     if (err_no != 0) {
         cout << "ERROR when creating thread: " << err_no << endl;
     } else {
-        cout << " Aircraft with thread ID: " << thread_id << " created" << endl;
+        cout << " Aircraft Update position thread created with ID: " << thread_id << endl;
     }
+
+    err_no = pthread_create(&thread_id,
+       NULL, &fwdServiceInterrogationSignal, &nextAircraft);
+       if (err_no != 0) {
+           cout << "ERROR when creating thread: " << err_no << endl;
+       } else {
+           cout << " Aircraft service interrogation signal thread created with ID: " << thread_id << endl;
+       }
 
 }

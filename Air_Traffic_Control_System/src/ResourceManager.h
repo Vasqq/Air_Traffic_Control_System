@@ -19,7 +19,7 @@ class ResourceManager {
 public:
     // Constructors and destructor
     ResourceManager();
-    ResourceManager(vector<Aircraft>& AircraftSchedule);
+    ResourceManager(vector<Aircraft> *AircraftArr);
     virtual ~ResourceManager();
 
     // Initialization functions
@@ -36,9 +36,11 @@ public:
     void createATCSSubsystems();
     void storeAircraftProcessId(int pid);
     void storeATCSProcessId(int pid);
+    int createAircraftTransponderDataChannel();
 
     // Thread execution functions
-    static void * fwdExecutionToAircraft(void * aircraft);
+    static void * fwdUpdateAircraftPosition(void * aircraft);
+    static void * fwdServiceInterrogationSignal(void * aircraft);
     static void * fwdExecutionToPSR(void * psr);
     static void * fwdExecutionToSSR(void * ssr);
 
@@ -46,12 +48,12 @@ public:
     void execute();
     void configureSimulation();
     void runSimulation();
-    void spawnNewAircraftThread(Aircraft& nextAircraft);
+    void spawnNewAircraftThreads(Aircraft& nextAircraft);
 
 private:
     vector<int> aircraft_pids;
     vector<int> ATCS_pids;
-    vector<Aircraft> AircraftSchedule;
+    vector<Aircraft> *AircraftSchedule;
 
 };
 

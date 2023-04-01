@@ -7,12 +7,13 @@
 
 #ifndef AIRCRAFT_H_
 #define AIRCRAFT_H_
+
 #include <pthread.h>
 #include <vector>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <errno.h>
 #include <sys/neutrino.h> // For QNX message passing API
 #include <stdint.h> // For data type uint64_t
 #include <sys/iofunc.h>
@@ -20,6 +21,8 @@
 #include <unistd.h>
 #include <sys/netmgr.h>
 #include <sys/types.h>
+
+#include "TransponderData.h"
 
 using namespace std;
 
@@ -31,8 +34,6 @@ public:
     Aircraft();
 	virtual ~Aircraft();
 	Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
-	int INTERROGATION_REPLY = 2;
-	 int INTERROGATION_SIGNAL = 1;
 
 	//Functions that update position and flight level
 	void updatePositionX();
@@ -40,10 +41,11 @@ public:
 	void updatePositionZ();
 	void updateFlightLevel();
 	void updateAircraftPosition();
+	void setTransponderDataChannel(int chid);
 
 	//Communication with the IPC
 	void ServiceInterrogationSignal();
-	int connectToChannel(int chid);
+	int connectToChannel();
 
 
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
@@ -59,6 +61,8 @@ public:
 	int getSpeedX();
 	int getSpeedY();
 	int getSpeedZ();
+
+	int getTransponderDataChannel();
 
 
 	//This will collect all the new values returned and then send the new data.
@@ -77,6 +81,7 @@ private:
 	int flight_id;
 	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
+	int transponderDataChannel;
 
 
 
