@@ -8,30 +8,53 @@
 #ifndef SRC_RESOURCEMANAGER_H_
 #define SRC_RESOURCEMANAGER_H_
 #include "Aircraft.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+using namespace std;
+
+
 class ResourceManager {
 public:
-	ResourceManager();
-//All the void functions
-	void createAircraftThreads(Aircraft aircraft[]);
-	void createATCSSubsystems();
-	void storeAircraftProcessId(int pid);
-	void initializeDataDisplay();
-	void initializeComputerSystem();
-	void initializeCommunicationSystem();
-	void initializeOperatorConsole();
-	void initializeRadar();
-	void storeATCSProcessId(int pid);
+    // Constructors and destructor
+    ResourceManager();
+    ResourceManager(vector<Aircraft> *AircraftArr);
+    virtual ~ResourceManager();
 
+    // Initialization functions
+    void initializeDataDisplay();
+    void initializeComputerSystem();
+    void initializeCommunicationSystem();
+    void initializeOperatorConsole();
+    void initializeRadar();
+    void initializePSR();
+    void initializeSSR();
 
-//Aircraft class function
-	Aircraft* TakeNextAircraftThread(Aircraft aircraft[]);
-//int function
-	void spawnNewAircraftThread(Aircraft aircraft);
+    // Process management functions
+    void createAircraftThreads();
+    void createATCSSubsystems();
+    void storeAircraftProcessId(int pid);
+    void storeATCSProcessId(int pid);
+    int createAircraftTransponderDataChannel();
 
-	virtual ~ResourceManager();
+    // Thread execution functions
+    static void * fwdUpdateAircraftPosition(void * aircraft);
+    static void * fwdServiceInterrogationSignal(void * aircraft);
+    static void * fwdExecutionToPSR(void * psr);
+    static void * fwdExecutionToSSR(void * ssr);
+
+    // Simulation functions
+    void execute();
+    void configureSimulation();
+    void runSimulation();
+    void spawnNewAircraftThreads(Aircraft& nextAircraft);
+
 private:
-	vector<int> aircraft_pids;		//arrays of type integer to store Aircraft PIDS
-	vector<int> ATCS_pids;			//arrays of type integer to store ATCS PIDS
+    vector<int> aircraft_pids;
+    vector<int> ATCS_pids;
+    vector<Aircraft> *AircraftSchedule;
+
 };
 
 #endif /* SRC_RESOURCEMANAGER_H_ */

@@ -1,12 +1,12 @@
 #include <iostream>
-using namespace std;
-
 #include "Aircraft.h"
 #include "PSR.h"
 #include "SSR.h"
+#include "ResourceManager.h"
+
+using namespace std;
 
 int main() {
-	cout << "Hello World!!!" << endl; // prints Hello World!!!
 
 	Aircraft a1(10,20000,1,30,60,0,1000,1000,1000);
 	Aircraft a2(11,20000,2,40,70,0,1000,1000,1000);
@@ -15,13 +15,15 @@ int main() {
 	testAircraftArr.push_back(a1);
 	testAircraftArr.push_back(a2);
 
-	PSR psr(testAircraftArr);
-	vector<Aircraft> illuminatedObjects;
-	illuminatedObjects=psr.execute();
+	cout << "Aircraft a1: " << &testAircraftArr[0] << endl;
+    cout << "Aircraft a2: " << &testAircraftArr[1] << endl;
 
-	SSR ssr(illuminatedObjects);
-	ssr.execute();
+	cout << "Address of testAircraftArr" << &testAircraftArr << endl;
 
+
+
+	ResourceManager RM(&testAircraftArr);
+	RM.execute();
 
 
 	return 0;
