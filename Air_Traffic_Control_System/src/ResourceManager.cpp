@@ -6,8 +6,7 @@
  */
 
 #include "ResourceManager.h"
-#include "PSR.h"
-#include "SSR.h"
+
 
 /* -----------------------------------------------------------------------------
  * Name:        ResourceManager()
@@ -137,15 +136,25 @@ void ResourceManager::initializePSR() {
     // Create a dynamic instance of the PSR class
     PSR *psr = new PSR(AircraftSchedule);
 
-    err_no = pthread_create(&PSR_thread_id,
-                            NULL,
-                            &fwdExecutionToPSR,
-                            psr);
-    if (err_no != 0) {
-        cout << "ERROR when creating PSR thread: " << err_no << endl;
-    } else {
-        cout << " PSR with thread ID: " << PSR_thread_id << " created" << endl;
-    }
+	    // Set the scheduling policy and priority of the PSR thread
+	    struct sched_param param;
+	    param.sched_priority = 4;  // set the priority to 10
+	    pthread_setschedparam(pthread_self(), SCHED_RR, &param);
+
+	    // Create a new thread for the PSR object
+	    err_no = pthread_create(&PSR_thread_id,
+	                            NULL,
+	                            &fwdExecutionToPSR,
+	                            psr);
+	    if (err_no != 0) {
+	        cout << "ERROR when creating PSR thread: " << err_no << endl;
+	    } else {
+	        cout << " PSR with thread ID: " << PSR_thread_id << " created" << endl;
+	    }
+	    psrThreadID=PSR_thread_id;
+	    // Set the scheduling policy and priority of the PSR thread
+
+
 
 }
 
@@ -258,8 +267,8 @@ void ResourceManager::execute() {
 
     // Execute the ATCS simulation
     cout << "All systems ready, press 'R' to run the simulation." << endl;
-    cin >> input;
-    if (input == 'R')
+    //cin >> input;
+    //if (input == 'R')
         runSimulation();
 
 }
@@ -277,7 +286,9 @@ void ResourceManager::configureSimulation() {
 
 
     createAircraftThreads();
+
     createATCSSubsystems();
+
 }
 
 /* -----------------------------------------------------------------------------
@@ -346,3 +357,5 @@ void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
        }
 
 }
+
+

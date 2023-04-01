@@ -8,12 +8,13 @@
 #ifndef SRC_RESOURCEMANAGER_H_
 #define SRC_RESOURCEMANAGER_H_
 #include "Aircraft.h"
+#include "PSR.h"
+#include "SSR.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 
 using namespace std;
-
 
 class ResourceManager {
 public:
@@ -21,7 +22,7 @@ public:
     ResourceManager();
     ResourceManager(vector<Aircraft> *AircraftArr);
     virtual ~ResourceManager();
-
+    pthread_mutex_t mutex;
     // Initialization functions
     void initializeDataDisplay();
     void initializeComputerSystem();
@@ -30,6 +31,7 @@ public:
     void initializeRadar();
     void initializePSR();
     void initializeSSR();
+    void PSRReady();
 
     // Process management functions
     void createAircraftThreads();
