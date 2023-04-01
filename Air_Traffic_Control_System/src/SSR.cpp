@@ -58,7 +58,9 @@ SSR::~SSR() {
  * Input:       Aircraft targetAircraft
  * Output:      Aircraft targetAircraft
  * Description: This method will request the aircraft thread for transponder
- *              data
+ *              data by creating a message passing channel.
+ *              This sends a connection message requesting the types of
+ *              transponder data struct to be filled and sent back in a reply.
  * -----------------------------------------------------------------------------
  */
 void SSR::interrogateAircraft(Aircraft *targetAircraft){
@@ -83,8 +85,6 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft){
 
 
     // Send the message to the Aircraft thread
-   // targetAircraft.ServiceInterrogationSignal(chid, pid);
-
     int returnCode = MsgSend(coid, &is, sizeof(is), &aircraftTransponderData, sizeof(aircraftTransponderData));
 
     if (returnCode != -1) {
@@ -107,7 +107,7 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft){
  * Input:       Aircraft targetAircraft
  * Output:      Aircraft targetAircraft
  * Description: This method will receive transponder data between the Aircraft
- *              thread and SSR.
+ *              thread and SSR and a transponder data struct object.
  * -----------------------------------------------------------------------------
  */
 void SSR::receiveTransponderData(Aircraft targetAircraft){
@@ -159,7 +159,7 @@ vector<sTransponderData> SSR::sendTransponderData()
  * Name:        execute
  * Input:       None
  * Output:      None
- * Description: This method will run interrogate and senTransponderData,
+ * Description: This method will run interrogate and sendTransponderData,
  *              executing all functions within the SSR.
  * -----------------------------------------------------------------------------
  */

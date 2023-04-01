@@ -23,19 +23,27 @@ using namespace std;
 
 class PSR {
 public:
+    //Constructor and Destructor of class PSR
 	PSR(vector<Aircraft> *aircraftSchedule);
+	virtual ~PSR();
 
-	void execute();
-	void test();
+	//Main functions of the PSR to scan and detect Aircrafts
+	//and rotate the radar
 	void scan();
 	void detectAircraft(int angle);
 	void rotateRadar();
+	vector<Aircraft> sendAircraftPositionsToSSR();
+	void execute();
+	void test();
+
+
+
 	bool receiveEchoes(int echoes[]);
 	Aircraft* determineDistances(int echoes[]);
 
-	vector<Aircraft> sendAircraftPositionsToSSR();
 
-	virtual ~PSR();
+
+
 
 
 

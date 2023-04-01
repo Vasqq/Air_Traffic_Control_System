@@ -18,7 +18,14 @@
 #include <math.h>
 
 
-
+/* -----------------------------------------------------------------------------
+ * Name:        PSR
+ * Input:       Pointer to a vector of Aircraft objects
+ * Output:      None
+ * Description: Initializes the PSR object with default values and stores the
+ *              pointer to the vector of Aircraft objects..
+ * -----------------------------------------------------------------------------
+ */
 PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 
 	range = MAX_RANGE;
@@ -32,10 +39,28 @@ PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 	cout << "PSR Aircraft list address: " << aircraftList << endl;
 }
 
+
+/* -----------------------------------------------------------------------------
+ * Name:        PSR Destructor
+ * Input:       None
+ * Output:      None
+ * Description: Destructor of PSR object.
+ * -----------------------------------------------------------------------------
+ */
 PSR::~PSR() {
 	// TODO Auto-generated destructor stub
 }
 
+
+
+/* -----------------------------------------------------------------------------
+ * Name:        scan
+ * Input:       None
+ * Output:      None
+ * Description: Scans for aircraft by rotating the radar 360 degrees and
+ *              calling detectAircraft at each degree.
+ * -----------------------------------------------------------------------------
+ */
 void PSR::scan(){
 
     cout << "Scanning..." << endl;
@@ -55,6 +80,16 @@ void PSR::scan(){
 	}
 }
 
+
+
+/* -----------------------------------------------------------------------------
+ * Name:        detectAircraft
+ * Input:       int angle
+ * Output:      None
+ * Description: Detects if an aircraft is present at the given angle and if so,
+ *              adds it to the illuminatedObjects vector if it is within range.
+ * -----------------------------------------------------------------------------
+ */
 void PSR::detectAircraft(int angle){
 
 	int aircraftDistance; 			// Distance of the detected aircraft
@@ -92,12 +127,27 @@ void PSR::detectAircraft(int angle){
 
 }
 
+
+/* -----------------------------------------------------------------------------
+ * Name:        rotateRadar
+ * Input:       None
+ * Output:      None
+ * Description: Rotates the radar by one degree.
+ * -----------------------------------------------------------------------------
+ */
 void PSR::rotateRadar(){
 
 	current_angle++;
 }
 
-
+/* -----------------------------------------------------------------------------
+ * Name:        sendAircraftPositionsToSSR
+ * Input:       None
+ * Output:      A vector of Aircraft objects
+ * Description: Sends the list of illuminated Aircraft objects to the
+ *              SSR object.
+ * -----------------------------------------------------------------------------
+ */
 vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 
 //	cout << "Sending illuminated objects" << endl;
@@ -113,6 +163,16 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 }
 
 
+
+
+/* -----------------------------------------------------------------------------
+ * Name:        execute
+ * Input:       None
+ * Output:      None
+ * Description: Executes the PSR object by calling scan,
+ *              sendAircraftPositionsToSSR, and executing the SSR object.
+ * -----------------------------------------------------------------------------
+ */
 void PSR::execute(){
 
     cout << "Executing PSR..." << endl;

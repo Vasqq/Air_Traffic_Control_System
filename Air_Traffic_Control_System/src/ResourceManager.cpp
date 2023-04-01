@@ -199,6 +199,32 @@ void ResourceManager::createATCSSubsystems() {
     initializeOperatorConsole();
     initializeRadar();
 }
+
+
+
+
+/* -----------------------------------------------------------------------------
+ * Name:        createAircraftTransponderDataChannel
+ * Input:       None
+ * Output:      chid (Channel Id)
+ * Description: This creates the communication channel for message passing
+ *              to be used for the SSR and Aircraft.
+ * -----------------------------------------------------------------------------
+ */
+int ResourceManager::createAircraftTransponderDataChannel() {
+
+    // Create message passing channel
+
+        int chid = ChannelCreate(0);
+        if (chid == -1) {
+            cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
+            exit(EXIT_FAILURE);
+        }
+
+    return chid;
+}
+
+
 /* -----------------------------------------------------------------------------
  * Name:        fwdExecutionToAircraft
  * Input:       void pointer to an Aircraft object
@@ -212,6 +238,26 @@ void* ResourceManager::fwdUpdateAircraftPosition(void *aircraft) {
 
     return NULL;
 }
+
+/* -----------------------------------------------------------------------------
+ * Name:        fwdServiceInterrogationSignal
+ * Input:       None
+ * Output:      Null
+ * Description: This creates a static cast pointer of type Aircraft to start
+ *              the ServiceInterrogationSignal function that replies with the
+ *              requested Aircraft information (flight ID, positions,
+ *              speeds,etc).
+ * -----------------------------------------------------------------------------
+ */
+void* ResourceManager::fwdServiceInterrogationSignal(void *aircraft) {
+
+    static_cast<Aircraft*>(aircraft)->ServiceInterrogationSignal();
+
+        return NULL;
+}
+
+
+
 /* -----------------------------------------------------------------------------
  * Name:        fwdExecutionToPSR
  * Input:       void pointer to a PSR object
@@ -233,12 +279,14 @@ void* ResourceManager::fwdExecutionToPSR(void *psr) {
  * Description: This function forwards execution to an SSR object.
  * -----------------------------------------------------------------------------
  */
-
 void* ResourceManager::fwdExecutionToSSR(void *ssr) {
 
     static_cast<PSR*>(ssr)->execute();
     return NULL;
 }
+
+
+
 /* -----------------------------------------------------------------------------
  * Name:		execute
  * Input:		None
@@ -294,25 +342,7 @@ void ResourceManager::runSimulation() {
 
 }
 
-int ResourceManager::createAircraftTransponderDataChannel() {
 
-    // Create message passing channel
-
-        int chid = ChannelCreate(0);
-        if (chid == -1) {
-            cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
-            exit(EXIT_FAILURE);
-        }
-
-    return chid;
-}
-
-void* ResourceManager::fwdServiceInterrogationSignal(void *aircraft) {
-
-    static_cast<Aircraft*>(aircraft)->ServiceInterrogationSignal();
-
-        return NULL;
-}
 
 /* -----------------------------------------------------------------------------
  * Name:        spawnNewAircraftThread
@@ -322,6 +352,8 @@ void* ResourceManager::fwdServiceInterrogationSignal(void *aircraft) {
  *              in as an argument, using the fwdExecutionToAircraft() function
  *              to forward execution to the object. If there is an error
  *              creating the thread, an error message is printed.
+ *              This also creates another thread to handle the service
+ *              interrogation signal.
  * -----------------------------------------------------------------------------
  */
 void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
