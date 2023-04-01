@@ -9,7 +9,7 @@ using namespace std;
 int main() {
 
 	Aircraft a1(10,20000,1,30,60,0,1000,1000,1000);
-	Aircraft a2(11,20000,2,40,70,0,1000,1000,1000);
+	Aircraft a2(11,20000,2,40,70,0,1000,1500,900);
 
 	vector<Aircraft> testAircraftArr;
 	testAircraftArr.push_back(a1);

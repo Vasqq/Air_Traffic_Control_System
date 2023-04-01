@@ -14,6 +14,7 @@
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
 #include <sys/types.h>
+#include <math.h>
 
 using namespace std;
 
@@ -97,7 +98,16 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft){
 
     ConnectDetach(coid);
 
-    cout <<  "Aircraft flightID is: " <<aircraftTransponderData.flightId << endl;
+    int d= sqrt((pow(aircraftTransponderData.speedX,2)+pow(aircraftTransponderData.speedY,2)
+                +pow(aircraftTransponderData.speedZ,2)));
+    cout <<  "Aircraft Flight ID is: " <<aircraftTransponderData.flightId << endl;
+    cout <<  "Aircraft "<<aircraftTransponderData.flightId<< " Flight Level is: " <<aircraftTransponderData.flightLevel << endl;
+    cout <<  "Aircraft "<<aircraftTransponderData.flightId<< " Position is: " <<aircraftTransponderData.positionX<<","<<
+                aircraftTransponderData.positionY<<","<<aircraftTransponderData.positionY << endl;
+    cout <<  "Aircraft "<<aircraftTransponderData.flightId<< " Speed is: " <<aircraftTransponderData.speedX<<","<<
+                    aircraftTransponderData.speedY<<","<<aircraftTransponderData.speedZ << endl;
+
+    cout <<  "Aircraft "<<aircraftTransponderData.flightId<< " Speed is: " <<d<< "km/h"<<endl;
 
 
 };
