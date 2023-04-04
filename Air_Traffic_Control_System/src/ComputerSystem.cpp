@@ -27,11 +27,11 @@ bool pushback = false;
                         + pow((td1.positionZ - td2.positionZ), 2));
                 if (distance <= 3000 && abs(td1.positionZ - td2.positionZ) <= 1000) {
                     collisionDetection  = true;
-                    if (pushback==false){       //stops looping the pushbacks more than once
-                        closeAircrafts.push_back(td1.flightId);
-                        closeAircrafts.push_back(td2.flightId);
-                        pushback=true;
-                    }
+                    //if (pushback==false){       //stops looping the pushbacks more than once
+                      //  closeAircrafts.push_back(td1.flightId);
+                      //  closeAircrafts.push_back(td2.flightId);
+                      //  pushback=true;
+                   // }
 
                 }
 
@@ -47,11 +47,11 @@ void ComputerSystem::displayAlert() {
 
     if (collisionDetection) {
             cout << "WARNING: Two or more Aircrafts are in close proximity!" << endl;
-            cout << "The following aircrafts are in close proximity: ";
-                    for (int flightId : closeAircrafts) {
-                        cout << "Aircraft: "<<flightId << " ";
-                    }
-                    cout << endl;
+           // cout << "The following aircrafts are in close proximity: ";
+                   // for (int flightId : closeAircrafts) {
+                    //    cout << "Aircraft: "<<flightId << " ";
+                   // }
+                   // cout << endl;
         }
 }
 
