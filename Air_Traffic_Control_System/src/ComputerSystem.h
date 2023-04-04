@@ -26,6 +26,8 @@ public:
 
 private:
 	bool collisionDetection  = false;
+	vector<vector<bool>> pushback;  // declaration of pushback as a private member variable
+
 
 };
 
