@@ -33,7 +33,7 @@ public:
 
     Aircraft();
 	virtual ~Aircraft();
-	Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
+	Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
 
 	//Functions that update position and flight level
 	void updatePositionX();

@@ -43,10 +43,10 @@ Aircraft::~Aircraft()
  * 				private members to be used in later functions.
  * -----------------------------------------------------------------------------
  */
-Aircraft::Aircraft(int time_at_boundary,int flight_level, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
+Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
 {
     this->time_at_boundary=time_at_boundary;
-	this->flight_level=flight_level;
+	this->flight_level=posZ;
 	this->flight_id=flight_id;
 	this->posX=posX;
 	this->posY=posY;
