@@ -89,7 +89,7 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft)
 
     ConnectDetach(coid);
 
-    cout << "Aircraft flightID is: " << aircraftTransponderData.flightId << endl;
+    //cout << "Aircraft flightID is: " << aircraftTransponderData.flightId << endl;
 
     receiveTransponderData(aircraftTransponderData);
 };
@@ -144,13 +144,13 @@ vector<sTransponderData> SSR::sendTransponderData()
     // send transponderDataList to computer system
 
     // this just tests that all values passed over are correct so we can move on to send the Transponder data
-    for (const auto &td : transponderDataList)
-    {
-        cout << "Flight ID: " << td.flightId << endl;
-        cout << "Position (x, y, z): (" << td.positionX << ", " << td.positionY << ", " << td.positionZ << ")" << endl;
-        cout << "Speed (x, y, z): (" << td.speedX << ", " << td.speedY << ", " << td.speedZ << ")" << endl;
-        cout << endl;
-    }
+//    for (const auto &td : transponderDataList)
+//    {
+//        cout << "Flight ID: " << td.flightId << endl;
+//        cout << "Position (x, y, z): (" << td.positionX << ", " << td.positionY << ", " << td.positionZ << ")" << endl;
+//        cout << "Speed (x, y, z): (" << td.speedX << ", " << td.speedY << ", " << td.speedZ << ")" << endl;
+//        cout << endl;
+//    }
 
     return transponderDataList;
 }
