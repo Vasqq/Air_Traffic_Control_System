@@ -33,7 +33,7 @@ Parser::Parser(const char* AIRCRAFT_DATA_FILE) {
  */
 int Parser::parse() {
 
-    int flight_id, time_at_boundary, flight_level, pos_x, pos_y,pos_z, speed_x, speed_y, speed_z;
+    int flight_id, time_at_boundary, pos_x, pos_y,pos_z, speed_x, speed_y, speed_z;
 
     FILE *input_file = fopen(AIRCRAFT_DATA_FILE, "r");
     if (input_file == NULL) {
@@ -42,10 +42,10 @@ int Parser::parse() {
     }
 
     // Read each line of the input file until the end of file
-    while (fscanf(input_file, "%d,%d,%d,%d,%d,%d,%d,%d,%d\n", &flight_id, &time_at_boundary, &flight_level, &pos_x, &pos_y,&pos_z, &speed_x, &speed_y, &speed_z) == 9) {
+    while (fscanf(input_file, "%d,%d,%d,%d,%d,%d,%d,%d\n", &time_at_boundary, &flight_id, &pos_x, &pos_y,&pos_z, &speed_x, &speed_y, &speed_z) == 8) {
 
            // Create an Aircraft object with the extracted data and add it to the aircraftSchedule vector
-           Aircraft aircraft(time_at_boundary, flight_level, flight_id, pos_x, pos_y, pos_z, speed_x, speed_y, speed_z);
+           Aircraft aircraft(time_at_boundary, flight_id, pos_x, pos_y, pos_z, speed_x, speed_y, speed_z);
            aircraftSchedule.push_back(aircraft);
        }
 
