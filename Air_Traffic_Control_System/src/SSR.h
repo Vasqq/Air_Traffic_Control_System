@@ -10,6 +10,7 @@
 #include "Aircraft.h"
 #include "PSR.h"
 #include "TransponderData.h"
+#include "ComputerSystem.h"
 #include <sys/neutrino.h> // For QNX message passing API
 #include <stdint.h> // For data type uint64_t
 #include <unistd.h>

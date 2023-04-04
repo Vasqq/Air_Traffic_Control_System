@@ -4,6 +4,7 @@
 #include "PSR.h"
 #include "SSR.h"
 #include "ResourceManager.h"
+#include "ComputerSystem.h"
 
 using namespace std;
 
@@ -19,5 +20,7 @@ int main() {
    RM.execute();
 
 
-    return 0;
+
+	return 0;
+
 }
