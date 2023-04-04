@@ -20,7 +20,7 @@ public:
 
 	void checkAircraftProximity(vector<sTransponderData> transponderDataList);
 	void displayAlert();
-
+	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
 
 
 

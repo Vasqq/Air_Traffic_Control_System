@@ -19,7 +19,7 @@ ComputerSystem::~ComputerSystem() {
 
 
 void ComputerSystem::checkAircraftProximity(vector<sTransponderData> transponderDataList) {
-
+bool pushback = false;
     for (const auto& td1 : transponderDataList) {
         for (const auto& td2 : transponderDataList) {
             if (td1.flightId != td2.flightId) {
@@ -27,6 +27,11 @@ void ComputerSystem::checkAircraftProximity(vector<sTransponderData> transponder
                         + pow((td1.positionZ - td2.positionZ), 2));
                 if (distance <= 3000 && abs(td1.positionZ - td2.positionZ) <= 1000) {
                     collisionDetection  = true;
+                    if (pushback==false){       //stops looping the pushbacks more than once
+                        closeAircrafts.push_back(td1.flightId);
+                        closeAircrafts.push_back(td2.flightId);
+                        pushback=true;
+                    }
 
                 }
 
@@ -42,6 +47,11 @@ void ComputerSystem::displayAlert() {
 
     if (collisionDetection) {
             cout << "WARNING: Two or more Aircrafts are in close proximity!" << endl;
+            cout << "The following aircrafts are in close proximity: ";
+                    for (int flightId : closeAircrafts) {
+                        cout << "Aircraft: "<<flightId << " ";
+                    }
+                    cout << endl;
         }
 }
 
