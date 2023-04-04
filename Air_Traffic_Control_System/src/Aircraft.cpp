@@ -46,7 +46,6 @@ Aircraft::~Aircraft()
 Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
 {
     this->time_at_boundary=time_at_boundary;
-	this->flight_level=posZ;
 	this->flight_id=flight_id;
 	this->posX=posX;
 	this->posY=posY;
@@ -174,7 +173,6 @@ void Aircraft::ServiceInterrogationSignal()
     // Construct reply message
 
     reply_msg.flightId    = this->flight_id;
-    reply_msg.flightLevel = this->flight_level;
     reply_msg.positionX   = this->posX;
     reply_msg.positionY   = this->posY;
     reply_msg.positionZ   = this->posZ;
@@ -223,25 +221,6 @@ int Aircraft::getFlightID(){
 
 	return this->flight_id;
 }
-
-
-/* -----------------------------------------------------------------------------
- * Name:        getFlightLevel
- * Input:       None
- * Output:      flight_level
- * Description: This will return the newly updated flight_level.
- * -----------------------------------------------------------------------------
- */
-int Aircraft::getFlightLevel(){
-
-	return this->flight_level;
-}
-
-
-
-
-
-
 /* -----------------------------------------------------------------------------
  * Name:        getPosX
  * Input:       None

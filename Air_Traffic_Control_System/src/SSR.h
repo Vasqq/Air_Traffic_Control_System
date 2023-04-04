@@ -31,10 +31,12 @@ public:
 
     // Functions to interact with Aircraft threads and receive their data
     void interrogateAircraft(Aircraft *targetAircraft);
-    void receiveTransponderData(Aircraft illuminatedObject);
+    void receiveTransponderData(sTransponderData illuminatedObject);
 
     // Function that will run the two previous functions
     void interrogate(vector<Aircraft*> illuminatedObjects);
+
+
 
     // This function will return the result of interrogate
     vector<sTransponderData> sendTransponderData();

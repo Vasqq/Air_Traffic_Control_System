@@ -77,7 +77,6 @@ public:
 
 private:
 	int time_at_boundary;
-	int flight_level;
 	int flight_id;
 	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
