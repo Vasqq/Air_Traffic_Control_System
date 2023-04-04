@@ -39,8 +39,8 @@ void ComputerSystem::checkAircraftProximity(vector<sTransponderData> transponder
         for (const auto& td2 : transponderDataList) {
 
             if (td1.flightId != td2.flightId) {
-                double distance = sqrt(pow((td1.positionX - td2.positionX), 2) + pow((td1.positionY - td2.positionY), 2)
-                        + pow((td1.positionZ - td2.positionZ), 2));
+                double distance = sqrt(pow((td1.positionX - td2.positionX), 2) +
+                        pow((td1.positionY - td2.positionY), 2));
                 if (distance <= 3000 && abs(td1.positionZ - td2.positionZ) <= 1000) {
                     collisionDetection  = true;
                     if (!pushback[td1.flightId][td2.flightId] && !pushback[td2.flightId][td1.flightId]){       //stops looping the pushbacks more than once
