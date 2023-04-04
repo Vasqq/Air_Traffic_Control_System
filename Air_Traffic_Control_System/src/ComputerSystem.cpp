@@ -17,6 +17,7 @@ ComputerSystem::~ComputerSystem() {
 	// TODO Auto-generated destructor stub
 }
 
+
 void ComputerSystem::checkAircraftProximity(vector<sTransponderData> transponderDataList) {
 
     for (const auto& td1 : transponderDataList) {
@@ -53,3 +54,4 @@ void ComputerSystem::displayAlert() {
             cout << "WARNING: Two or more Aircrafts are in close proximity!" << endl;
         }
 }
+
