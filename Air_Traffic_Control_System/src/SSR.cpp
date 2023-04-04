@@ -118,12 +118,6 @@ void SSR::receiveTransponderData(sTransponderData aircraftTransponderData){
 
 	transponderDataList.push_back(aircraftTransponderData);
 
-
-
-
-
-
-
 };
 
 /* -----------------------------------------------------------------------------
@@ -162,13 +156,10 @@ vector<sTransponderData> SSR::sendTransponderData()
 	//this just tests that all values passed over are correct so we can move on to send the Transponder data
 		for (const auto& td : transponderDataList) {
 		    cout << "Flight ID: " << td.flightId << endl;
-		    cout << "Flight Level: " << td.flightLevel << endl;
 		    cout << "Position (x, y, z): (" << td.positionX << ", " << td.positionY << ", " << td.positionZ << ")" << endl;
 		    cout << "Speed (x, y, z): (" << td.speedX << ", " << td.speedY << ", " << td.speedZ << ")" << endl;
 		    cout << endl;
 		}
-
-
 
     return transponderDataList;
 

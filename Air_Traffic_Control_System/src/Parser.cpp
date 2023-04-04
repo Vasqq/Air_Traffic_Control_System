@@ -33,7 +33,7 @@ Parser::Parser(const char* AIRCRAFT_DATA_FILE) {
  */
 int Parser::parse() {
 
-    int flight_id, time_at_boundary, pos_x, pos_y,pos_z, speed_x, speed_y, speed_z;
+    int flight_id, time_at_boundary, pos_x, pos_y, pos_z, speed_x, speed_y, speed_z;
 
     FILE *input_file = fopen(AIRCRAFT_DATA_FILE, "r");
     if (input_file == NULL) {

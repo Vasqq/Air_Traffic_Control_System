@@ -11,7 +11,6 @@
 typedef struct
 {
     int flightId;
-    int flightLevel;
     int positionX;
     int positionY;
     int positionZ;
