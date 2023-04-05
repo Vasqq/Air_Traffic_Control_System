@@ -11,10 +11,14 @@
 #include "SSR.h"
 #include <Math.h>
 
+
 class ComputerSystem {
 public:
+	ComputerSystem(int n);
+	void ComputeAirTrafficFlow();
+	void SetN(int new_n);
 	ComputerSystem();
-	virtual ~ComputerSystem();
+	//virtual ~ComputerSystem();
 
 
 
@@ -25,9 +29,16 @@ public:
 
 
 private:
+	int n;
+	std::vector<sTransponderData> receiveIlluminatedObjects();
+	void forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects);
+	void checkAircraftSeperationConstraints(std::vector<sTransponderData>illuminatedObjects);
+	void notifySafetyViolation(std::vector<int> violatingAircraft);
+	//void displayAlert();
+
 	bool collisionDetection  = false;
 	vector<vector<bool>> pushback;  // declaration of pushback as a private member variable
-
+	//std::vector<int>closeAircrafts;
 
 };
 

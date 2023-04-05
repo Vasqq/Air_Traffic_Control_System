@@ -11,13 +11,54 @@
 
 ComputerSystem::ComputerSystem() {
 	// TODO Auto-generated constructor stub
-
 	pushback = std::vector<std::vector<bool>>();
+
 
 }
 
-ComputerSystem::~ComputerSystem() {
-	// TODO Auto-generated destructor stub
+ComputerSystem::ComputerSystem(int n) {
+	this->n=n;
+
+	//option 1: receive new n through interprocess communication
+	//todo:implement
+
+	//option2: n is defined in shared memory
+	//todo:implement
+
+	//option3: operation console has a reference to the computer system object
+	//todo:implement
+
+	//option4: operator console requests setting n through the resource manager
+
+}
+
+void ComputerSystem::SetN(int new_n){
+	this->n=new_n;
+
+}
+
+void ComputerSystem::ComputeAirTrafficFlow(){
+	std::vector<sTransponderData> illuminatedObjects = receiveIlluminatedObjects();
+	forwardIlluminatedObjectsToDataDisplay(illuminatedObjects);
+	//checkAircraftSeperationConstraints(illuminatedObjects);
+}
+
+std::vector<sTransponderData> ComputerSystem::receiveIlluminatedObjects() {
+	std::vector<sTransponderData> transponderDataList;
+
+	//Generate simulated transponder data for n aircrafts
+	for(int i=0; i<n ; i++){
+		sTransponderData td;
+		//todo
+
+		transponderDataList.push_back(td);
+	}
+
+	return transponderDataList;
+}
+
+void ComputerSystem::forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects) {
+	//ResourceManager::GetInstance().AddDataToQueue(illuminatedObjects);
 }
 
 
