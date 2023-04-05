@@ -10,34 +10,32 @@
 
 #include "SSR.h"
 #include <Math.h>
+#include "TransponderData.h"
+
+using namespace std;
 
 
 class ComputerSystem {
 public:
-	ComputerSystem(int n);
+    //ComputerSystem();
+	ComputerSystem(vector<sTransponderData> *transponderDataList);
 	void ComputeAirTrafficFlow();
 	void SetN(int new_n);
-	ComputerSystem();
-	//virtual ~ComputerSystem();
-
-
-
-	void checkAircraftProximity(vector<sTransponderData> transponderDataList);
+	virtual ~ComputerSystem();
+	void checkAircraftProximity();
 	void displayAlert();
 	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
-
-
-
-private:
-	int n;
 	std::vector<sTransponderData> receiveIlluminatedObjects();
 	void forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects);
 	void checkAircraftSeperationConstraints(std::vector<sTransponderData>illuminatedObjects);
 	void notifySafetyViolation(std::vector<int> violatingAircraft);
-	//void displayAlert();
+
+private:
+	int n;
 
 	bool collisionDetection  = false;
 	vector<vector<bool>> pushback;  // declaration of pushback as a private member variable
+	vector<sTransponderData> *transponderDataList;
 	//std::vector<int>closeAircrafts;
 
 };

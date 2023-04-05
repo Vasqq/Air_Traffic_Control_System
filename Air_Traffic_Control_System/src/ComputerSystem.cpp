@@ -9,15 +9,15 @@
 #include "ResourceManager.h"
 #include <set>
 
-ComputerSystem::ComputerSystem() {
-	// TODO Auto-generated constructor stub
-	pushback = std::vector<std::vector<bool>>();
+//ComputerSystem::ComputerSystem() {
+//	// TODO Auto-generated constructor stub
+//	//pushback = std::vector<std::vector<bool>>();
+//
+//
+//}
 
-
-}
-
-ComputerSystem::ComputerSystem(int n) {
-	this->n=n;
+ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList) {
+    //	this->n=n;
 
 	//option 1: receive new n through interprocess communication
 	//todo:implement
@@ -30,11 +30,14 @@ ComputerSystem::ComputerSystem(int n) {
 
 	//option4: operator console requests setting n through the resource manager
 
+    this->transponderDataList = transponderDataList;
+    pushback = vector<vector<bool>>();
+
+    checkAircraftProximity();
 }
 
 void ComputerSystem::SetN(int new_n){
 	this->n=new_n;
-
 }
 
 void ComputerSystem::ComputeAirTrafficFlow(){
@@ -57,33 +60,41 @@ std::vector<sTransponderData> ComputerSystem::receiveIlluminatedObjects() {
 	return transponderDataList;
 }
 
+ComputerSystem::~ComputerSystem() {
+}
+
 void ComputerSystem::forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects) {
 	//ResourceManager::GetInstance().AddDataToQueue(illuminatedObjects);
 }
 
 
-void ComputerSystem::checkAircraftProximity(vector<sTransponderData> transponderDataList) {
+void ComputerSystem::checkAircraftProximity() {
 
 	 //this dynamically resizes the 2d boolean vector based on the number of structs in the list.
 	    int max_flight_id = 0;
-	    for (const auto& td : transponderDataList) {
+	    for (sTransponderData& td : *transponderDataList) {
 	        if (td.flightId > max_flight_id) {
 	            max_flight_id = td.flightId;
 	        }
 	    }
-	    pushback.resize(max_flight_id + 1, std::vector<bool>(max_flight_id + 1, false));
+	    pushback.resize(max_flight_id + 1, vector<bool>(max_flight_id + 1, false));
 
 
 
-	for (const auto& td1 : transponderDataList) {
+	for (sTransponderData& td1 : *transponderDataList) {
 
-        for (const auto& td2 : transponderDataList) {
+	    for (sTransponderData& td2 : *transponderDataList) {
 
-            if (td1.flightId != td2.flightId) {
-                double distance = sqrt(pow((td1.positionX - td2.positionX), 2) +
-                        pow((td1.positionY - td2.positionY), 2));
-                if (distance <= 3000 && abs(td1.positionZ - td2.positionZ) <= 1000) {
+	        if (td1.flightId != td2.flightId) {
+
+                int distance = sqrt( pow((td1.positionX - td2.positionX),2) +
+                                     pow((td1.positionY - td2.positionY),2));
+                int altitude = abs(td1.positionZ - td2.positionZ);
+
+                if (distance <= 3000 && altitude <= 1000) {
                     collisionDetection  = true;
+
+
                     if (!pushback[td1.flightId][td2.flightId] && !pushback[td2.flightId][td1.flightId]){       //stops looping the pushbacks more than once
                         closeAircrafts.push_back(td1.flightId);
                         closeAircrafts.push_back(td2.flightId);
@@ -112,7 +123,7 @@ void ComputerSystem::displayAlert() {
 
 	    // Loop through each unique flight ID
 	    for (int flightId : closeAircrafts) {
-	        cout << "Aircraft " << flightId << " is in close proximity to: ";
+	        cout << "Aircraft " << flightId << " is in close proximity to ";
 
 	        // Loop through the closeAircrafts vector to find all the aircrafts close to the current flight ID
 	        bool firstAircraft = true;

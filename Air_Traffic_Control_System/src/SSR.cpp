@@ -152,6 +152,7 @@ vector<sTransponderData> SSR::sendTransponderData()
 //        cout << endl;
 //    }
 
+
     return transponderDataList;
 }
 
@@ -167,6 +168,7 @@ void SSR::execute()
 {
 
     interrogate(illuminatedObjects);
-    ComputerSystem cs;
-    cs.checkAircraftProximity(sendTransponderData());
+    //cout << &transponderDataList << endl;
+    ComputerSystem cs(&transponderDataList);
+    //cs.checkAircraftProximity(sendTransponderData());
 }
