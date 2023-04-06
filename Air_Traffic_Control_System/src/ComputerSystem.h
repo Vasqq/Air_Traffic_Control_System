@@ -22,14 +22,16 @@ public:
 	void ComputeAirTrafficFlow();
 	void SetN(int new_n);
 	virtual ~ComputerSystem();
-	void checkAircraftProximity();
-	void displayAlert();
+
 	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
 	std::vector<sTransponderData> receiveIlluminatedObjects();
 	void forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects);
-	void checkAircraftSeperationConstraints(std::vector<sTransponderData>illuminatedObjects);
-	void notifySafetyViolation(std::vector<int> violatingAircraft);
+	void checkAircraftSeperationConstraints();
+	void notifySafetyViolation();
 
+
+	//void checkAircraftProximity();
+	//void displayAlert();
 private:
 	int n;
 
