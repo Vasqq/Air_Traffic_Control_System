@@ -135,7 +135,7 @@ void Aircraft::updateAircraftPosition()
     updatePositionY();
     updatePositionZ();
 
-    cout<<"Update position thread finished executing..."<<endl;
+    cout<<endl<<"Update position thread finished executing..."<<endl;
 }
 
 void Aircraft::setTransponderDataChannel(int chid){

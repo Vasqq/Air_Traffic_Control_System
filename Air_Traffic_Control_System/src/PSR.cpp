@@ -29,7 +29,6 @@ PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 	pulse_speed = PULSE_SPEED;
 
 	this->aircraftList=AircraftSchedule;
-	cout << "PSR Aircraft list address: " << aircraftList << endl;
 }
 
 PSR::~PSR() {
@@ -38,7 +37,7 @@ PSR::~PSR() {
 
 void PSR::scan(){
 
-    cout << "Scanning..." << endl;
+    cout << endl<< "Scanning..." << endl<< endl;
 	while(current_angle <= DEGREES_IN_CIRCLE){
 
 		detectAircraft(current_angle);
@@ -82,10 +81,7 @@ void PSR::detectAircraft(int angle){
 			   aircraftDistance = (int) (sqrt(pow(aircraft.getPosX(), 2) + pow(aircraft.getPosY(), 2)));
 			   // Add the aircraft object to the array if it is within range
 			   if(aircraftDistance < range){
-
-				   cout << "Pushing back with address: " << &aircraft  << endl;
 				   illuminatedObjects.push_back(&aircraft);
-			   	   cout << illuminatedObjects.size() << endl;
 			   }
 		   }
 	}
@@ -115,15 +111,15 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 
 void PSR::execute(){
 
-    cout << "Executing PSR..." << endl;
+    cout << endl<< "Executing PSR..." << endl;
 while(true)
 {
 	scan();
-	//sendAircraftPositionsToSSR();
+
 	SSR ssr(illuminatedObjects);
 	ssr.execute();
 }
-	//return illuminatedObjects;
+
 
 }
 

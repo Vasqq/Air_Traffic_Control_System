@@ -29,16 +29,13 @@ public:
 	void checkAircraftSeperationConstraints();
 	void notifySafetyViolation();
 
-
-	//void checkAircraftProximity();
-	//void displayAlert();
 private:
 	int n;
 
 	bool collisionDetection  = false;
 	vector<vector<bool>> pushback;  // declaration of pushback as a private member variable
 	vector<sTransponderData> *transponderDataList;
-	//std::vector<int>closeAircrafts;
+
 
 };
 

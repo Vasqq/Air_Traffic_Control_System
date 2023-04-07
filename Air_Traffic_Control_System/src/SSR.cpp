@@ -53,7 +53,7 @@ SSR::~SSR(){
 void SSR::interrogateAircraft(Aircraft *targetAircraft)
 {
 
-    cout << targetAircraft << endl;
+
     int chid = targetAircraft->getTransponderDataChannel();
 
     // Connecting the SSR to channel
@@ -168,7 +168,6 @@ void SSR::execute()
 {
 
     interrogate(illuminatedObjects);
-    //cout << &transponderDataList << endl;
     ComputerSystem cs(&transponderDataList);
-    //cs.checkAircraftProximity(sendTransponderData());
+
 }
