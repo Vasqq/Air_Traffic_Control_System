@@ -112,13 +112,13 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 void PSR::execute(){
 
     cout << endl<< "Executing PSR..." << endl;
-while(true)
-{
+//while(true)
+//{
 	scan();
 
 	SSR ssr(illuminatedObjects);
 	ssr.execute();
-}
+//}
 
 
 }

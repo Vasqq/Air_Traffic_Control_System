@@ -11,7 +11,7 @@
 #include "SSR.h"
 #include <Math.h>
 #include "TransponderData.h"
-
+#include "DataDisplay.h"
 using namespace std;
 
 
@@ -23,12 +23,12 @@ public:
 	void SetN(int new_n);
 	virtual ~ComputerSystem();
 
-	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
+
 	std::vector<sTransponderData> receiveIlluminatedObjects();
-	void forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects);
+	void forwardIlluminatedObjectsToDataDisplay();
 	void checkAircraftSeperationConstraints();
 	void notifySafetyViolation();
-
+	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
 private:
 	int n;
 
