@@ -14,16 +14,16 @@
 #include "DataDisplay.h"
 using namespace std;
 
-
-class ComputerSystem {
+class ComputerSystem
+{
 public:
-    //ComputerSystem();
+	// ComputerSystem();
 	ComputerSystem(vector<sTransponderData> *transponderDataList);
 	void ComputeAirTrafficFlow();
 	void SetN(int new_n);
 	virtual ~ComputerSystem();
 
-
+	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
 	std::vector<sTransponderData> receiveIlluminatedObjects();
 	void forwardIlluminatedObjectsToDataDisplay();
 	void checkAircraftSeperationConstraints();
@@ -34,11 +34,9 @@ public:
 private:
 	int n;
 
-	bool collisionDetection  = false;
-	vector<vector<bool>> pushback;  // declaration of pushback as a private member variable
+	bool collisionDetection = false;
+	vector<vector<bool>> pushback; // declaration of pushback as a private member variable
 	vector<sTransponderData> *transponderDataList;
-
-
 };
 
 #endif /* SRC_COMPUTERSYSTEM_H_ */
