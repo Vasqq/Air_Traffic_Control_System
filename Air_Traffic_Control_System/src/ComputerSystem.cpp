@@ -34,6 +34,7 @@ ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList) {
     pushback = vector<vector<bool>>();
 
     checkAircraftSeperationConstraints();
+    forwardIlluminatedObjectsToDataDisplay();
 }
 
 void ComputerSystem::SetN(int new_n){
@@ -42,8 +43,8 @@ void ComputerSystem::SetN(int new_n){
 
 void ComputerSystem::ComputeAirTrafficFlow(){
 	std::vector<sTransponderData> illuminatedObjects = receiveIlluminatedObjects();
-	forwardIlluminatedObjectsToDataDisplay(illuminatedObjects);
-	//checkAircraftSeperationConstraints(illuminatedObjects);
+	forwardIlluminatedObjectsToDataDisplay();
+
 }
 
 std::vector<sTransponderData> ComputerSystem::receiveIlluminatedObjects() {
@@ -63,8 +64,10 @@ std::vector<sTransponderData> ComputerSystem::receiveIlluminatedObjects() {
 ComputerSystem::~ComputerSystem() {
 }
 
-void ComputerSystem::forwardIlluminatedObjectsToDataDisplay(std::vector<sTransponderData> illuminatedObjects) {
-	//ResourceManager::GetInstance().AddDataToQueue(illuminatedObjects);
+void ComputerSystem::forwardIlluminatedObjectsToDataDisplay() {
+
+    DataDisplay d (transponderDataList,&closeAircrafts);
+
 }
 
 
