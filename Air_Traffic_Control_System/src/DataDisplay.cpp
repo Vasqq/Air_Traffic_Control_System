@@ -51,8 +51,8 @@ void DataDisplay::displayVisual()
 	const int AIRSPACE_HEIGHT = 100000;
 
 	// Define the dimensions of the reduced airspace (box)
-	const int BOX_WIDTH = 20;
-	const int BOX_HEIGHT = 5;
+	const int BOX_WIDTH = 50;
+	const int BOX_HEIGHT = 20;
 
 	// Compute the maximum distance between any two aircrafts
 	double maxDistance = 0;
@@ -70,8 +70,8 @@ void DataDisplay::displayVisual()
 	}
 
 	// Compute the scaling factors for both dimensions based on the maximum distance
-	double widthFactor = maxDistance / 5;
-	double heightFactor = maxDistance / 2;
+	double widthFactor = AIRSPACE_WIDTH/(maxDistance / 5);
+	double heightFactor = AIRSPACE_HEIGHT/(maxDistance / 2);
 
 	// If the scaling factors are too small, round them up to 1
 	if (widthFactor < 1)
