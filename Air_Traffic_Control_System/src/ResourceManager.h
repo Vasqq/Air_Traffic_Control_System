@@ -10,12 +10,12 @@
 #include "Aircraft.h"
 #include "PSR.h"
 #include "SSR.h"
+#include "PeriodicTimer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 
 using namespace std;
-
 
 class ResourceManager {
 public:
@@ -56,6 +56,7 @@ private:
     vector<int> aircraft_pids;
     vector<int> ATCS_pids;
     vector<Aircraft> *AircraftSchedule;
+    PeriodicTimer aircraftPeriodicTimer;
 
 };
 

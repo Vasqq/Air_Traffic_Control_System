@@ -43,7 +43,7 @@ Aircraft::~Aircraft()
  * 				private members to be used in later functions.
  * -----------------------------------------------------------------------------
  */
-Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
+Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ, int base_timer_signal)
 {
     this->time_at_boundary=time_at_boundary;
 	this->flight_id=flight_id;
@@ -55,6 +55,10 @@ Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int 
 	this->speedZ=speedZ;
 
 
+    int sigNo = base_timer_signal;
+
+    this->updatePositionTimer = PeriodicTimer();
+    updatePositionTimer.setupTimer(sigNo);
 
 
 
@@ -129,13 +133,19 @@ void Aircraft::updateFlightLevel()
  */
 void Aircraft::updateAircraftPosition()
 {
-    cout<<"Executing aircraft update position thread..."<<endl;
+    const timespec aircraft_update_position_period{1,0};
 
+
+    updatePositionTimer.startTimer(aircraft_update_position_period);
+    //aircraft should break from loop when it is out of range of the cuboid
+    while(true){
+    printf("\t--->Executing fwdUpdateAircraftPosition thread for aircraft ID:%d\n\n",getFlightID());
     updatePositionX();
     updatePositionY();
     updatePositionZ();
-
-    cout<<endl<<"Update position thread finished executing..."<<endl;
+    printf("\t--->fwdUpdateAircraftPosition finished executing for aircraft ID:%d.\n\n", getFlightID());
+    updatePositionTimer.waitPeriod();
+    }
 }
 
 void Aircraft::setTransponderDataChannel(int chid){
@@ -154,20 +164,21 @@ void Aircraft::setTransponderDataChannel(int chid){
  */
 void Aircraft::ServiceInterrogationSignal()
 {
+    while(true){
     sTransponderData reply_msg;
     sInterrogationSignal interrogationSignal;
 
-    cout << "Servicing interrogation signal" << endl;
+    //printf("\t--->Executing fwdServiceInterrogationSignal thread for aircraft ID:%d\n\n",getFlightID());
     // Wait for a message on the channel
     int rcvid = MsgReceive(transponderDataChannel, &interrogationSignal, sizeof(interrogationSignal), NULL);
 
     if (rcvid == -1) {
-        cout << "Failed to receive message in aircraft. Error Code: " << strerror(errno) << endl;
+       printf("Failed to receive message in aircraft. Error Code: %s\n",strerror(errno));
        exit(EXIT_FAILURE);
     }
     else
     {
-       cout<<"Message Received."<<endl;
+       //printf("\t--->Message received from SSR.\n");
     }
 
     // Construct reply message
@@ -182,11 +193,12 @@ void Aircraft::ServiceInterrogationSignal()
 
    int returnCode = MsgReply(rcvid, EOK, &reply_msg, sizeof(reply_msg));
    if (returnCode == -1) {
-       cout << "Failed to send reply message in ServiceInterrogationSignal. Error Code: " << strerror(errno) << endl;
+       printf("\t--->Failed to send reply message. Error Code: %s\n", strerror(errno));
        exit(EXIT_FAILURE);
    }
 
-   cout << "Finished servicing interrogation signal" << endl;
+   //printf("\t--->Finished servicing interrogation signal.\n");
+    }
 }
 
 
@@ -325,8 +337,6 @@ char* Aircraft::collectTransponderData()
 {
 	return 0;
 }
-
-
 
 /* -----------------------------------------------------------------------------
  * Name:        sendTransponderData

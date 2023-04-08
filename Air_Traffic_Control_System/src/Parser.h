@@ -14,6 +14,8 @@
 #ifndef SRC_PARSER_H_
 #define SRC_PARSER_H_
 
+#define AIRCRAFT_UPDATE_POSITION_SIGNAL_BASE 41
+
 class Parser {
 public:
     Parser(const char* AIRCRAFT_DATA_FILE);

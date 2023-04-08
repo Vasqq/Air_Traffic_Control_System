@@ -31,7 +31,6 @@ ResourceManager::ResourceManager() {
 ResourceManager::ResourceManager(vector<Aircraft> *AircraftArr) {
 
     this->AircraftSchedule = AircraftArr;
-
 }
 
 /* -----------------------------------------------------------------------------
@@ -164,7 +163,11 @@ void ResourceManager::initializeSSR() {
  */
 void ResourceManager::createAircraftThreads() {
 
-    cout << "Creating Aircraft threads" << endl;
+    printf("#################################\n");
+    printf("### Creating Aircraft threads ###\n");
+    printf("#################################\n\n");
+
+
 
     for (Aircraft &nextAircraft : *AircraftSchedule) {
 
@@ -295,7 +298,7 @@ int ResourceManager::createAircraftTransponderDataChannel() {
 
         int chid = ChannelCreate(0);
         if (chid == -1) {
-            cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
+            printf("Error: ChannelCreate failed. Error ID: %s\n",strerror(errno));
             exit(EXIT_FAILURE);
         }
 
@@ -323,21 +326,24 @@ void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
 
     int err_no;
     pthread_t thread_id;
+    pthread_attr_t attr;
+    pthread_attr_init( &attr );
+    pthread_attr_setschedpolicy(&attr, SCHED_RR);
 
     err_no = pthread_create(&thread_id,
-    NULL, &fwdUpdateAircraftPosition, &nextAircraft);
+            &attr, &fwdUpdateAircraftPosition, &nextAircraft);
     if (err_no != 0) {
-        cout << "ERROR when creating thread: " << err_no << endl;
+        printf("ERROR when creating thread:\n");
     } else {
-        cout << "Aircraft Update position thread created with ID: " << thread_id << endl<<endl;
+        printf("\tfwdUpdateAircraftPosition thread created with ID: %d\n", thread_id);
     }
 
     err_no = pthread_create(&thread_id,
-       NULL, &fwdServiceInterrogationSignal, &nextAircraft);
+            &attr, &fwdServiceInterrogationSignal, &nextAircraft);
        if (err_no != 0) {
-           cout << "ERROR when creating thread: " << err_no << endl;
+           printf("ERROR when creating thread:\n");
        } else {
-           cout << "Aircraft service interrogation signal thread created with ID: " << thread_id << endl<<endl;
+           printf("\tfwdServiceInterrogationSignal thread created with ID: %d\n", thread_id);
        }
 
 }

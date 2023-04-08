@@ -68,54 +68,52 @@ void ComputerSystem::forwardIlluminatedObjectsToDataDisplay(std::vector<sTranspo
 }
 
 
-
 void ComputerSystem::checkAircraftSeperationConstraints() {
 
-	 //this dynamically resizes the 2d boolean vector based on the number of structs in the list.
-		    int max_flight_id = 0;
-		    for (sTransponderData& td : *transponderDataList) {
-		        if (td.flightId > max_flight_id) {
-		            max_flight_id = td.flightId;
-		        }
-		    }
-		    pushback.resize(max_flight_id + 1, vector<bool>(max_flight_id + 1, false));
+//this dynamically resizes the 2d boolean vector based on the number of structs in the list.
+    int max_flight_id = 0;
+    for (sTransponderData& td : *transponderDataList) {
+        if (td.flightId > max_flight_id) {
+            max_flight_id = td.flightId;
+        }
+    }
+    pushback.resize(max_flight_id + 1, vector<bool>(max_flight_id + 1, false));
 
 
 
-		for (sTransponderData& td1 : *transponderDataList) {
+    for (sTransponderData& td1 : *transponderDataList) {
 
-		    for (sTransponderData& td2 : *transponderDataList) {
+        for (sTransponderData& td2 : *transponderDataList) {
 
-		        if (td1.flightId != td2.flightId) {
+            if (td1.flightId != td2.flightId) {
 
-	                int distance = sqrt( pow((td1.positionX - td2.positionX),2) +
-	                                     pow((td1.positionY - td2.positionY),2));
-	                int altitude = abs(td1.positionZ - td2.positionZ);
+                int distance = sqrt( pow((td1.positionX - td2.positionX),2) +
+                                     pow((td1.positionY - td2.positionY),2));
+                int altitude = abs(td1.positionZ - td2.positionZ);
 
-	                if (distance <= 3000 && altitude <= 1000) {
-	                    collisionDetection  = true;
-
-
-	                    if (!pushback[td1.flightId][td2.flightId] && !pushback[td2.flightId][td1.flightId] && collisionDetection == true){       //stops looping the pushbacks more than once
-	                        closeAircrafts.push_back(td1.flightId);
-	                        closeAircrafts.push_back(td2.flightId);
-
-	                        pushback[td1.flightId][td2.flightId] = true; // Mark this pair of flight IDs as pushed back
-	                        pushback[td2.flightId][td1.flightId] = true; // Mark this pair of flight IDs as pushed back
-	                        //this above 2d boolean is done so that you dont have the reverse order of aircrafts being checked as well.
-	                        collisionDetection  = false;	//reset collisionDetection back to false to check again
-
-	                    }
-
-	                }
-
-	            }
-	        }
-	             }
-		notifySafetyViolation();
+                if (distance <= 3000 && altitude <= 1000) {
+                    collisionDetection  = true;
 
 
-	}
+                    if (!pushback[td1.flightId][td2.flightId] && !pushback[td2.flightId][td1.flightId] && collisionDetection == true){       //stops looping the pushbacks more than once
+                        closeAircrafts.push_back(td1.flightId);
+                        closeAircrafts.push_back(td2.flightId);
+
+                        pushback[td1.flightId][td2.flightId] = true; // Mark this pair of flight IDs as pushed back
+                        pushback[td2.flightId][td1.flightId] = true; // Mark this pair of flight IDs as pushed back
+                        //this above 2d boolean is done so that you dont have the reverse order of aircrafts being checked as well.
+                        collisionDetection  = false;	//reset collisionDetection back to false to check again
+
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    notifySafetyViolation();
+}
 
 
 void ComputerSystem::notifySafetyViolation() {
@@ -127,19 +125,19 @@ void ComputerSystem::notifySafetyViolation() {
 		    // Loop through each unique flight ID
 		    cout<<endl;
 		    for (int flightId : closeAircrafts) {
-		        cout << "Aircraft " << flightId << " is in close proximity to ";
+		        //cout << "Aircraft " << flightId << " is in close proximity to ";
 
 		        // Loop through the closeAircrafts vector to find all the aircrafts close to the current flight ID
 		        bool firstAircraft = true;
 		        for (int closeFlightId : closeAircrafts) {
 		            if (closeFlightId != flightId) {
 		                if (!firstAircraft) {
-		                    cout << ", ";
+		                    //cout << ", ";
 		                }
-		                cout << "Aircraft: " <<closeFlightId;
+		                //cout << "Aircraft: " <<closeFlightId;
 		                firstAircraft = false;
 		            }
 		        }
-		        cout << endl;
+		        //cout << endl;
 		    }
 }

@@ -23,8 +23,10 @@
 #include <sys/types.h>
 
 #include "TransponderData.h"
+#include "PeriodicTimer.h"
 
 using namespace std;
+
 
 
 class Aircraft {
@@ -33,7 +35,7 @@ public:
 
     Aircraft();
 	virtual ~Aircraft();
-	Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
+	Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ, int base_timer_signal);
 
 	//Functions that update position and flight level
 	void updatePositionX();
@@ -82,8 +84,7 @@ private:
 	int speedX,speedY,speedZ;
 	int transponderDataChannel;
 
-
-
+	PeriodicTimer updatePositionTimer;
 };
 
 #endif /* AIRCRAFT_H_ */

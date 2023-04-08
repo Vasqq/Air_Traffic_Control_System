@@ -37,7 +37,7 @@ PSR::~PSR() {
 
 void PSR::scan(){
 
-    cout << endl<< "Scanning..." << endl<< endl;
+    //cout << "Scanning..." << endl;
 	while(current_angle <= DEGREES_IN_CIRCLE){
 
 		detectAircraft(current_angle);

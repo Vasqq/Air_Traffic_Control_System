@@ -42,10 +42,11 @@ int Parser::parse() {
     }
 
     // Read each line of the input file until the end of file
+        int base_timer_signal = AIRCRAFT_UPDATE_POSITION_SIGNAL_BASE;
     while (fscanf(input_file, "%d,%d,%d,%d,%d,%d,%d,%d\n", &time_at_boundary, &flight_id, &pos_x, &pos_y,&pos_z, &speed_x, &speed_y, &speed_z) == 8) {
 
            // Create an Aircraft object with the extracted data and add it to the aircraftSchedule vector
-           Aircraft aircraft(time_at_boundary, flight_id, pos_x, pos_y, pos_z, speed_x, speed_y, speed_z);
+           Aircraft aircraft(time_at_boundary, flight_id, pos_x, pos_y, pos_z, speed_x, speed_y, speed_z, base_timer_signal++);
            aircraftSchedule.push_back(aircraft);
        }
 

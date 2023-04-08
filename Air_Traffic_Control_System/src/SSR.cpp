@@ -65,7 +65,7 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft)
         exit(EXIT_FAILURE);
     }
 
-    cout << "Aircraft thread waiting for Interrogation signal..." << endl;
+    //cout << "Aircraft thread waiting for Interrogation signal..." << endl;
     // targetAircraft.ServiceInterrogationSignal();
     //  Receive message
     sInterrogationSignal is;
@@ -79,7 +79,7 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft)
 
     if (returnCode != -1)
     {
-        cout << "Aircraft reply\n";
+        //cout << "Aircraft reply\n";
     }
     else
     {
