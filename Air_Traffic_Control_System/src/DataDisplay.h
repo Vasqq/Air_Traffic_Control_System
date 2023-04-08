@@ -34,6 +34,7 @@ public:
     //Y speeds next to them
     //but since the rectangle will be too large to show in the console it must be
     //scaled down and should also show the aircrafts relative location within that too
+
     void displayVisual();
 
 

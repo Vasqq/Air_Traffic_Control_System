@@ -32,7 +32,9 @@ ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList) {
 
     this->transponderDataList = transponderDataList;
     pushback = vector<vector<bool>>();
+
     runCS();
+
 }
 
 void ComputerSystem::SetN(int new_n){

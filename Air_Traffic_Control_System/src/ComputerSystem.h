@@ -29,6 +29,7 @@ public:
 	void checkAircraftSeperationConstraints();
 	void notifySafetyViolation();
 	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
+
 	void runCS();
 
 private:
