@@ -32,9 +32,7 @@ ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList) {
 
     this->transponderDataList = transponderDataList;
     pushback = vector<vector<bool>>();
-
-    checkAircraftSeperationConstraints();
-    forwardIlluminatedObjectsToDataDisplay();
+    runCS();
 }
 
 void ComputerSystem::SetN(int new_n){
@@ -128,19 +126,26 @@ void ComputerSystem::notifySafetyViolation() {
 		    // Loop through each unique flight ID
 		    //cout<<endl;
 		    for (int flightId : closeAircrafts) {
-		        //cout << "Aircraft " << flightId << " is in close proximity to ";
+		        cout << "Aircraft " << flightId << " is in close proximity to ";
 
 		        // Loop through the closeAircrafts vector to find all the aircrafts close to the current flight ID
 		        bool firstAircraft = true;
 		        for (int closeFlightId : closeAircrafts) {
 		            if (closeFlightId != flightId) {
 		                if (!firstAircraft) {
-		                    //cout << ", ";
+		                    cout << ", ";
 		                }
-		                //cout << "Aircraft: " <<closeFlightId;
+		                cout << "Aircraft: " <<closeFlightId;
 		                firstAircraft = false;
 		            }
 		        }
-		        //cout << endl;
+		        cout << endl;
 		    }
+}
+
+void ComputerSystem::runCS() {
+
+
+    checkAircraftSeperationConstraints();
+    forwardIlluminatedObjectsToDataDisplay();
 }
