@@ -11,8 +11,6 @@ Console::Console() {
     // TODO Auto-generated constructor stub
 
 }
-
-
 Console::~Console() {
     // TODO Auto-generated destructor stub
 }
