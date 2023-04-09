@@ -23,7 +23,6 @@ public:
 	void SetN(int new_n);
 	virtual ~ComputerSystem();
 
-	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
 	std::vector<sTransponderData> receiveIlluminatedObjects();
 	void forwardIlluminatedObjectsToDataDisplay();
 	void checkAircraftSeperationConstraints();
