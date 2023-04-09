@@ -10,7 +10,7 @@
 #include "Aircraft.h"
 #include "PSR.h"
 #include "SSR.h"
-#include "PeriodicTimer.h"
+#include "AircraftPeriodicTimer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -41,7 +41,6 @@ public:
     int createAircraftTransponderDataChannel();
 
     // Thread execution functions
-    static void * fwdUpdateAircraftPosition(void * aircraft);
     static void * fwdServiceInterrogationSignal(void * aircraft);
     static void * fwdExecutionToPSR(void * psr);
     static void * fwdExecutionToSSR(void * ssr);
@@ -56,7 +55,8 @@ private:
     vector<int> aircraft_pids;
     vector<int> ATCS_pids;
     vector<Aircraft> *AircraftSchedule;
-    PeriodicTimer aircraftPeriodicTimer;
+    AircraftPeriodicTimer aircraftPeriodicTimer;
+    const timespec AIRCRAFT_UPDATE_POSITION_PERIOD{1,0};
 
 };
 

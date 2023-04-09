@@ -197,19 +197,7 @@ void ResourceManager::createATCSSubsystems() {
     initializeRadar();
 
 }
-/* -----------------------------------------------------------------------------
- * Name:        fwdExecutionToAircraft
- * Input:       void pointer to an Aircraft object
- * Output:      void pointer
- * Description: This function forwards execution to an Aircraft object to update
- *              its position.
- * -----------------------------------------------------------------------------
- */
-void* ResourceManager::fwdUpdateAircraftPosition(void *aircraft) {
-    static_cast<Aircraft*>(aircraft)->updateAircraftPosition();
 
-    return NULL;
-}
 /* -----------------------------------------------------------------------------
  * Name:        fwdExecutionToPSR
  * Input:       void pointer to a PSR object
@@ -330,13 +318,8 @@ void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
     pthread_attr_init( &attr );
     pthread_attr_setschedpolicy(&attr, SCHED_RR);
 
-    err_no = pthread_create(&thread_id,
-            &attr, &fwdUpdateAircraftPosition, &nextAircraft);
-    if (err_no != 0) {
-        printf("ERROR when creating thread:\n");
-    } else {
-        printf("\tfwdUpdateAircraftPosition thread created with ID: %d\n", thread_id);
-    }
+    AircraftPeriodicTimer aircraftTimer(&nextAircraft);
+    aircraftTimer.startTimer(AIRCRAFT_UPDATE_POSITION_PERIOD);
 
     err_no = pthread_create(&thread_id,
             &attr, &fwdServiceInterrogationSignal, &nextAircraft);

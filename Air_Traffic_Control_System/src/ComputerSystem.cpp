@@ -123,7 +123,7 @@ void ComputerSystem::notifySafetyViolation() {
 		    closeAircrafts.erase(unique(closeAircrafts.begin(), closeAircrafts.end()), closeAircrafts.end());
 
 		    // Loop through each unique flight ID
-		    cout<<endl;
+		    //cout<<endl;
 		    for (int flightId : closeAircrafts) {
 		        //cout << "Aircraft " << flightId << " is in close proximity to ";
 

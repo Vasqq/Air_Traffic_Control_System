@@ -23,7 +23,6 @@
 #include <sys/types.h>
 
 #include "TransponderData.h"
-#include "PeriodicTimer.h"
 
 using namespace std;
 
@@ -35,7 +34,7 @@ public:
 
     Aircraft();
 	virtual ~Aircraft();
-	Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ, int base_timer_signal);
+	Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ);
 
 	//Functions that update position and flight level
 	void updatePositionX();
@@ -51,6 +50,7 @@ public:
 
 
 	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
+	void setTimerID(timer_t timerID);
 
 	//This section will return the new values after they are updated.
 	int getFlightID();
@@ -65,13 +65,14 @@ public:
 	int getSpeedZ();
 
 	int getTransponderDataChannel();
+	timer_t getTimerID();
 
 
 	//This will collect all the new values returned and then send the new data.
 	char* collectTransponderData();
 	void sendTransponderData(char transponderData[]);
 
-
+	timer_t     aircraftTimerID;
 
 	pid_t get_pid() {
 	        return getpid();
@@ -84,7 +85,6 @@ private:
 	int speedX,speedY,speedZ;
 	int transponderDataChannel;
 
-	PeriodicTimer updatePositionTimer;
 };
 
 #endif /* AIRCRAFT_H_ */

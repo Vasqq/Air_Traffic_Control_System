@@ -43,7 +43,7 @@ Aircraft::~Aircraft()
  * 				private members to be used in later functions.
  * -----------------------------------------------------------------------------
  */
-Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ, int base_timer_signal)
+Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int posZ,int speedX,int speedY,int speedZ)
 {
     this->time_at_boundary=time_at_boundary;
 	this->flight_id=flight_id;
@@ -53,14 +53,6 @@ Aircraft::Aircraft(int time_at_boundary, int flight_id, int posX, int posY, int 
 	this->speedX=speedX;
 	this->speedY=speedY;
 	this->speedZ=speedZ;
-
-
-    int sigNo = base_timer_signal;
-
-    this->updatePositionTimer = PeriodicTimer();
-    updatePositionTimer.setupTimer(sigNo);
-
-
 
 }
 
@@ -133,19 +125,13 @@ void Aircraft::updateFlightLevel()
  */
 void Aircraft::updateAircraftPosition()
 {
-    const timespec aircraft_update_position_period{1,0};
 
 
-    updatePositionTimer.startTimer(aircraft_update_position_period);
-    //aircraft should break from loop when it is out of range of the cuboid
-    while(true){
     printf("\t--->Executing fwdUpdateAircraftPosition thread for aircraft ID:%d\n\n",getFlightID());
     updatePositionX();
     updatePositionY();
     updatePositionZ();
     printf("\t--->fwdUpdateAircraftPosition finished executing for aircraft ID:%d.\n\n", getFlightID());
-    updatePositionTimer.waitPeriod();
-    }
 }
 
 void Aircraft::setTransponderDataChannel(int chid){
@@ -354,4 +340,14 @@ void Aircraft::sendTransponderData(char transponderData[])
 int Aircraft::getTransponderDataChannel() {
 
     return transponderDataChannel;
+}
+
+timer_t Aircraft::getTimerID() {
+
+    return aircraftTimerID;
+}
+
+void Aircraft::setTimerID(timer_t timerID) {
+
+    this->aircraftTimerID = timerID;
 }
