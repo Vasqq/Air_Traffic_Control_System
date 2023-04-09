@@ -151,4 +151,43 @@ void ComputerSystem::runCS()
 
     checkAircraftSeperationConstraints();
     forwardIlluminatedObjectsToDataDisplay();
+
 }
+
+
+
+
+
+
+void ComputerSystem::writeToFile(const string &filename, const string &data) {
+
+        ofstream outfile;
+      outfile.open(filename, std::ios_base::app);
+
+      if (!outfile.good()) {
+        throw std::runtime_error("Error opening file: " + filename);
+      }
+
+      outfile << data << std::endl;
+      outfile.close();
+    }
+
+void ComputerSystem::sendtoFile() {
+
+    string data;
+      data += "-----------------------------<Flight Data>---------------------------\n";
+      for (sTransponderData &td : *transponderDataList)
+      {
+        data += "------------------------------------------------------------"
+                "---------\n";
+        data += "Aircraft Flight ID: " + to_string(td.flightId) + "\n";
+        data += "Position (x, y, z): (" + to_string(td.positionX) + ", " +to_string(td.positionY) + ", " +to_string(td.positionZ) + ")\n";
+        data += "Speed (x, y, z): (" + to_string(td.speedX) + ", " + to_string(td.speedY) + ", " + to_string(td.speedZ) + ")\n";
+        data += "------------------------------------------------------------"
+                "---------\n";
+      }
+      data += "-----------------------------<Flight Data>---------------------------\n";
+
+      writeToFile("/data/home/qnxuser/flight_data.txt", data);
+    }
+

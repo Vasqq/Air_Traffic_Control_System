@@ -12,6 +12,8 @@
 #include <Math.h>
 #include "TransponderData.h"
 #include "DataDisplay.h"
+#include <thread>
+
 using namespace std;
 
 class ComputerSystem
@@ -29,6 +31,9 @@ public:
 	void notifySafetyViolation();
 	vector<int> closeAircrafts; // a vector to store flight IDs of aircrafts in close proximity
 	void runCS();
+
+	void writeToFile(const string& filename, const string& data);
+	void sendtoFile();
 
 private:
 	int n;

@@ -14,6 +14,7 @@
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -167,7 +168,8 @@ vector<sTransponderData> SSR::sendTransponderData()
 void SSR::execute()
 {
 
-    interrogate(illuminatedObjects);
-    ComputerSystem cs(&transponderDataList);
+            interrogate(illuminatedObjects);
+            ComputerSystem cs(&transponderDataList);
+
 
 }
