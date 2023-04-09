@@ -9,7 +9,9 @@
 
 Console::Console() {
     // TODO Auto-generated constructor stub
-
+while (true){
+    Operator_Commands();
+}
 }
 Console::~Console() {
     // TODO Auto-generated destructor stub
@@ -18,7 +20,8 @@ Console::~Console() {
 
 
 
-void* Console::Operator_Commands(void *parameter) {
+void Console::Operator_Commands() {
+
     int command;
        //Operator Commands
        cout << "--------------<Operator Console>--------------"
@@ -35,6 +38,8 @@ void* Console::Operator_Commands(void *parameter) {
 
        string message = "";
        string temp = "";
+       ComputerSystem cm(0); // Declare the ComputerSystem object outside the switch statement
+
 
        switch(command){
        case 0:
@@ -44,14 +49,16 @@ void* Console::Operator_Commands(void *parameter) {
            cout <<"Please enter the ID of the aircraft you wish to communicate to" << endl;
            cin>>temp;
            cout<< temp<<endl;
-           static_cast<Aircraft*>(parameter)->getFlightID(); //i want to ask for a specific aircraft number
-           //then I want to return its current position Z using getPosZ()
-           static_cast<Aircraft*>(parameter)->getPosZ();
+           // assign a value to cm only when case condition is met
+           cm = ComputerSystem(stoi(temp)); // Assign a new value to cm for each case
+                 //set flight_id to cin value
+
            //then I want to update the aircrafts posZ using another cin
            cout <<"Please enter the altitude you wish to set the aircraft to" << endl;
            cin>>temp;
            cout<< temp<<endl;
-           static_cast<Aircraft*>(parameter)->updatePositionZ();
+           //then I want to return its current position Z using getPosZ()
+
 
            break;
        case 2:
@@ -59,14 +66,15 @@ void* Console::Operator_Commands(void *parameter) {
            cout <<"Please enter the ID of the aircraft you wish to communicate to" << endl;
            cin>>temp;
            cout<< temp<<endl;
-           static_cast<Aircraft*>(parameter)->getFlightID(); //i want to ask for a specific aircraft number
 
-           static_cast<Aircraft*>(parameter)->getPosX();
+           cm = ComputerSystem(stoi(temp)); // Assign a new value to cm for each case
+
+
 
            cout <<"Please enter the longitude X coordinate you wish to set the aircraft to" << endl;
            cin>>temp;
            cout<< temp<<endl;
-           static_cast<Aircraft*>(parameter)->updatePositionX();
+
            break;
 
        case 3:
@@ -74,21 +82,23 @@ void* Console::Operator_Commands(void *parameter) {
            cout <<"Please enter the ID of the aircraft you wish to communicate to" << endl;
            cin>>temp;
            cout<< temp<<endl;
-           static_cast<Aircraft*>(parameter)->getFlightID(); //i want to ask for a specific aircraft number
 
-           static_cast<Aircraft*>(parameter)->getPosY();
+           cm = ComputerSystem(stoi(temp)); // Assign a new value to cm for each case
+
+
 
            cout <<"Please enter the latitude Y coordinate you wish to set the aircraft to" << endl;
            cin>>temp;
            cout<< temp<<endl;
-           static_cast<Aircraft*>(parameter)->updatePositionY();
+
            break;
 //       case 4:
 //           message = "4,";
 //           cout <<"Please enter the ID of the aircraft you wish to communicate to" << endl;
 //           cin>>temp;
 //           cout<< temp<<endl;
-//           static_cast<Aircraft*>(parameter)->getFlightID(); //i want to ask for a specific aircraft number
+//           int num = stoi(temp);
+//           ComputerSystem cm(num);
 //
 //           static_cast<Aircraft*>(parameter)->getSpeedZ();
 //
@@ -116,7 +126,9 @@ void* Console::Operator_Commands(void *parameter) {
 //            cout <<"Please enter the ID of the aircraft you wish to communicate to" << endl;
 //            cin>>temp;
 //            cout<< temp<<endl;
-//            static_cast<Aircraft*>(parameter)->getFlightID(); //i want to ask for a specific aircraft number
+//            int num = stoi(temp);
+//            ComputerSystem cm(num);
+//
 //
 //            static_cast<Aircraft*>(parameter)->getSpeedY();
 //

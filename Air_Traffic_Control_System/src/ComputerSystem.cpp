@@ -155,10 +155,6 @@ void ComputerSystem::runCS()
 }
 
 
-
-
-
-
 void ComputerSystem::writeToFile(const string &filename, const string &data) {
 
         ofstream outfile;
@@ -189,5 +185,22 @@ void ComputerSystem::sendtoFile() {
       data += "-----------------------------<Flight Data>---------------------------\n";
 
       writeToFile("/data/home/qnxuser/flight_data.txt", data);
-    }
+}
 
+ComputerSystem::ComputerSystem(int flight_id) {
+   this->flight_id=flight_id;
+   forwardIDtoCommSystem(flight_id);
+}
+
+void ComputerSystem::forwardIDtoCommSystem(int flight_id) {
+    Aircraft flight;
+        int existingFlightID = flight.getFlightID();
+        if (existingFlightID == flight_id) {
+            this->flight_id = existingFlightID;
+            // Forward flight id to communication system
+            CommunicationSystem comm;
+            comm.fwdConsoleRequest(flight);
+        } else {
+            printf("Error: Flight id %d does not exist.\n", flight_id);
+        }
+    }

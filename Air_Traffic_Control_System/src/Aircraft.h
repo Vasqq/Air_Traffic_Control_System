@@ -24,6 +24,7 @@
 
 #include "TransponderData.h"
 
+
 using namespace std;
 
 
@@ -49,7 +50,7 @@ public:
 	int connectToChannel();
 
 
-	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
+	void ServiceInterrogationSignalConsole();		//this blocks until interrogation signal arrives
 	void setTimerID(timer_t timerID);
 
 	//This section will return the new values after they are updated.

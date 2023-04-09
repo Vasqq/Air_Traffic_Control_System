@@ -196,10 +196,44 @@ void Aircraft::ServiceInterrogationSignal()
  * 				the code is blocked until the error is resolved.
  * -----------------------------------------------------------------------------
  */
-void Aircraft::receiveInterrogationSignal()
+void Aircraft::ServiceInterrogationSignalConsole()
 {
 
+    while(true){
+       sTransponderData reply_msg;
+       sInterrogationSignal interrogationSignal;
 
+       //printf("\t--->Executing fwdServiceInterrogationSignal thread for aircraft ID:%d\n\n",getFlightID());
+       // Wait for a message on the channel
+       int rcvid = MsgReceive(transponderDataChannel, &interrogationSignal, sizeof(interrogationSignal), NULL);
+
+       if (rcvid == -1) {
+          printf("Failed to receive message in aircraft. Error Code: %s\n",strerror(errno));
+          exit(EXIT_FAILURE);
+       }
+       else
+       {
+          //printf("\t--->Message received from SSR.\n");
+       }
+
+       // Construct reply message
+
+       reply_msg.flightId    = this->flight_id;
+       reply_msg.positionX   = this->posX;
+       reply_msg.positionY   = this->posY;
+       reply_msg.positionZ   = this->posZ;
+       reply_msg.speedX      = this->speedX;
+       reply_msg.speedY      = this->speedY;
+       reply_msg.speedZ      = this->speedZ;
+
+      int returnCode = MsgReply(rcvid, EOK, &reply_msg, sizeof(reply_msg));
+      if (returnCode == -1) {
+          printf("\t--->Failed to send reply message. Error Code: %s\n", strerror(errno));
+          exit(EXIT_FAILURE);
+      }
+
+      //printf("\t--->Finished servicing interrogation signal.\n");
+       }
 
 
 

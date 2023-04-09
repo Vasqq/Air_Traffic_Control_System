@@ -5,6 +5,7 @@
 #include "SSR.h"
 #include "ResourceManager.h"
 #include "ComputerSystem.h"
+#include "Console.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ int main() {
 
    ResourceManager RM(&aircraftSchedule);
    RM.execute();
+
 
 
 

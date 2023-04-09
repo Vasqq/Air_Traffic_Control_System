@@ -20,7 +20,7 @@ public:
 
     virtual ~Console();
 
-    void* Operator_Commands(void* parameter);
+    void Operator_Commands();
 
 
 
@@ -29,6 +29,7 @@ private:
     int command;
     string message = "";
     string temp = "";
+    int flight_id;
 };
 
 #endif /* SRC_CONSOLE_H_ */
