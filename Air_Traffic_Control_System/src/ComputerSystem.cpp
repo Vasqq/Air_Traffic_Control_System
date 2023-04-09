@@ -9,13 +9,6 @@
 #include "ResourceManager.h"
 #include <set>
 
-// ComputerSystem::ComputerSystem() {
-//	// TODO Auto-generated constructor stub
-//	//pushback = std::vector<std::vector<bool>>();
-//
-//
-// }
-
 ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList)
 {
     //	this->n=n;
