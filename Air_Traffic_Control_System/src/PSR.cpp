@@ -81,6 +81,8 @@ void PSR::detectAircraft(int angle){
 			   aircraftDistance = (int) (sqrt(pow(aircraft.getPosX(), 2) + pow(aircraft.getPosY(), 2)));
 			   // Add the aircraft object to the array if it is within range
 			   if(aircraftDistance < range){
+
+
 				   illuminatedObjects.push_back(&aircraft);
 			   }
 		   }
@@ -111,19 +113,12 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 
 void PSR::execute(){
 
-    cout << endl<< "Executing PSR..." << endl;
-while(true)
-{
-	scan();
+cout << endl<< "Executing PSR..." << endl;
+scan();
+SSR ssr(illuminatedObjects);
+ssr.execute();
 
-	SSR ssr(illuminatedObjects);
-	ssr.execute();
-}
 
 
 }
-
-void PSR::test(){}
-
-
 

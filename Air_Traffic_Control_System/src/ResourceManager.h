@@ -11,6 +11,7 @@
 #include "PSR.h"
 #include "SSR.h"
 #include "AircraftPeriodicTimer.h"
+#include "PSRPeriodicTimer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -42,8 +43,6 @@ public:
 
     // Thread execution functions
     static void * fwdServiceInterrogationSignal(void * aircraft);
-    static void * fwdExecutionToPSR(void * psr);
-    static void * fwdExecutionToSSR(void * ssr);
 
     // Simulation functions
     void execute();
@@ -55,8 +54,11 @@ private:
     vector<int> aircraft_pids;
     vector<int> ATCS_pids;
     vector<Aircraft> *AircraftSchedule;
-    AircraftPeriodicTimer aircraftPeriodicTimer;
+    vector<AircraftPeriodicTimer> AircraftPeriodicTimers;
+    PSRPeriodicTimer *PSRPeriodicTimer_;
+
     const timespec AIRCRAFT_UPDATE_POSITION_PERIOD{1,0};
+    const timespec PSR_SCAN_PERIOD{1,0};
 
 };
 

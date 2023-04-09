@@ -26,7 +26,6 @@ public:
 	PSR(vector<Aircraft> *aircraftSchedule);
 
 	void execute();
-	void test();
 	void scan();
 	void detectAircraft(int angle);
 	void rotateRadar();
@@ -47,6 +46,8 @@ private:
 	int pulses_per_degree;
 	int current_angle;
 	int pulse_speed;
+
+	timer_t timerID;
 
 	vector<Aircraft> *aircraftList;
 	vector<Aircraft*> illuminatedObjects;

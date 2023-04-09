@@ -124,23 +124,10 @@ void ResourceManager::initializeRadar() {
  * -----------------------------------------------------------------------------
  */
 void ResourceManager::initializePSR() {
-
-    int err_no;
-    pthread_t PSR_thread_id;
-
     // Create a dynamic instance of the PSR class
     PSR *psr = new PSR(AircraftSchedule);
-
-    err_no = pthread_create(&PSR_thread_id,
-                            NULL,
-                            &fwdExecutionToPSR,
-                            psr);
-    if (err_no != 0) {
-        cout << "ERROR when creating PSR thread: " << err_no << endl;
-    } else {
-        cout <<endl<<"PSR with thread ID: " << PSR_thread_id << " created" << endl;
-    }
-
+    // Create a dynamic instance of the PSR Periodic Timer class
+    PSRPeriodicTimer_ = new PSRPeriodicTimer(psr);
 }
 
 /* -----------------------------------------------------------------------------
@@ -198,19 +185,7 @@ void ResourceManager::createATCSSubsystems() {
 
 }
 
-/* -----------------------------------------------------------------------------
- * Name:        fwdExecutionToPSR
- * Input:       void pointer to a PSR object
- * Output:      void pointer
- * Description: This function forwards execution to a PSR object to execute.
- * -----------------------------------------------------------------------------
- */
-void* ResourceManager::fwdExecutionToPSR(void *psr) {
 
-    static_cast<PSR*>(psr)->execute();
-
-    return NULL;
-}
 
 /* -----------------------------------------------------------------------------
  * Name:        fwdExecutionToSSR
@@ -220,11 +195,6 @@ void* ResourceManager::fwdExecutionToPSR(void *psr) {
  * -----------------------------------------------------------------------------
  */
 
-void* ResourceManager::fwdExecutionToSSR(void *ssr) {
-
-    static_cast<PSR*>(ssr)->execute();
-    return NULL;
-}
 /* -----------------------------------------------------------------------------
  * Name:		execute
  * Input:		None
@@ -238,15 +208,15 @@ void* ResourceManager::fwdExecutionToSSR(void *ssr) {
  */
 void ResourceManager::execute() {
 
-    char input;
+//    char input;
 
     configureSimulation();
 
     // Execute the ATCS simulation
-    cout << "All systems ready, press 'R' to run the simulation." << endl;
-    cin >> input;
-    if (input == 'R')
-        runSimulation();
+//    cout << "All systems ready, press 'R' to run the simulation." << endl;
+//    cin >> input;
+//    if (input == 'R')
+    runSimulation();
 
 }
 /* -----------------------------------------------------------------------------
@@ -277,6 +247,12 @@ void ResourceManager::configureSimulation() {
 void ResourceManager::runSimulation() {
 
     cout << "Begin of simulation" << endl;
+
+    //PSRPeriodicTimer_->startTimer(PSR_SCAN_PERIOD);
+
+    for (AircraftPeriodicTimer& aircraftTimer : AircraftPeriodicTimers){
+        aircraftTimer.startTimer(AIRCRAFT_UPDATE_POSITION_PERIOD);
+    }
 
 }
 
@@ -319,7 +295,7 @@ void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
     pthread_attr_setschedpolicy(&attr, SCHED_RR);
 
     AircraftPeriodicTimer aircraftTimer(&nextAircraft);
-    aircraftTimer.startTimer(AIRCRAFT_UPDATE_POSITION_PERIOD);
+    AircraftPeriodicTimers.push_back(aircraftTimer);
 
     err_no = pthread_create(&thread_id,
             &attr, &fwdServiceInterrogationSignal, &nextAircraft);
