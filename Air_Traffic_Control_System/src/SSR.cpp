@@ -168,8 +168,17 @@ vector<sTransponderData> SSR::sendTransponderData()
 void SSR::execute()
 {
 
+	while (true) {
+		        // Lock the mutex to prevent other threads from executing
+
             interrogate(illuminatedObjects);
             ComputerSystem cs(&transponderDataList);
+            // Unlock the mutex to allow other threads to execute
 
+          	        pthread_mutex_unlock(&psr_mutex);
+
+          	        // Sleep for 5 seconds before executing again
+          	        sleep(5);
+          }
 
 }

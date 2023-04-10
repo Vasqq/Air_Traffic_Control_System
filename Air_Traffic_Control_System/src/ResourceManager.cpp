@@ -8,7 +8,7 @@
 #include "ResourceManager.h"
 
 
-pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
+ pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 /* -----------------------------------------------------------------------------
  * Name:        ResourceManager()
  * Input:       None
@@ -215,11 +215,11 @@ void* ResourceManager::fwdExecutionToPSR(void *psr) {
 	        // Execute the PSR thread
 	        static_cast<PSR*>(psr)->execute();
 
-	        // Unlock the mutex to allow other threads to execute
-	        pthread_mutex_unlock(&psr_mutex);
-
-	        // Sleep for 5 seconds before executing again
-	        sleep(5);
+//	        // Unlock the mutex to allow other threads to execute
+//	        pthread_mutex_unlock(&psr_mutex);
+//
+//	        // Sleep for 5 seconds before executing again
+//	        sleep(5);
 	    }
     return NULL;
 }

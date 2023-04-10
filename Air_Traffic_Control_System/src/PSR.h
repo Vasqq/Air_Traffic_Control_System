@@ -18,6 +18,7 @@
 
 #include "Aircraft.h"
 #include <vector>
+#include "ResourceManager.h"
 
 using namespace std;
 
@@ -37,7 +38,7 @@ public:
 
 	virtual ~PSR();
 
-
+	//pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 private:
 
