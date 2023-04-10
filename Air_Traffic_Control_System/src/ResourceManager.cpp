@@ -8,6 +8,7 @@
 #include "ResourceManager.h"
 
 
+pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 /* -----------------------------------------------------------------------------
  * Name:        ResourceManager()
  * Input:       None
@@ -207,8 +208,19 @@ void ResourceManager::createATCSSubsystems() {
  */
 void* ResourceManager::fwdExecutionToPSR(void *psr) {
 
-    static_cast<PSR*>(psr)->execute();
+	while (true) {
+	        // Lock the mutex to prevent other threads from executing
+	        pthread_mutex_lock(&psr_mutex);
 
+	        // Execute the PSR thread
+	        static_cast<PSR*>(psr)->execute();
+
+	        // Unlock the mutex to allow other threads to execute
+	        pthread_mutex_unlock(&psr_mutex);
+
+	        // Sleep for 5 seconds before executing again
+	        sleep(5);
+	    }
     return NULL;
 }
 
@@ -244,7 +256,7 @@ void ResourceManager::execute() {
 	while (cin >> input) {
 	    if (input == 'R') {
 	        configureSimulation();
-	        runSimulation();
+	        //runSimulation();
 	        //break; // exit the loop if simulation is run
 	    } else {
 	        cout << "Invalid input, please press 'R' to run the simulation." << endl;
