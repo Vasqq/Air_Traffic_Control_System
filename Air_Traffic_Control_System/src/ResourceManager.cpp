@@ -238,15 +238,18 @@ void* ResourceManager::fwdExecutionToSSR(void *ssr) {
  */
 void ResourceManager::execute() {
 
-    char input;
-
-    configureSimulation();
-
-    // Execute the ATCS simulation
-    cout << "All systems ready, press 'R' to run the simulation." << endl;
-    cin >> input;
-    if (input == 'R')
-        runSimulation();
+	// Execute the ATCS simulation
+	cout << "All systems ready, press 'R' to run the simulation." << endl;
+	char input;
+	while (cin >> input) {
+	    if (input == 'R') {
+	        configureSimulation();
+	        runSimulation();
+	        //break; // exit the loop if simulation is run
+	    } else {
+	        cout << "Invalid input, please press 'R' to run the simulation." << endl;
+	    }
+	}
 
 }
 /* -----------------------------------------------------------------------------
