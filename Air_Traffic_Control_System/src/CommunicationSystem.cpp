@@ -6,22 +6,47 @@
  */
 
 #include "CommunicationSystem.h"
-
+/* -----------------------------------------------------------------------------
+ * Name:		CommunicationSystem
+ * Input:		None
+ * Output:		None
+ * Description:	Constructor for CommunicationSystem class
+ * -----------------------------------------------------------------------------
+ */
 CommunicationSystem::CommunicationSystem() {
     // TODO Auto-generated constructor stub
 
 }
-
+/* -----------------------------------------------------------------------------
+ * Name:		CommunicationSystem
+ * Input:		Aircraft object
+ * Output:		None
+ * Description:	Constructor for CommunicationSystem class taking an Aircraft
+ * 				object
+ * -----------------------------------------------------------------------------
+ */
 CommunicationSystem::CommunicationSystem(Aircraft& flight_id) {
     this->flight_id=flight_id;
 }
-
+/* -----------------------------------------------------------------------------
+ * Name:		~CommunicationSystem
+ * Input:		None
+ * Output:		None
+ * Description:	Destructor for CommunicationSystem class
+ * -----------------------------------------------------------------------------
+ */
 CommunicationSystem::~CommunicationSystem() {
     // TODO Auto-generated destructor stub
 }
 
 
-
+/* -----------------------------------------------------------------------------
+ * Name:		msgPassingChannel
+ * Input:		None
+ * Output:		Integer representing the created message passing channel ID
+ * Description:	Creates a message passing channel and returns the channel ID
+ * -----------------------------------------------------------------------------
+ */
 int CommunicationSystem::msgPassingChannel(){
 
 int chid = ChannelCreate(0);
@@ -32,7 +57,14 @@ if (chid == -1) {
 
 return chid;
 }
-
+/* -----------------------------------------------------------------------------
+ * Name:		fwdConsoleRequest
+ * Input:		Aircraft object
+ * Output:		None
+ * Description:	Forwards a service interrogation signal to an Aircraft object
+ * 				in a new thread
+ * -----------------------------------------------------------------------------
+ */
 void CommunicationSystem::fwdConsoleRequest(Aircraft &flight_id){
         int err_no;
        pthread_t thread_id;
@@ -49,14 +81,27 @@ void CommunicationSystem::fwdConsoleRequest(Aircraft &flight_id){
           }
 
 }
-
-
-
+/* -----------------------------------------------------------------------------
+ * Name:		fwdServiceInterrogationSignalID
+ * Input:		Void pointer to an Aircraft object
+ * Output:		Void pointer
+ * Description:	Forwards execution to an Aircraft object to send a service
+ * 				interrogation signal
+ * -----------------------------------------------------------------------------
+ */
 void* CommunicationSystem::fwdServiceInterrogationSignalID(void *flight_id_ptr) {
 
     static_cast<Aircraft*>(flight_id_ptr)->ServiceInterrogationSignalConsole();
         return NULL;
 }
+
+/* -----------------------------------------------------------------------------
+ * Name:		interrogateAircraftConsole
+ * Input:		Pointer to an Aircraft object
+ * Output:		None
+ * Description:	Sends a message to an Aircraft object to request transponder data and receives the response
+ * -----------------------------------------------------------------------------
+ */
 
 void CommunicationSystem::interrogateAircraftConsole(Aircraft *targetAircraft)
 {
@@ -102,7 +147,14 @@ void CommunicationSystem::interrogateAircraftConsole(Aircraft *targetAircraft)
     receiveTransponderDataConsole(aircraftTransponderData);
 };
 
-
+/* -----------------------------------------------------------------------------
+ * Name:		receiveTransponderDataConsole
+ * Input:		sTransponderData structure
+ * Output:		None
+ * Description:	Receives transponder data from an Aircraft object and stores it
+ * 				in a list
+ * -----------------------------------------------------------------------------
+ */
 void CommunicationSystem::receiveTransponderDataConsole(sTransponderData aircraftTransponderData)
 {
 

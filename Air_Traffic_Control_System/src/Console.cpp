@@ -7,19 +7,47 @@
 
 #include "Console.h"
 
+
+/* -----------------------------------------------------------------------------
+ *Name: 		Console
+ *Input: 		None
+ *Output: 		None
+ *Description: 	Constructor for the Console class that creates an instance of
+ *	 	 	 	the class and continuously prompts for operator commands until
+ *	 	 	 	the program is exited.
+ *-----------------------------------------------------------------------------
+ */
 Console::Console() {
     // TODO Auto-generated constructor stub
 while (true){
     Operator_Commands();
 }
 }
+
+
+
+/* -----------------------------------------------------------------------------
+ *Name: 		~Console()
+ *Input: 		None
+ *Output: 		None
+ *Description: 	Destructor for the Console class that is automatically called
+ *	 	 	 	when the program is exited.
+ *-----------------------------------------------------------------------------
+ */
 Console::~Console() {
     // TODO Auto-generated destructor stub
 }
 
 
 
-
+/* -----------------------------------------------------------------------------
+ *Name: 		Operator_Commands
+ *Input: 		None
+ *Output: 		None
+ *Description: 	Prompts the operator for input and performs the corresponding
+ *		 		action based on the input received.
+ *-----------------------------------------------------------------------------
+ */
 void Console::Operator_Commands() {
 
     int command;

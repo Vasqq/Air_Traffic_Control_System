@@ -7,6 +7,17 @@
 
 #include "DataDisplay.h"
 
+
+/* -----------------------------------------------------------------------------
+ * Name:  		DataDisplay
+ * Input:		vector<sTransponderData> *transponderDataARR &
+ * 				vector<int> *closeAircraftsARR
+ * Output:		None
+ * Description:	Initializes the DataDisplay object with the provided
+ * 				transponder data and close aircrafts, and calls the displayVisual
+ * 				and displayTransponderData functions.
+ * -----------------------------------------------------------------------------
+ */
 DataDisplay::DataDisplay(vector<sTransponderData> *transponderDataARR, vector<int> *closeAircraftsARR)
 {
 
@@ -17,12 +28,26 @@ DataDisplay::DataDisplay(vector<sTransponderData> *transponderDataARR, vector<in
 	displayTransponderData();
 }
 
+/* -----------------------------------------------------------------------------
+ * Name:    	~DataDisplay
+ * Input:		None
+ * Output:		None
+ * Description:	Destructor for the class DataDisplay.
+ * -----------------------------------------------------------------------------
+ */
 DataDisplay::~DataDisplay()
 {
 	// TODO Auto-generated destructor stub
 
 }
 
+/* -----------------------------------------------------------------------------
+ * Name:        displayTransponderData
+ * Input:		None
+ * Output:		None
+ * Description:	Displays the transponder data in a formatted table.
+ * -----------------------------------------------------------------------------
+ */
 void DataDisplay::displayTransponderData()
 {
 
@@ -46,6 +71,14 @@ void DataDisplay::displayTransponderData()
 
 }
 
+/* -----------------------------------------------------------------------------
+ * Name:        displayVisual
+ * Input:		None
+ * Output:		None
+ * Description:	Displays a visual representation of the airspace with "A"# where
+ * 				the # is the aircraft ID in the scaled down airspace.
+ * -----------------------------------------------------------------------------
+ */
 void DataDisplay::displayVisual()
 {
 

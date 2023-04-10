@@ -7,10 +7,26 @@
 
 #include "AircraftPeriodicTimer.h"
 
+
+/* -----------------------------------------------------------------------------
+ * Name:        ~AircraftPeriodicTimer
+ * Input:		None
+ * Output:		None
+ * Description:	Destructor that clears up the AircraftPeriodicTimer object
+ * -----------------------------------------------------------------------------
+ */
 AircraftPeriodicTimer::~AircraftPeriodicTimer() {
     // TODO Auto-generated destructor stub
 }
 
+
+/* -----------------------------------------------------------------------------
+ * Name:
+ * Input:
+ * Output:
+ * Description:
+ * -----------------------------------------------------------------------------
+ */
 AircraftPeriodicTimer::AircraftPeriodicTimer(Aircraft* aircraft) {
 
     this->aircraft = aircraft;
@@ -18,7 +34,13 @@ AircraftPeriodicTimer::AircraftPeriodicTimer(Aircraft* aircraft) {
     this->timerID_ = -1;
 }
 
-
+/* -----------------------------------------------------------------------------
+ * Name:		startTimer
+ * Input:		const timespec reference to the timer interval
+ * Output:		None
+ * Description:	Creates a timer with the given interval and starts it.
+ * -----------------------------------------------------------------------------
+ */
 void AircraftPeriodicTimer::startTimer(const timespec& period) {
 
     // Create the timer
@@ -52,10 +74,25 @@ void AircraftPeriodicTimer::fwdUpdateAircraftPosition(sigval signalValue) {
     //stopTimer(aircraft->getTimerID());
 }
 
+
+/* -----------------------------------------------------------------------------
+ * Name:		stopTimer
+ * Input:		timer_t timerID
+ * Output:		None
+ * Description:	Deletes the timer with the given timer ID.
+ * -----------------------------------------------------------------------------
+ */
 void AircraftPeriodicTimer::stopTimer(timer_t timerID) {
 
     timer_delete(timerID);
 }
-
+/* -----------------------------------------------------------------------------
+ * Name:      	AircraftPeriodicTimer
+ * Input:	  	None
+ * Output:		None
+ * Description:	Constructor that initializes the AircraftPeriodicTimer object
+ * 				with the provided Aircraft object pointer
+ * -----------------------------------------------------------------------------
+ */
 AircraftPeriodicTimer::AircraftPeriodicTimer() {
 }

@@ -9,6 +9,15 @@
 #include "ResourceManager.h"
 #include <set>
 
+ /* -----------------------------------------------------------------------------
+ * Name:		ComputerSystem
+ * Input:		vector<sTransponderData>* transponderDataList
+ * Output:		None
+ * Description:	The constructor of the ComputerSystem class. Initializes the
+ * 				transponderDataList and pushback data members and runs the runCS
+ * 				method.
+ * -----------------------------------------------------------------------------
+ */
 ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList)
 {
     //	this->n=n;
@@ -29,17 +38,42 @@ ComputerSystem::ComputerSystem(vector<sTransponderData> *transponderDataList)
     runCS();
 }
 
+/* -----------------------------------------------------------------------------
+* Name:			SetN
+* Input:		int new_n
+* Output:		None
+* Description:	Setter method for n.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::SetN(int new_n)
 {
     this->n = new_n;
 }
 
+/* -----------------------------------------------------------------------------
+* Name:			ComputeAirTrafficFlow
+* Input:		None
+* Output:		None
+* Description:	Method that receives illuminated objects, forwards them to data
+* 				display, and checks safety violations.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::ComputeAirTrafficFlow()
 {
     std::vector<sTransponderData> illuminatedObjects = receiveIlluminatedObjects();
     forwardIlluminatedObjectsToDataDisplay();
 }
 
+
+
+/* -----------------------------------------------------------------------------
+* Name:			receiveIlluminatedObjects
+* Input:		None
+* Output:		vector<sTransponderData>
+* Description:	Method that generates simulated transponder data for n
+* 				aircrafts and returns a vector of sTransponderData objects.
+* -----------------------------------------------------------------------------
+*/
 std::vector<sTransponderData> ComputerSystem::receiveIlluminatedObjects()
 {
     std::vector<sTransponderData> transponderDataList;
@@ -56,16 +90,40 @@ std::vector<sTransponderData> ComputerSystem::receiveIlluminatedObjects()
     return transponderDataList;
 }
 
+/* -----------------------------------------------------------------------------
+* Name:			~ComputerSystem
+* Input:		None
+* Output:		None
+* Description:	Destructor for ComputerSystem class.
+* -----------------------------------------------------------------------------
+*/
 ComputerSystem::~ComputerSystem()
 {
 }
 
+/* -----------------------------------------------------------------------------
+* Name:			forwardIlluminatedObjectsToDataDisplay
+* Input:		None
+* Output:		None
+* Description:	Method that creates a DataDisplay object and passes the
+* 				transponderDataList and closeAircrafts vector to it.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::forwardIlluminatedObjectsToDataDisplay()
 {
 
     DataDisplay d(transponderDataList, &closeAircrafts);
 }
 
+/* -----------------------------------------------------------------------------
+* Name:			checkAircraftSeperationConstraints
+* Input:		None
+* Output:		None
+* Description:	Method that checks for safety violations by looping through
+* 				the transponderDataList and adding flight IDs to the
+* 				closeAircrafts vector if they are too close.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::checkAircraftSeperationConstraints()
 {
 
@@ -115,6 +173,16 @@ void ComputerSystem::checkAircraftSeperationConstraints()
     notifySafetyViolation();
 }
 
+
+/* -----------------------------------------------------------------------------
+* Name:			notifySafetyViolation
+* Input:		None
+* Output:		None
+* Description:	Method that removes duplicates from the closeAircrafts vector
+* 				and sorts it in numerical order before looping through it to
+* 				print safety violation messages.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::notifySafetyViolation()
 {
 
@@ -146,6 +214,15 @@ void ComputerSystem::notifySafetyViolation()
     }
 }
 
+
+/* -----------------------------------------------------------------------------
+* Name:			runCS
+* Input:		None
+* Output:		None
+* Description:	Method that calls the checkAircraftSeperationConstraints() and
+* 				forwardIlluminatedObjectsToDataDisplay() methods.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::runCS()
 {
 
@@ -155,6 +232,14 @@ void ComputerSystem::runCS()
 }
 
 
+
+/* -----------------------------------------------------------------------------
+* Name:			writeToFile
+* Input:		const string& filename, const string& data
+* Output:		None
+* Description:	Method that writes transponder data to a file.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::writeToFile(const string &filename, const string &data) {
 
         ofstream outfile;
@@ -168,6 +253,16 @@ void ComputerSystem::writeToFile(const string &filename, const string &data) {
       outfile.close();
     }
 
+
+
+/* -----------------------------------------------------------------------------
+* Name:			sendtoFile
+* Input:		None
+* Output:		flight_data.txt
+* Description:	Method that generates a string of flight data and calls the
+* 				writeToFile() method to write it to a file.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::sendtoFile() {
 
     string data;
@@ -187,11 +282,34 @@ void ComputerSystem::sendtoFile() {
       writeToFile("/data/home/qnxuser/flight_data.txt", data);
 }
 
+
+/* -----------------------------------------------------------------------------
+* Name:			ComputerSystem
+* Input:		int flight_id
+* Output:		None
+* Description:	Initializes a new instance of the ComputerSystem class with
+* 				the specified flight_id, and calls forwardIDtoCommSystem to
+* 				forward the flight ID to the communication system.
+* -----------------------------------------------------------------------------
+*/
 ComputerSystem::ComputerSystem(int flight_id) {
    this->flight_id=flight_id;
    forwardIDtoCommSystem(flight_id);
 }
 
+
+
+
+/* -----------------------------------------------------------------------------
+* Name:			forwardIDtoCommSystem
+* Input:		int flight_id
+* Output:
+* Description:	Gets the existing flight ID from an Aircraft object, compares
+* 				it to the specified flight_id, and forwards it to the
+* 				CommunicationSystem class using fwdConsoleRequest() if it
+* 				matches.
+* -----------------------------------------------------------------------------
+*/
 void ComputerSystem::forwardIDtoCommSystem(int flight_id) {
     Aircraft flight;
         int existingFlightID = flight.getFlightID();
