@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-extern pthread_mutex_t psr_mutex;
 using namespace std;
 
 class ResourceManager {

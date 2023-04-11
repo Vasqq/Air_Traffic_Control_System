@@ -208,7 +208,7 @@ void ResourceManager::createATCSSubsystems() {
  */
 void* ResourceManager::fwdExecutionToPSR(void *psr) {
 
-	while (true) {
+
 	        // Lock the mutex to prevent other threads from executing
 	        pthread_mutex_lock(&psr_mutex);
 
@@ -220,8 +220,6 @@ void* ResourceManager::fwdExecutionToPSR(void *psr) {
 //
 //	        // Sleep for 5 seconds before executing again
 //	        sleep(5);
-	    }
-    return NULL;
 }
 
 /* -----------------------------------------------------------------------------

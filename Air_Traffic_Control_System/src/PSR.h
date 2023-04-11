@@ -16,6 +16,7 @@
 #define PULSE_SPEED 1
 #define DEGREES_IN_CIRCLE 360
 
+
 #include "Aircraft.h"
 #include <vector>
 #include "ResourceManager.h"
@@ -50,6 +51,7 @@ private:
 	int pulses_per_degree;
 	int current_angle;
 	int pulse_speed;
+	pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 	vector<Aircraft> *aircraftList;
 	vector<Aircraft*> illuminatedObjects;

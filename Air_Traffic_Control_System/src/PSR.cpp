@@ -38,20 +38,14 @@ PSR::~PSR() {
 void PSR::scan(){
 
     //cout << "Scanning..." << endl;
-	while(current_angle <= DEGREES_IN_CIRCLE){
+	while(current_angle < DEGREES_IN_CIRCLE){
 
-		detectAircraft(current_angle);
-
-		if (current_angle >= DEGREES_IN_CIRCLE){
-
-			// reset the radar
-			current_angle = 0;
-			break;
-		}
-
-		// Rotate the radar 1 degree
-		rotateRadar();
+	detectAircraft(current_angle);
+	// Rotate the radar 1 degree
+	rotateRadar();
 	}
+	// reset the radar
+	current_angle = 0;
 }
 
 void PSR::detectAircraft(int angle){
@@ -117,7 +111,7 @@ void PSR::execute(){
 
     while (true) {
 
-
+	pthread_mutex_lock(&psr_mutex);
 	scan();
 
 	SSR ssr(illuminatedObjects);
