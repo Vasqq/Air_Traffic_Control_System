@@ -11,6 +11,12 @@ using namespace std;
 
 int main() {
 
+    FILE *fp;
+    char filename[] = "/data/home/qnxuser/flight_data.txt";
+    fp = fopen(filename, "w");
+    fclose(fp);
+
+
    const char* input_file = "/data/home/qnxuser/input_flyby.txt";
    vector<Aircraft> aircraftSchedule;
 

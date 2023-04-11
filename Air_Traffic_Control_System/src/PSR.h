@@ -21,6 +21,9 @@
 #include <vector>
 #include "ResourceManager.h"
 
+
+extern int textfileCounter;
+
 using namespace std;
 
 class PSR {
@@ -39,7 +42,7 @@ public:
 
 	virtual ~PSR();
 
-	int textfileCounter=0;
+
 
 	//pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 

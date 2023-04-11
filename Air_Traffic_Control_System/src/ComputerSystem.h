@@ -17,7 +17,7 @@
 #include "CommunicationSystem.h"
 
 using namespace std;
-
+extern int textfileCounter;
 class ComputerSystem
 {
 public:

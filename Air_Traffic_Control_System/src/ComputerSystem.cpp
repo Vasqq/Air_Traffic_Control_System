@@ -228,6 +228,10 @@ void ComputerSystem::runCS()
 
     checkAircraftSeperationConstraints();
     forwardIlluminatedObjectsToDataDisplay();
+    if (textfileCounter==6){
+        sendtoFile();
+        textfileCounter=0;
+    }
 
 }
 

@@ -18,7 +18,8 @@
 #include <math.h>
 
 
-
+int textfileCounter = 5; //initialize to 5 to have the first set of data written
+//it will get incremented to 6 later to force an initial write.
 PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 
 	range = MAX_RANGE;
@@ -27,6 +28,7 @@ PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 	pulses_per_degree = PULSES_PER_DEGREE;
 	current_angle = CURRENT_ANGLE;
 	pulse_speed = PULSE_SPEED;
+
 
 	this->aircraftList=AircraftSchedule;
 }
