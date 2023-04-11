@@ -122,6 +122,7 @@ void PSR::execute(){
 
 	SSR ssr(illuminatedObjects);
 	illuminatedObjects.clear();
+	textfileCounter++;
 	ssr.execute();
 
 	pthread_mutex_unlock(&psr_mutex);

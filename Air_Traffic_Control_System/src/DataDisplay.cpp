@@ -109,48 +109,61 @@ void DataDisplay::displayVisual()
      for (int y = minY; y <= maxY; y += 1000) {
          int yPos = originY - y / 1000;
          if (yPos >= 0 && yPos < height) {
-             stringstream ss;
-             ss << y;
-             string yLabel = ss.str();
-             int labelSize = yLabel.size();
-             int labelPos = originX - labelSize - 1;
-             if (labelPos >= 0 && labelPos < width) {
-                 plane[yPos].replace(labelPos, labelSize, yLabel);
-                 plane[yPos][originX - 1] = '|';
+             if (y % 10000 == 0) { // check if the y-value is a multiple of 10000
+                 stringstream ss;
+                 ss << y;
+                 string yLabel = ss.str();
+                 int labelSize = yLabel.size();
+                 int labelPos = originX - labelSize - 1;
+                 if (labelPos >= 0 && labelPos < width) {
+                     plane[yPos].replace(labelPos, labelSize, yLabel);
+                 }
              }
+             plane[yPos][originX - 1] = '|'; // draw a vertical line at every 1000 units
          }
      }
 
      // draw negative y-axis
      for (int y = -1000; y >= minY; y -= 1000) {
          int yPos = originY - y / 1000;
-         if (yPos >= 0 && yPos < height) {
-             stringstream ss;
-             ss << y;
-             string yLabel = ss.str();
-             int labelSize = yLabel.size();
-             int labelPos = originX - labelSize - 1;
-             if (labelPos >= 0 && labelPos < width) {
-                 plane[yPos].replace(labelPos, labelSize, yLabel);
-                 plane[yPos][originX - 1] = '|';
+             if (yPos >= 0 && yPos < height) {
+                     if (y % 10000 == 0) {
+                             stringstream ss;
+                                 ss << y;
+                                 string yLabel = ss.str();
+                                 int labelSize = yLabel.size();
+                                 int labelPos = originX - labelSize - 1;
+                                 if (labelPos >= 0 && labelPos < width) {
+                                     plane[yPos].replace(labelPos, labelSize, yLabel);
+                                     plane[yPos][originX - 1] = '|';
+                                 }
+                     } else {
+                         plane[yPos][originX - 1] = '|';
+                     }
              }
-         }
-     }
+             }
      for (sTransponderData &td : *transponderDataARR) {
-         int xPos = round(td.positionX / 1000.0) + originX;
-         int yPos = originY - round(td.positionY / 1000.0);
-         if (xPos >= 0 && xPos < width && yPos >= 0 && yPos < height) {
-             plane[yPos][xPos] = 'A';
-             string flightID = to_string(td.flightId);
-             if (flightID.size() <= 2) {
-                 plane[yPos].replace(xPos + 1, 1, flightID);
-                 plane[yPos].replace(xPos + 3, 1, "(" + to_string(td.positionX) + "," + to_string(td.positionY) + ")");
-             } else {
-                 plane[yPos].replace(xPos + 1, 2, flightID.substr(0, 2));
-                 plane[yPos].replace(xPos + 4, 1, "(" + to_string(td.positionX) + "," + to_string(td.positionY) + ")");
-             }
-         }
-     }
+          int xPos = round(td.positionX / 1000.0) + originX;
+          int yPos = originY - round(td.positionY / 1000.0);
+          if (xPos >= 0 && xPos < width && yPos >= 0 && yPos < height) {
+              string flightID = to_string(td.flightId);
+              string positionStr = "(" + to_string(td.positionX) + "," + to_string(td.positionY) + ")";
+              string displayStr = "A" + flightID + positionStr;
+              int positionXPos, positionYPos;
+              if (td.positionX >= 0) {
+                  positionXPos = xPos + 1;
+                  positionYPos = xPos - displayStr.size() - 1;
+              } else {
+                  positionXPos = xPos - displayStr.size() - 2;
+                  positionYPos = xPos + 1;
+              }
+              if (flightID.size() <= 3) {
+                  plane[yPos].replace(positionXPos, 3, displayStr);
+              } else {
+                  plane[yPos].replace(positionXPos, 4, displayStr.substr(0, 4));
+              }
+          }
+      }
      // print the updated plane vector
      for (int i = 0; i < height; i++) {
          cout << plane[i] << endl;
