@@ -68,7 +68,7 @@ void AircraftPeriodicTimer::fwdUpdateAircraftPosition(sigval signalValue) {
     Aircraft* aircraft = static_cast<Aircraft*>(signalValue.sival_ptr);
     aircraft->updateAircraftPosition();
 
-    printf("Aircraft ID: %d with position X:%d, Y:%d, Z:%d\n",aircraft->getFlightID(),aircraft->getPosX(), aircraft->getPosY(), aircraft->getPosZ());
+    //printf("Aircraft ID: %d with position X:%d, Y:%d, Z:%d\n",aircraft->getFlightID(),aircraft->getPosX(), aircraft->getPosY(), aircraft->getPosZ());
 
     //Check if aircraft is out of bounds, if it is then stop the timer
     //stopTimer(aircraft->getTimerID());

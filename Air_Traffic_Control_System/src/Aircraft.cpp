@@ -127,11 +127,11 @@ void Aircraft::updateAircraftPosition()
 {
 
 
-    printf("\t--->Executing fwdUpdateAircraftPosition thread for aircraft ID:%d\n\n",getFlightID());
+    //printf("\t--->Executing fwdUpdateAircraftPosition thread for aircraft ID:%d\n\n",getFlightID());
     updatePositionX();
     updatePositionY();
     updatePositionZ();
-    printf("\t--->fwdUpdateAircraftPosition finished executing for aircraft ID:%d.\n\n", getFlightID());
+    //printf("\t--->fwdUpdateAircraftPosition finished executing for aircraft ID:%d.\n\n", getFlightID());
 }
 
 void Aircraft::setTransponderDataChannel(int chid){
