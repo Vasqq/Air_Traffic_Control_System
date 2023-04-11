@@ -114,10 +114,22 @@ void PSR::execute(){
     cout << endl<< "Executing PSR..." << endl;
 //while(true)
 //{
+
+    while (true) {
+
+
 	scan();
 
 	SSR ssr(illuminatedObjects);
+	illuminatedObjects.clear();
 	ssr.execute();
+
+	pthread_mutex_unlock(&psr_mutex);
+    // Sleep for 5 seconds before executing again
+    sleep(5);
+          }
+
+
 //}
 
 
