@@ -18,7 +18,8 @@
 #include <math.h>
 
 
-
+int textfileCounter = 5; //initialize to 5 to have the first set of data written
+//it will get incremented to 6 later to force an initial write.
 PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 
 	range = MAX_RANGE;
@@ -28,8 +29,8 @@ PSR::PSR(vector<Aircraft> *AircraftSchedule) {
 	current_angle = CURRENT_ANGLE;
 	pulse_speed = PULSE_SPEED;
 
+
 	this->aircraftList=AircraftSchedule;
-	cout << "PSR Aircraft list address: " << aircraftList << endl;
 }
 
 PSR::~PSR() {
@@ -38,21 +39,15 @@ PSR::~PSR() {
 
 void PSR::scan(){
 
-    cout << "Scanning..." << endl;
-	while(current_angle <= DEGREES_IN_CIRCLE){
+    //cout << "Scanning..." << endl;
+	while(current_angle < DEGREES_IN_CIRCLE){
 
-		detectAircraft(current_angle);
-
-		if (current_angle >= DEGREES_IN_CIRCLE){
-
-			// reset the radar
-			current_angle = 0;
-			break;
-		}
-
-		// Rotate the radar 1 degree
-		rotateRadar();
+	detectAircraft(current_angle);
+	// Rotate the radar 1 degree
+	rotateRadar();
 	}
+	// reset the radar
+	current_angle = 0;
 }
 
 void PSR::detectAircraft(int angle){
@@ -82,10 +77,7 @@ void PSR::detectAircraft(int angle){
 			   aircraftDistance = (int) (sqrt(pow(aircraft.getPosX(), 2) + pow(aircraft.getPosY(), 2)));
 			   // Add the aircraft object to the array if it is within range
 			   if(aircraftDistance < range){
-
-				   cout << "Pushing back with address: " << &aircraft  << endl;
 				   illuminatedObjects.push_back(&aircraft);
-			   	   cout << illuminatedObjects.size() << endl;
 			   }
 		   }
 	}
@@ -115,14 +107,28 @@ vector<Aircraft> PSR::sendAircraftPositionsToSSR(){
 
 void PSR::execute(){
 
-    cout << "Executing PSR..." << endl;
+    cout << endl<< "Executing PSR..." << endl;
+//while(true)
+//{
 
+    while (true) {
+
+	pthread_mutex_lock(&psr_mutex);
 	scan();
-	sendAircraftPositionsToSSR();
+
 	SSR ssr(illuminatedObjects);
+	illuminatedObjects.clear();
+	textfileCounter++;
 	ssr.execute();
 
-	//return illuminatedObjects;
+	pthread_mutex_unlock(&psr_mutex);
+    // Sleep for 5 seconds before executing again
+    sleep(5);
+          }
+
+
+//}
+
 
 }
 

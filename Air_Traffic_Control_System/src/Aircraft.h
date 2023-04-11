@@ -24,7 +24,9 @@
 
 #include "TransponderData.h"
 
+
 using namespace std;
+
 
 
 class Aircraft {
@@ -48,7 +50,8 @@ public:
 	int connectToChannel();
 
 
-	void receiveInterrogationSignal();		//this blocks until interrogation signal arrives
+	void ServiceInterrogationSignalConsole();		//this blocks until interrogation signal arrives
+	void setTimerID(timer_t timerID);
 
 	//This section will return the new values after they are updated.
 	int getFlightID();
@@ -63,13 +66,14 @@ public:
 	int getSpeedZ();
 
 	int getTransponderDataChannel();
+	timer_t getTimerID();
 
 
 	//This will collect all the new values returned and then send the new data.
 	char* collectTransponderData();
 	void sendTransponderData(char transponderData[]);
 
-
+	timer_t     aircraftTimerID;
 
 	pid_t get_pid() {
 	        return getpid();
@@ -81,8 +85,6 @@ private:
 	int posX, posY, posZ;
 	int speedX,speedY,speedZ;
 	int transponderDataChannel;
-
-
 
 };
 

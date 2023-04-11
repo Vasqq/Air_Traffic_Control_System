@@ -14,6 +14,7 @@
 #include <sys/neutrino.h>
 #include <sys/netmgr.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -25,17 +26,11 @@ using namespace std;
  *               illuminatedObjects vector.
  * -----------------------------------------------------------------------------
  */
-SSR::SSR(vector<Aircraft*>illuminatedObjects) {
-	// TODO Auto-generated constructor stub
-	this->illuminatedObjects=illuminatedObjects;
-
-
-
-
+SSR::SSR(vector<Aircraft *> illuminatedObjects)
+{
+    // TODO Auto-generated constructor stub
+    this->illuminatedObjects = illuminatedObjects;
 };
-
-
-
 
 /* -----------------------------------------------------------------------------
  * Name:        ~SSR
@@ -44,14 +39,9 @@ SSR::SSR(vector<Aircraft*>illuminatedObjects) {
  * Description: Destructor for the SSR class.
  * -----------------------------------------------------------------------------
  */
-SSR::~SSR() {
-
+SSR::~SSR(){
 
 };
-
-
-
-
 
 /* -----------------------------------------------------------------------------
  * Name:        interrogateAircraft
@@ -61,47 +51,48 @@ SSR::~SSR() {
  *              data
  * -----------------------------------------------------------------------------
  */
-void SSR::interrogateAircraft(Aircraft *targetAircraft){
+void SSR::interrogateAircraft(Aircraft *targetAircraft)
+{
 
-    cout << targetAircraft << endl;
+
     int chid = targetAircraft->getTransponderDataChannel();
 
     // Connecting the SSR to channel
-    int coid = ConnectAttach(ND_LOCAL_NODE ,0,chid,_NTO_SIDE_CHANNEL, 0);
-    if (coid == -1) {
+    int coid = ConnectAttach(ND_LOCAL_NODE, 0, chid, _NTO_SIDE_CHANNEL, 0);
+    if (coid == -1)
+    {
         perror("Failed to connect to Aircraft");
         ChannelDestroy(chid);
         exit(EXIT_FAILURE);
     }
 
-    cout << "Aircraft thread waiting for Interrogation signal..." << endl;
-    //targetAircraft.ServiceInterrogationSignal();
-    // Receive message
+    //cout << "Aircraft thread waiting for Interrogation signal..." << endl;
+    // targetAircraft.ServiceInterrogationSignal();
+    //  Receive message
     sInterrogationSignal is;
     sTransponderData aircraftTransponderData;
-    //we are requesting the following from Aircraft
-
+    // we are requesting the following from Aircraft
 
     // Send the message to the Aircraft thread
-   // targetAircraft.ServiceInterrogationSignal(chid, pid);
+    // targetAircraft.ServiceInterrogationSignal(chid, pid);
 
     int returnCode = MsgSend(coid, &is, sizeof(is), &aircraftTransponderData, sizeof(aircraftTransponderData));
 
-    if (returnCode != -1) {
-        cout <<"Aircraft reply\n";
-            }
-    else{
+    if (returnCode != -1)
+    {
+        //cout << "Aircraft reply\n";
+    }
+    else
+    {
         cout << "MsgSend failed. Error Code: " << strerror(errno) << endl;
         return;
-        }
+    }
 
     ConnectDetach(coid);
 
-    cout <<  "Aircraft flightID is: " <<aircraftTransponderData.flightId << endl;
+    //cout << "Aircraft flightID is: " << aircraftTransponderData.flightId << endl;
 
     receiveTransponderData(aircraftTransponderData);
-
-
 };
 
 /* -----------------------------------------------------------------------------
@@ -112,12 +103,12 @@ void SSR::interrogateAircraft(Aircraft *targetAircraft){
  *              thread and SSR.
  * -----------------------------------------------------------------------------
  */
-void SSR::receiveTransponderData(sTransponderData aircraftTransponderData){
+void SSR::receiveTransponderData(sTransponderData aircraftTransponderData)
+{
 
     // Receive message from the aircraft thread containing transponder data
 
-	transponderDataList.push_back(aircraftTransponderData);
-
+    transponderDataList.push_back(aircraftTransponderData);
 };
 
 /* -----------------------------------------------------------------------------
@@ -129,15 +120,15 @@ void SSR::receiveTransponderData(sTransponderData aircraftTransponderData){
  * -----------------------------------------------------------------------------
  */
 
-void SSR::interrogate(vector<Aircraft*> illuminatedObjects)
+void SSR::interrogate(vector<Aircraft *> illuminatedObjects)
 {
 
-    for(Aircraft* illuminatedObject: illuminatedObjects){
-        //interrogate the aircraft and receive transponder data
+    for (Aircraft *illuminatedObject : illuminatedObjects)
+    {
+        // interrogate the aircraft and receive transponder data
         interrogateAircraft(illuminatedObject);
-        //receiveTransponderData(illuminatedObject);
+        // receiveTransponderData(illuminatedObject);
     }
-
 }
 
 /* -----------------------------------------------------------------------------
@@ -151,20 +142,19 @@ void SSR::interrogate(vector<Aircraft*> illuminatedObjects)
  */
 vector<sTransponderData> SSR::sendTransponderData()
 {
-    //send transponderDataList to computer system
+    // send transponderDataList to computer system
 
-	//this just tests that all values passed over are correct so we can move on to send the Transponder data
-		for (const auto& td : transponderDataList) {
-		    cout << "Flight ID: " << td.flightId << endl;
-		    cout << "Position (x, y, z): (" << td.positionX << ", " << td.positionY << ", " << td.positionZ << ")" << endl;
-		    cout << "Speed (x, y, z): (" << td.speedX << ", " << td.speedY << ", " << td.speedZ << ")" << endl;
-		    cout << endl;
-		}
+    // this just tests that all values passed over are correct so we can move on to send the Transponder data
+//    for (const auto &td : transponderDataList)
+//    {
+//        cout << "Flight ID: " << td.flightId << endl;
+//        cout << "Position (x, y, z): (" << td.positionX << ", " << td.positionY << ", " << td.positionZ << ")" << endl;
+//        cout << "Speed (x, y, z): (" << td.speedX << ", " << td.speedY << ", " << td.speedZ << ")" << endl;
+//        cout << endl;
+//    }
+
 
     return transponderDataList;
-
-
-
 }
 
 /* -----------------------------------------------------------------------------
@@ -175,13 +165,12 @@ vector<sTransponderData> SSR::sendTransponderData()
  *              executing all functions within the SSR.
  * -----------------------------------------------------------------------------
  */
- void SSR::execute(){
+void SSR::execute()
+{
 
 
-     interrogate(illuminatedObjects);
-     sendTransponderData();
-     //pass return value of sendTransponderData to comp system ex: comp_receive_Transponderdata(sendTransponderData())
- }
+            interrogate(illuminatedObjects);
+            ComputerSystem cs(&transponderDataList);
 
 
-
+}

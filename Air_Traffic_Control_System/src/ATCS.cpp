@@ -4,10 +4,18 @@
 #include "PSR.h"
 #include "SSR.h"
 #include "ResourceManager.h"
+#include "ComputerSystem.h"
+#include "Console.h"
 
 using namespace std;
 
 int main() {
+
+    FILE *fp;
+    char filename[] = "/data/home/qnxuser/flight_data.txt";
+    fp = fopen(filename, "w");
+    fclose(fp);
+
 
    const char* input_file = "/data/home/qnxuser/input_flyby.txt";
    vector<Aircraft> aircraftSchedule;
@@ -19,5 +27,8 @@ int main() {
    RM.execute();
 
 
-    return 0;
+
+
+	return 0;
+
 }

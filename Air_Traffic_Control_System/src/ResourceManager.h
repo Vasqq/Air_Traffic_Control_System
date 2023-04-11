@@ -8,12 +8,13 @@
 #ifndef SRC_RESOURCEMANAGER_H_
 #define SRC_RESOURCEMANAGER_H_
 #include "Aircraft.h"
+#include "PSR.h"
+#include "SSR.h"
+#include "AircraftPeriodicTimer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-
 using namespace std;
-
 
 class ResourceManager {
 public:
@@ -39,7 +40,6 @@ public:
     int createAircraftTransponderDataChannel();
 
     // Thread execution functions
-    static void * fwdUpdateAircraftPosition(void * aircraft);
     static void * fwdServiceInterrogationSignal(void * aircraft);
     static void * fwdExecutionToPSR(void * psr);
     static void * fwdExecutionToSSR(void * ssr);
@@ -50,10 +50,15 @@ public:
     void runSimulation();
     void spawnNewAircraftThreads(Aircraft& nextAircraft);
 
+
+
+
 private:
     vector<int> aircraft_pids;
     vector<int> ATCS_pids;
     vector<Aircraft> *AircraftSchedule;
+    AircraftPeriodicTimer aircraftPeriodicTimer;
+    const timespec AIRCRAFT_UPDATE_POSITION_PERIOD{1,0};
 
 };
 

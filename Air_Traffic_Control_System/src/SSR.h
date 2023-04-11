@@ -10,10 +10,12 @@
 #include "Aircraft.h"
 #include "PSR.h"
 #include "TransponderData.h"
+#include "ComputerSystem.h"
 #include <sys/neutrino.h> // For QNX message passing API
 #include <stdint.h> // For data type uint64_t
 #include <unistd.h>
 #include <errno.h>
+#include "ResourceManager.h"
 
 class SSR {
 
@@ -47,7 +49,7 @@ public:
 
     // Public declaration of transponderDataList vector
     vector<sTransponderData> transponderDataList;
-
+    //pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 };
 

@@ -6,9 +6,9 @@
  */
 
 #include "ResourceManager.h"
-#include "PSR.h"
-#include "SSR.h"
 
+
+ pthread_mutex_t psr_mutex = PTHREAD_MUTEX_INITIALIZER;
 /* -----------------------------------------------------------------------------
  * Name:        ResourceManager()
  * Input:       None
@@ -32,12 +32,6 @@ ResourceManager::ResourceManager() {
 ResourceManager::ResourceManager(vector<Aircraft> *AircraftArr) {
 
     this->AircraftSchedule = AircraftArr;
-
-    cout << "Aircraft schedule: " << AircraftSchedule << endl;
-
-    cout << "Aircraft a1: " << &AircraftSchedule[0] << endl;
-    cout << "Aircraft a2: " << &AircraftSchedule[1] << endl;
-
 }
 
 /* -----------------------------------------------------------------------------
@@ -115,6 +109,7 @@ void ResourceManager::initializeOperatorConsole() {
 void ResourceManager::initializeRadar() {
 
     cout << "Initializing Radar..." << endl;
+    cout<<"------------------------------------------"<<endl;
 
     initializePSR();
 
@@ -144,7 +139,7 @@ void ResourceManager::initializePSR() {
     if (err_no != 0) {
         cout << "ERROR when creating PSR thread: " << err_no << endl;
     } else {
-        cout << " PSR with thread ID: " << PSR_thread_id << " created" << endl;
+        cout <<endl<<"PSR with thread ID: " << PSR_thread_id << " created" << endl;
     }
 
 }
@@ -169,12 +164,14 @@ void ResourceManager::initializeSSR() {
  */
 void ResourceManager::createAircraftThreads() {
 
-    cout << "Creating Aircraft threads" << endl;
+    printf("#################################\n");
+    printf("### Creating Aircraft threads ###\n");
+    printf("#################################\n\n");
+
+
 
     for (Aircraft &nextAircraft : *AircraftSchedule) {
 
-
-        cout << &nextAircraft << endl;
         int chid = createAircraftTransponderDataChannel();
         nextAircraft.setTransponderDataChannel(chid);
         spawnNewAircraftThreads(nextAircraft);
@@ -193,25 +190,15 @@ void ResourceManager::createAircraftThreads() {
 void ResourceManager::createATCSSubsystems() {
 
     cout << "Initializing ATCS subsystems..." << endl;
+    cout<<"------------------------------------------"<<endl;
     initializeDataDisplay();
     initializeComputerSystem();
     initializeCommunicationSystem();
     initializeOperatorConsole();
     initializeRadar();
-}
-/* -----------------------------------------------------------------------------
- * Name:        fwdExecutionToAircraft
- * Input:       void pointer to an Aircraft object
- * Output:      void pointer
- * Description: This function forwards execution to an Aircraft object to update
- *              its position.
- * -----------------------------------------------------------------------------
- */
-void* ResourceManager::fwdUpdateAircraftPosition(void *aircraft) {
-    static_cast<Aircraft*>(aircraft)->updateAircraftPosition();
 
-    return NULL;
 }
+
 /* -----------------------------------------------------------------------------
  * Name:        fwdExecutionToPSR
  * Input:       void pointer to a PSR object
@@ -221,9 +208,18 @@ void* ResourceManager::fwdUpdateAircraftPosition(void *aircraft) {
  */
 void* ResourceManager::fwdExecutionToPSR(void *psr) {
 
-    static_cast<PSR*>(psr)->execute();
 
-    return NULL;
+	        // Lock the mutex to prevent other threads from executing
+	        pthread_mutex_lock(&psr_mutex);
+
+	        // Execute the PSR thread
+	        static_cast<PSR*>(psr)->execute();
+
+//	        // Unlock the mutex to allow other threads to execute
+//	        pthread_mutex_unlock(&psr_mutex);
+//
+//	        // Sleep for 5 seconds before executing again
+//	        sleep(5);
 }
 
 /* -----------------------------------------------------------------------------
@@ -252,15 +248,18 @@ void* ResourceManager::fwdExecutionToSSR(void *ssr) {
  */
 void ResourceManager::execute() {
 
-    char input;
-
-    configureSimulation();
-
-    // Execute the ATCS simulation
-    cout << "All systems ready, press 'R' to run the simulation." << endl;
-    cin >> input;
-    if (input == 'R')
-        runSimulation();
+	// Execute the ATCS simulation
+	cout << "All systems ready, press 'R' to run the simulation." << endl;
+	char input;
+	while (cin >> input) {
+	    if (input == 'R') {
+	        configureSimulation();
+	        //runSimulation();
+	        //break; // exit the loop if simulation is run
+	    } else {
+	        cout << "Invalid input, please press 'R' to run the simulation." << endl;
+	    }
+	}
 
 }
 /* -----------------------------------------------------------------------------
@@ -300,7 +299,7 @@ int ResourceManager::createAircraftTransponderDataChannel() {
 
         int chid = ChannelCreate(0);
         if (chid == -1) {
-            cout << "Error: ChannelCreate failed. Error ID: "<< strerror(errno) << endl;
+            printf("Error: ChannelCreate failed. Error ID: %s\n",strerror(errno));
             exit(EXIT_FAILURE);
         }
 
@@ -328,21 +327,19 @@ void ResourceManager::spawnNewAircraftThreads(Aircraft &nextAircraft) {
 
     int err_no;
     pthread_t thread_id;
+    pthread_attr_t attr;
+    pthread_attr_init( &attr );
+    pthread_attr_setschedpolicy(&attr, SCHED_RR);
+
+    AircraftPeriodicTimer aircraftTimer(&nextAircraft);
+    aircraftTimer.startTimer(AIRCRAFT_UPDATE_POSITION_PERIOD);
 
     err_no = pthread_create(&thread_id,
-    NULL, &fwdUpdateAircraftPosition, &nextAircraft);
-    if (err_no != 0) {
-        cout << "ERROR when creating thread: " << err_no << endl;
-    } else {
-        cout << " Aircraft Update position thread created with ID: " << thread_id << endl;
-    }
-
-    err_no = pthread_create(&thread_id,
-       NULL, &fwdServiceInterrogationSignal, &nextAircraft);
+            &attr, &fwdServiceInterrogationSignal, &nextAircraft);
        if (err_no != 0) {
-           cout << "ERROR when creating thread: " << err_no << endl;
+           printf("ERROR when creating thread:\n");
        } else {
-           cout << " Aircraft service interrogation signal thread created with ID: " << thread_id << endl;
+           printf("\tfwdServiceInterrogationSignal thread created with ID: %d\n", thread_id);
        }
 
 }
